@@ -1,0 +1,14 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+npx lint-staged
+npx tsc
+# 判断单元测试文件变动，变动则执行 npm run test
+# { # try
+#   files_to_test=$(git status -s | grep 'tests')
+#   if [ -n "$files_to_test" ] ; then
+#     npm run test
+#   fi
+# } || { # catch
+#   echo 'error'
+# }
