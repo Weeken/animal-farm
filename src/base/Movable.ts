@@ -6,6 +6,7 @@ interface MovablePros {
 export class Movable {
 	x: number = 0
 	y: number = 0
+	movingWithMap = true
 	constructor(props: MovablePros) {
 		this.x = props.x
 		this.y = props.y

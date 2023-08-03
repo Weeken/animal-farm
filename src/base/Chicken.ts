@@ -1,12 +1,13 @@
 import { loadImage, VIEW_OFFSET, withGrid } from '../utils'
 import { Movable } from './Movable'
 
-interface ChickenConfig {
+export interface ChickenConfig {
 	x: number
 	y: number
 	width: number
 	frames: number
 	height: number
+	walkingLeftStartFrame?: number
 	src: string
 	ctx: CanvasRenderingContext2D
 	state: 'standing' | 'moving'
@@ -30,6 +31,8 @@ export class Chicken extends Movable {
 	realDistance = 0
 	walkingDirection = 'right'
 	standingTime = 0
+	walkingLeftStartFrame = 3
+	state = 'standing'
 
 	constructor(config: ChickenConfig) {
 		super({ x: config.x, y: config.y })
@@ -42,6 +45,8 @@ export class Chicken extends Movable {
 		this.height = config.height
 
 		this.frames = config.frames
+		this.walkingLeftStartFrame = config.walkingLeftStartFrame || 3
+		this.state = config.state
 		this.isMoving = config.state === 'moving'
 		this.isStanding = config.state === 'standing'
 	}
@@ -108,7 +113,7 @@ export class Chicken extends Movable {
 			// 停留2000帧的时间后继续走
 			if (this.standingTime >= 200) {
 				this.walkingDirection = 'left'
-				this.currentFrame = 4
+				this.currentFrame = this.walkingLeftStartFrame
 				this.gap = 0
 				this.isMoving = true
 				this.isStanding = false
@@ -120,7 +125,7 @@ export class Chicken extends Movable {
 			}
 		} else if (this.isStanding && this.walkingDirection === 'left') {
 			// 向左走到终点之后
-			this.currentFrame = 4
+			this.currentFrame = this.walkingLeftStartFrame
 			// 停留2000帧的时间后继续走
 			if (this.standingTime >= 200) {
 				this.walkingDirection = 'right'
@@ -170,7 +175,7 @@ export class Chicken extends Movable {
 					if (this.currentFrame < this.frames - 1) {
 						this.currentFrame++
 					} else {
-						this.currentFrame = 4
+						this.currentFrame = this.walkingLeftStartFrame
 					}
 					this.x -= 16
 				}

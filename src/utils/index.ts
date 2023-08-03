@@ -57,3 +57,13 @@ export const isHitting = (rect1: Required<BaseRect>, rect2: Required<BaseRect>) 
 		rect1.y <= rect2.y + rect2.height - 32
 	)
 }
+
+interface Range {
+	min: number
+	max: number
+}
+
+export const randomPosition = (range: Range) => {
+	const random = Math.random()
+	return Math.floor(random * (range.max - range.min + 1) + range.min)
+}
