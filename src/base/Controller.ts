@@ -1,11 +1,11 @@
 import { Player } from './Player'
-import { Boundary } from './Boundary'
+import { BoundaryItem } from './BoundaryItem'
 import { isHitting } from '../utils'
 
 interface ControllerConfig {
 	movableObjects: any[]
 	player: Player
-	boundaries: Boundary[]
+	boundaries: BoundaryItem[]
 }
 
 export class Controller {
@@ -20,7 +20,7 @@ export class Controller {
 	moveStep: number = 16
 	isMoving = false
 	player: Player
-	boundaries: Boundary[]
+	boundaries: BoundaryItem[]
 	constructor(config: ControllerConfig) {
 		this.movableObjects = config.movableObjects
 		this.player = config.player

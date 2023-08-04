@@ -1,0 +1,30 @@
+import type { TreeInfo } from '../base/Tree'
+
+export const appleTrees: TreeInfo[] = [
+	{ x: 15, y: 11, state: 'common' },
+	{ x: 14, y: 12, state: 'common' },
+	{ x: 14, y: 15, state: 'common' },
+	{ x: 16, y: 11, state: 'common' },
+	{ x: 18, y: 11, state: 'common' },
+	{ x: 22, y: 12, state: 'common' },
+	{ x: 21, y: 13, state: 'common' },
+	{ x: 23, y: 13, state: 'common' },
+	{ x: 42, y: 13, state: 'common' },
+	{ x: 45, y: 13, state: 'common' },
+	{ x: 51, y: 13, state: 'common' },
+	{ x: 41, y: 14, state: 'common' },
+	{ x: 51, y: 14, state: 'common' },
+	{ x: 41, y: 15, state: 'common' },
+	{ x: 15, y: 35, state: 'common' },
+	{ x: 18, y: 35, state: 'common' },
+	{ x: 17, y: 35, state: 'common' },
+	{ x: 20, y: 35, state: 'common' },
+	{ x: 18, y: 42, state: 'common' },
+	{ x: 18, y: 43, state: 'common' },
+	{ x: 23, y: 38, state: 'common' },
+	{ x: 22, y: 38, state: 'common' },
+	{ x: 23, y: 39, state: 'common' },
+	{ x: 25, y: 41, state: 'common' },
+	{ x: 26, y: 42, state: 'common' },
+	{ x: 26, y: 43, state: 'common' }
+]

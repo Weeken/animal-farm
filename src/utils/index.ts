@@ -27,6 +27,8 @@ export const VIEW_OFFSET = {
 	y: -withGrid(12)
 }
 
+export const hours = (num: number) => 1000 * 60 * 60 * num
+
 // 加载图片
 export const loadImage = (src: string) => {
 	return new Promise<HTMLImageElement>((resolve, reject) => {

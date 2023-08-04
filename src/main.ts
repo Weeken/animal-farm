@@ -4,10 +4,16 @@ import { VIEW_WIDTH, VIEW_HEIGHT } from './utils'
 
 import { Controller } from './base/Controller'
 
-import { useGlobal } from './utils/GameObjects'
+import { useGlobal } from './gameObjects'
+import { Chicken } from './base/Chicken'
+import { Cow } from './base/Cow'
+import { BerryTree } from './base/BerryTree'
+import { AppleTreeTop } from './base/AppleTreeTop'
+import { AppleTreeStump } from './base/AppleTreeStump'
+import { BoundaryItem } from './base/BoundaryItem'
 
 const start = async () => {
-	const { ctx, player, boundaries, gameObjects } = await useGlobal()
+	const { ctx, player, boundary, gameObjects } = await useGlobal()
 
 	const gameLoop = () => {
 		const frame = () => {
@@ -18,7 +24,7 @@ const start = async () => {
 			// 左上角的门
 			gameObjects.playerHouseDoor.draw()
 			// 鸡
-			gameObjects.chickens.forEach(chicken => {
+			gameObjects.chickens.forEach((chicken: Chicken) => {
 				if (chicken.state === 'standing') {
 					chicken.standing()
 				} else {
@@ -27,7 +33,7 @@ const start = async () => {
 			})
 
 			// 牛
-			gameObjects.cows.forEach(cow => {
+			gameObjects.cows.forEach((cow: Cow) => {
 				if (cow.state === 'standing') {
 					cow.standing()
 				} else {
@@ -36,8 +42,13 @@ const start = async () => {
 			})
 
 			// 浆果树
-			gameObjects.berryTrees.forEach(tree => {
+			gameObjects.berryTrees.forEach((tree: BerryTree) => {
 				tree.draw()
+			})
+
+			// 苹果树树桩
+			gameObjects.appleTrees.treeStumps.forEach((treeStump: AppleTreeStump) => {
+				treeStump.draw()
 			})
 
 			// 主角
@@ -49,11 +60,16 @@ const start = async () => {
 				player.draw()
 			}
 
+			// 苹果树树冠
+			gameObjects.appleTrees.treeTops.forEach((treeTop: AppleTreeTop) => {
+				treeTop.draw()
+			})
+
 			// 左上角房子的房顶
 			gameObjects.playerHouse.draw()
 
 			// 边界
-			boundaries.forEach(boundary => {
+			boundary.list.forEach((boundary: BoundaryItem) => {
 				boundary.draw()
 			})
 
@@ -66,17 +82,19 @@ const start = async () => {
 
 	const movableObjects: any[] = [
 		gameObjects.map,
-		...boundaries,
+		...boundary.list,
 		gameObjects.playerHouse,
 		gameObjects.playerHouseDoor,
 		...gameObjects.chickens,
 		...gameObjects.cows,
-		...gameObjects.berryTrees
+		...gameObjects.berryTrees,
+		...gameObjects.appleTrees.treeTops,
+		...gameObjects.appleTrees.treeStumps
 	]
 	const controller: Controller = new Controller({
 		movableObjects,
 		player,
-		boundaries
+		boundaries: boundary.list
 	})
 
 	controller && controller.init()

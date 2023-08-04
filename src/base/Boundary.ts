@@ -1,27 +1,27 @@
-import { GRID_W, GRID_H, GRID_SCALE, VIEW_OFFSET } from '../utils'
-import { Movable } from './Movable'
+import { BoundaryItem, BoundaryInfo } from './BoundaryItem'
 
-interface BoundaryProps {
-	x: number
-	y: number
-	ctx: CanvasRenderingContext2D
+interface BoundaryConfig {
+	list: BoundaryInfo[]
 }
 
-export class Boundary extends Movable {
-	x = 0
-	y = 0
-	width = GRID_W * GRID_SCALE
-	height = GRID_H * GRID_SCALE
-	ctx: CanvasRenderingContext2D
-	constructor(props: BoundaryProps) {
-		super({ x: props.x, y: props.y })
-		this.x = props.x
-		this.y = props.y
-		this.ctx = props.ctx
+export class Boundary {
+	list: BoundaryItem[]
+	constructor(config: BoundaryConfig) {
+		this.list = config.list.map(item => {
+			return new BoundaryItem(item)
+		})
 	}
 
-	draw() {
-		this.ctx.fillStyle = 'rgba(255, 0, 0, 0.0)'
-		this.ctx.fillRect(this.x + VIEW_OFFSET.x, this.y + VIEW_OFFSET.y, this.width, this.height)
+	addItem(info: BoundaryInfo) {
+		if (this.list.find(item => item.x === info.x && item.y === info.y) === undefined) {
+			this.list.push(new BoundaryItem(info))
+		}
+	}
+
+	removeItem(info: { x: number; y: number }) {
+		const index: number = this.list.findIndex(item => item.x === info.x && item.y === info.y)
+		if (index !== -1) {
+			this.list.splice(index, 1)
+		}
 	}
 }
