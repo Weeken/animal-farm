@@ -129,7 +129,8 @@ export const useGlobal = async () => {
 		appleTrees: new AppleTree({
 			trees: appleTrees,
 			ctx,
-			boundary
+			boundary,
+			player
 		})
 	}
 

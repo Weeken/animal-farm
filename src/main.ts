@@ -94,7 +94,8 @@ const start = async () => {
 	const controller: Controller = new Controller({
 		movableObjects,
 		player,
-		boundaries: boundary.list
+		boundaries: boundary.list,
+		appleTrees: gameObjects.appleTrees
 	})
 
 	controller && controller.init()

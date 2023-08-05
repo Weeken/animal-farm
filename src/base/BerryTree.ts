@@ -1,6 +1,7 @@
 // import { loadImage, VIEW_OFFSET, withGrid } from '../utils'
 import { Tree, TreeState } from './Tree'
 import { Boundary } from './Boundary'
+import { hours } from '../utils'
 
 export interface BerryConfig {
 	x: number
@@ -19,7 +20,7 @@ export class BerryTree extends Tree {
 	constructor(config: BerryConfig) {
 		super(config)
 
-		// this.ctx = config.ctx
+		this.matureTime = hours(0.5)
 		this.boundary = config.boundary
 		this.boundary.addItem({
 			x: config.x,

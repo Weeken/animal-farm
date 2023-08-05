@@ -1,5 +1,5 @@
 import { Movable } from './Movable'
-import { loadImage, VIEW_OFFSET, hours } from '../utils'
+import { loadImage, VIEW_OFFSET } from '../utils'
 
 export type TreeState = 'bearFruit' | 'noFruit' | 'common'
 
@@ -35,10 +35,16 @@ export class Tree extends Movable {
 	matureTime = 0
 	createTime = 0
 
+	isBeingCut = false
+	offset = 1
+	shakeDirection = 'right'
+	shakeFrequency = 5
+	gap = 0
+
 	constructor(config: TreeConfig) {
 		super({ x: config.x, y: config.y })
-		this.x = config.x + VIEW_OFFSET.x
-		this.y = config.y + VIEW_OFFSET.y
+		this.x = config.x
+		this.y = config.y
 
 		this.src = config.src
 		this.ctx = config.ctx
@@ -47,12 +53,13 @@ export class Tree extends Movable {
 
 		this.createTime = +new Date()
 		this.state = config.state
-		this.matureTime = config.matureTime || hours(0.5)
+		this.matureTime = config.matureTime || 0
 	}
 
 	draw() {
 		return new Promise(resolve => {
 			let x = 0
+			let positionX = this.x + VIEW_OFFSET.x
 			if (this.state === 'common') {
 				x = 0
 			} else {
@@ -68,13 +75,52 @@ export class Tree extends Movable {
 				}
 			}
 
+			// 被砍的时候抖动
+			if (this.isBeingCut) {
+				if (this.gap <= this.shakeFrequency && this.shakeDirection === 'right') {
+					positionX += this.offset
+					this.gap++
+					if (this.gap > this.shakeFrequency) {
+						this.gap = 0
+						this.shakeDirection = 'left'
+					}
+				} else if (this.gap <= this.shakeFrequency && this.shakeDirection === 'left') {
+					positionX -= this.offset
+					this.gap++
+					if (this.gap > this.shakeFrequency) {
+						this.gap = 0
+						this.shakeDirection = 'right'
+					}
+				}
+			}
+
 			if (this.image) {
-				this.ctx.drawImage(this.image, x, 0, this.width, this.height, this.x, this.y, this.width, this.height)
+				this.ctx.drawImage(
+					this.image,
+					x,
+					0,
+					this.width,
+					this.height,
+					positionX,
+					this.y + VIEW_OFFSET.y,
+					this.width,
+					this.height
+				)
 			} else {
 				this.src &&
 					loadImage(this.src).then(img => {
 						this.image = img
-						this.ctx.drawImage(this.image, x, 0, this.width, this.height, this.x, this.y, this.width, this.height)
+						this.ctx.drawImage(
+							this.image,
+							x,
+							0,
+							this.width,
+							this.height,
+							positionX,
+							this.y + VIEW_OFFSET.y,
+							this.width,
+							this.height
+						)
 					})
 			}
 

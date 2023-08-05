@@ -5,10 +5,12 @@ import AppleTreeStumpImg from '../assets/apple-tree-stump.png'
 import { withGrid, hours } from '../utils'
 import { Boundary } from './Boundary'
 import type { TreeState } from './Tree'
+import { Player } from './Player'
 
 interface AppleTreeConfig {
 	ctx: CanvasRenderingContext2D
-	boundary?: Boundary
+	boundary: Boundary
+	player: Player
 	trees: TreeInfo[]
 }
 
@@ -31,7 +33,7 @@ export class AppleTree {
 					y: withGrid(appleTree.y),
 					width: withGrid(2),
 					height: withGrid(2),
-					state: 'noFruit',
+					state: appleTree.state,
 					ctx: config.ctx,
 					matureTime: appleTree.matureTime || hours(1)
 				})
@@ -43,12 +45,23 @@ export class AppleTree {
 					y: withGrid(appleTree.y + 1),
 					width: withGrid(1),
 					height: withGrid(1),
-					state: 'noFruit',
+					state: appleTree.state,
 					ctx: config.ctx,
 					boundary: config.boundary,
-					matureTime: appleTree.matureTime
+					matureTime: appleTree.matureTime || hours(1),
+					player: config.player,
+					parent: this
 				})
 			)
 		})
+	}
+
+	removeTree(info: { x: number; y: number }) {
+		console.log('%c [ info ]-59', 'font-size:13px; background:pink; color:#bf2c9f;', info)
+		const index: number = this.treeTops.findIndex(item => item.x === info.x && item.y === info.y)
+		if (index !== -1) {
+			this.treeTops.splice(index, 1)
+			this.treeStumps.splice(index, 1)
+		}
 	}
 }

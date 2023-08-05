@@ -15,8 +15,7 @@ export class Player {
 	// 相对于地图的坐标
 	x = 0
 	y = 0
-	width = 0
-	height = 0
+
 	src = ''
 	// 固定在视窗中间的位置
 	position = {
@@ -44,6 +43,9 @@ export class Player {
 
 	// 砍
 	isCutting = false
+
+	width = 0
+	height = 0
 
 	constructor(config: PlayerConfig) {
 		this.position.x = config.x
@@ -98,6 +100,8 @@ export class Player {
 			}
 
 			if (this.image) {
+				this.ctx.fillStyle = 'rgba(0, 0, 255, 0.2)'
+				this.ctx.fillRect(this.position.x, this.position.y, this.width, this.height)
 				this.ctx.drawImage(
 					this.image,
 					this.currentFrame * this.width,
@@ -113,6 +117,8 @@ export class Player {
 				this.src &&
 					loadImage(this.src).then(img => {
 						this.image = img
+						this.ctx.fillStyle = 'rgba(0, 0, 255, 0.2)'
+						this.ctx.fillRect(this.position.x, this.position.y, this.width, this.height)
 						this.ctx.drawImage(
 							this.image,
 							this.currentFrame * this.width,
@@ -183,14 +189,14 @@ export class Player {
 			if (this.currentActionFrame === 0) {
 				frameX = 0
 				frameY = withGrid(16)
-				frameW = withGrid(2)
-				frameH = withGrid(2)
+				frameW = withGrid(3)
+				frameH = withGrid(3)
 				positionX = this.position.x - withGrid(1)
 				positionY = this.position.y - withGrid(1)
 			} else {
 				frameX = withGrid(2)
 				frameY = withGrid(16)
-				frameW = withGrid(2)
+				frameW = withGrid(3)
 				frameH = withGrid(3)
 				positionX = this.position.x - withGrid(1)
 				positionY = this.position.y - withGrid(1)
@@ -206,8 +212,8 @@ export class Player {
 			} else {
 				frameX = withGrid(3)
 				frameY = withGrid(19)
-				frameW = withGrid(2)
-				frameH = withGrid(2)
+				frameW = withGrid(3)
+				frameH = withGrid(3)
 				positionX = this.position.x - withGrid(1)
 				positionY = this.position.y - withGrid(1)
 			}
@@ -231,14 +237,14 @@ export class Player {
 			if (this.currentActionFrame === 0) {
 				frameX = 0
 				frameY = withGrid(25)
-				frameW = withGrid(2)
+				frameW = withGrid(3) - 8
 				frameH = withGrid(2)
 				positionX = this.position.x - withGrid(1)
 				positionY = this.position.y - withGrid(1)
 			} else {
 				frameX = withGrid(2)
 				frameY = withGrid(25)
-				frameW = withGrid(3)
+				frameW = withGrid(3) - 8
 				frameH = withGrid(2)
 				positionX = this.position.x - withGrid(1)
 				positionY = this.position.y - withGrid(1)
@@ -260,6 +266,8 @@ export class Player {
 		}
 
 		if (this.image) {
+			this.ctx.fillStyle = 'rgba(0, 0, 255, 0.2)'
+			this.ctx.fillRect(positionX, positionY, frameW, frameH)
 			this.ctx.drawImage(this.image, frameX, frameY, frameW, frameH, positionX, positionY, frameW, frameH)
 		}
 	}
