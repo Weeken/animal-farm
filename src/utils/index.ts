@@ -69,3 +69,11 @@ export const randomPosition = (range: Range) => {
 	const random = Math.random()
 	return Math.floor(random * (range.max - range.min + 1) + range.min)
 }
+
+export const getPositionFormIdStr = (id: string) => {
+	const arr: string[] = id.split('-')
+	return {
+		x: parseInt(arr[1]),
+		y: parseInt(arr[2])
+	}
+}

@@ -100,8 +100,6 @@ export class Player {
 			}
 
 			if (this.image) {
-				this.ctx.fillStyle = 'rgba(0, 0, 255, 0.2)'
-				this.ctx.fillRect(this.position.x, this.position.y, this.width, this.height)
 				this.ctx.drawImage(
 					this.image,
 					this.currentFrame * this.width,
@@ -117,8 +115,6 @@ export class Player {
 				this.src &&
 					loadImage(this.src).then(img => {
 						this.image = img
-						this.ctx.fillStyle = 'rgba(0, 0, 255, 0.2)'
-						this.ctx.fillRect(this.position.x, this.position.y, this.width, this.height)
 						this.ctx.drawImage(
 							this.image,
 							this.currentFrame * this.width,
@@ -187,14 +183,14 @@ export class Player {
 		let positionY = 0
 		if (this.movingDirection === 'down') {
 			if (this.currentActionFrame === 0) {
-				frameX = 0
+				frameX = withGrid(2)
 				frameY = withGrid(16)
 				frameW = withGrid(3)
 				frameH = withGrid(3)
 				positionX = this.position.x - withGrid(1)
 				positionY = this.position.y - withGrid(1)
 			} else {
-				frameX = withGrid(2)
+				frameX = 0
 				frameY = withGrid(16)
 				frameW = withGrid(3)
 				frameH = withGrid(3)
@@ -203,14 +199,14 @@ export class Player {
 			}
 		} else if (this.movingDirection === 'up') {
 			if (this.currentActionFrame === 0) {
-				frameX = 0
+				frameX = withGrid(3)
 				frameY = withGrid(19)
 				frameW = withGrid(3)
 				frameH = withGrid(3)
 				positionX = this.position.x - withGrid(1)
 				positionY = this.position.y - withGrid(1)
 			} else {
-				frameX = withGrid(3)
+				frameX = 0
 				frameY = withGrid(19)
 				frameW = withGrid(3)
 				frameH = withGrid(3)
@@ -219,14 +215,14 @@ export class Player {
 			}
 		} else if (this.movingDirection === 'left') {
 			if (this.currentActionFrame === 0) {
-				frameX = 0
+				frameX = withGrid(3)
 				frameY = withGrid(22)
 				frameW = withGrid(3)
 				frameH = withGrid(2)
 				positionX = this.position.x - withGrid(1)
 				positionY = this.position.y - withGrid(1)
 			} else {
-				frameX = withGrid(3)
+				frameX = 0
 				frameY = withGrid(22)
 				frameW = withGrid(3)
 				frameH = withGrid(2)
@@ -235,14 +231,14 @@ export class Player {
 			}
 		} else {
 			if (this.currentActionFrame === 0) {
-				frameX = 0
+				frameX = withGrid(2)
 				frameY = withGrid(25)
 				frameW = withGrid(3) - 8
 				frameH = withGrid(2)
 				positionX = this.position.x - withGrid(1)
 				positionY = this.position.y - withGrid(1)
 			} else {
-				frameX = withGrid(2)
+				frameX = 0
 				frameY = withGrid(25)
 				frameW = withGrid(3) - 8
 				frameH = withGrid(2)
@@ -266,8 +262,8 @@ export class Player {
 		}
 
 		if (this.image) {
-			this.ctx.fillStyle = 'rgba(0, 0, 255, 0.2)'
-			this.ctx.fillRect(positionX, positionY, frameW, frameH)
+			// this.ctx.fillStyle = 'rgba(0, 0, 255, 0.2)'
+			// this.ctx.fillRect(positionX, positionY, frameW, frameH)
 			this.ctx.drawImage(this.image, frameX, frameY, frameW, frameH, positionX, positionY, frameW, frameH)
 		}
 	}

@@ -1,11 +1,14 @@
 import { Player } from './Player'
+import { Boundary } from './Boundary'
 import { BoundaryItem } from './BoundaryItem'
-import { isHitting } from '../utils'
+import { getPositionFormIdStr, isHitting } from '../utils'
+import { AppleTree, FullTree } from './AppleTree'
 
 interface ControllerConfig {
 	movableObjects: any[]
 	player: Player
-	boundaries: BoundaryItem[]
+	boundary: Boundary
+	appleTrees: AppleTree
 }
 
 export class Controller {
@@ -20,18 +23,20 @@ export class Controller {
 	moveStep: number = 16
 	isMoving = false
 	player: Player
-	boundaries: BoundaryItem[]
+	boundary: Boundary
+	appleTrees: AppleTree
 	constructor(config: ControllerConfig) {
 		this.movableObjects = config.movableObjects
 		this.player = config.player
-		this.boundaries = config.boundaries
+		this.boundary = config.boundary
+		this.appleTrees = config.appleTrees
 	}
 
 	checkHitting(direction: { x?: number; y?: number }) {
 		let canMoving = true
 
-		for (let i = 0; i < this.boundaries.length; i++) {
-			const boundary = this.boundaries[i]
+		for (let i = 0; i < this.boundary.list.length; i++) {
+			const boundary = this.boundary.list[i]
 			const side: { x?: number; y?: number } = {}
 			if (direction.y) {
 				side.y = boundary.y + direction.y
@@ -49,6 +54,30 @@ export class Controller {
 			}
 		}
 		return canMoving
+	}
+
+	findTargetBoundary(direction: { x?: number; y?: number }) {
+		let target: BoundaryItem | null = null
+
+		for (let i = 0; i < this.boundary.list.length; i++) {
+			const boundary = this.boundary.list[i]
+			const side: { x?: number; y?: number } = {}
+			if (direction.y) {
+				side.y = boundary.y + direction.y
+			} else if (direction.x) {
+				side.x = boundary.x + direction.x
+			}
+			if (
+				isHitting(this.player, {
+					...boundary,
+					...side
+				})
+			) {
+				target = boundary
+				break
+			}
+		}
+		return target
 	}
 
 	handleMove() {
@@ -81,6 +110,35 @@ export class Controller {
 		}
 	}
 
+	handleCuttingDownTree() {
+		this.player.selectAction('Cutting')
+		let targetTreeBoundary: BoundaryItem | null = null
+		if (this.player.movingDirection === 'right') {
+			targetTreeBoundary = this.findTargetBoundary({ x: -this.moveStep })
+		} else if (this.player.movingDirection === 'left') {
+			targetTreeBoundary = this.findTargetBoundary({ x: this.moveStep })
+		} else if (this.player.movingDirection === 'up') {
+			targetTreeBoundary = this.findTargetBoundary({ y: this.moveStep })
+		} else if (this.player.movingDirection === 'down') {
+			targetTreeBoundary = this.findTargetBoundary({ y: -this.moveStep })
+		}
+		const targetTree: FullTree | undefined = this.appleTrees.fullTrees.find(tree => {
+			if (targetTreeBoundary && tree.stump.boundaryBlock.id === targetTreeBoundary.id) {
+				return tree
+			}
+		})
+		if (targetTree) {
+			const position = getPositionFormIdStr(targetTree.id)
+			targetTree.stump.isBeingCut = true
+			targetTree.top.isBeingCut = true
+			// 树被砍3次就移除
+			if (targetTree.top.cuttingCount === 2) {
+				this.appleTrees.removeTree({ gridX: position.x, gridY: position.y })
+				targetTreeBoundary && this.boundary.removeItem(targetTreeBoundary.id)
+			}
+		}
+	}
+
 	init() {
 		document.addEventListener('keydown', (e: KeyboardEvent) => {
 			if (e.key === 'w') {
@@ -105,10 +163,8 @@ export class Controller {
 				this.handleMove()
 			} else if (e.key === 'p') {
 				this.player.selectAction('Digging')
-				this.player.digging()
 			} else if (e.key === 'o') {
-				this.player.selectAction('Cutting')
-				this.player.cutting()
+				this.handleCuttingDownTree()
 			}
 		})
 		document.addEventListener('keyup', (e: KeyboardEvent) => {

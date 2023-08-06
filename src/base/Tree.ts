@@ -39,7 +39,10 @@ export class Tree extends Movable {
 	offset = 1
 	shakeDirection = 'right'
 	shakeFrequency = 5
-	gap = 0
+	shakeGap = 0
+	shakeCount = 0
+	cuttingCount = 0
+	cuttingGap = 0
 
 	constructor(config: TreeConfig) {
 		super({ x: config.x, y: config.y })
@@ -77,19 +80,32 @@ export class Tree extends Movable {
 
 			// 被砍的时候抖动
 			if (this.isBeingCut) {
-				if (this.gap <= this.shakeFrequency && this.shakeDirection === 'right') {
+				// 左右晃动
+				if (this.shakeGap <= this.shakeFrequency && this.shakeDirection === 'right') {
 					positionX += this.offset
-					this.gap++
-					if (this.gap > this.shakeFrequency) {
-						this.gap = 0
+					this.shakeGap++
+					if (this.shakeGap > this.shakeFrequency) {
+						this.shakeGap = 0
 						this.shakeDirection = 'left'
 					}
-				} else if (this.gap <= this.shakeFrequency && this.shakeDirection === 'left') {
+				} else if (this.shakeGap <= this.shakeFrequency && this.shakeDirection === 'left') {
 					positionX -= this.offset
-					this.gap++
-					if (this.gap > this.shakeFrequency) {
-						this.gap = 0
+					this.shakeGap++
+					if (this.shakeGap > this.shakeFrequency) {
+						this.shakeGap = 0
 						this.shakeDirection = 'right'
+					}
+				}
+				// 晃动几次
+				this.cuttingGap++
+				if (this.cuttingGap % 10 === 0) {
+					this.shakeCount++
+
+					if (this.shakeCount >= 2) {
+						this.cuttingGap = 0
+						this.isBeingCut = false
+						this.shakeCount = 0
+						this.cuttingCount++ // 被砍了几次
 					}
 				}
 			}

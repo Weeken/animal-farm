@@ -18,10 +18,7 @@ export class Boundary {
 		}
 	}
 
-	removeItem(info: { x: number; y: number }) {
-		const index: number = this.list.findIndex(item => item.x === info.x && item.y === info.y)
-		if (index !== -1) {
-			this.list.splice(index, 1)
-		}
+	removeItem(id: string) {
+		this.list = this.list.filter(item => item.id !== id)
 	}
 }
