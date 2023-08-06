@@ -1,7 +1,7 @@
 import type { TreeInfo } from '../base/Tree'
 
 export const appleTrees: TreeInfo[] = [
-	{ x: 21, y: 18, state: 'common' },
+	{ x: 21, y: 18, state: 'bearFruit' },
 	{ x: 15, y: 11, state: 'common' },
 	{ x: 14, y: 12, state: 'common' },
 	{ x: 14, y: 15, state: 'common' },

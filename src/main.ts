@@ -73,6 +73,9 @@ const start = async () => {
 				boundary.draw()
 			})
 
+			// 物品栏
+			// itemDock.draw()
+
 			window.requestAnimationFrame(() => {
 				frame()
 			})

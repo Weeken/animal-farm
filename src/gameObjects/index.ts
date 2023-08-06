@@ -1,4 +1,4 @@
-import { screenCenter, withGrid, ROW_GRID_NUM, VIEW_OFFSET, ROLE_WIDTH, ROLE_HEIGHT } from '../utils'
+import { screenCenter, withGrid, ROW_GRID_NUM, VIEW_OFFSET, ROLE_WIDTH, ROLE_HEIGHT, VIEW_HEIGHT } from '../utils'
 
 import { getCtx } from '../utils/canvas'
 
@@ -12,6 +12,7 @@ import { Chicken } from '../base/Chicken'
 import { Cow } from '../base/Cow'
 import { BerryTree } from '../base/BerryTree'
 import { AppleTree } from '../base/AppleTree'
+import { ItemDock } from '../base/ItemDock'
 
 import MapImg from '../assets/map.png'
 import PlayerImg from '../assets/player.png'
@@ -59,6 +60,14 @@ export const useGlobal = async () => {
 			...item,
 			ctx
 		}))
+	})
+
+	const itemDock = new ItemDock({
+		x: screenCenter.x - withGrid(6),
+		y: VIEW_HEIGHT - withGrid(2.4),
+		width: withGrid(12),
+		height: withGrid(3),
+		ctx
 	})
 
 	const gameObjects = {
@@ -138,6 +147,7 @@ export const useGlobal = async () => {
 		ctx,
 		player,
 		boundary,
+		itemDock,
 		gameObjects
 	}
 }
