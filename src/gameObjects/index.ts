@@ -3,16 +3,17 @@ import { screenCenter, withGrid, ROW_GRID_NUM, VIEW_OFFSET, ROLE_WIDTH, ROLE_HEI
 import { getCtx } from '../utils/canvas'
 
 import { IslandMap } from '../base/Map'
-import { Boundary } from '../base/Boundary'
+import { Boundary } from '../base/fixed-things/Boundary'
 import { Player } from '../base/Player'
 import { collisions } from '../collisions'
-import { House } from '../base/House'
-import { SmallDoor } from '../base/SmallDoor'
-import { Chicken } from '../base/Chicken'
-import { Cow } from '../base/Cow'
-import { BerryTree } from '../base/BerryTree'
-import { AppleTree } from '../base/AppleTree'
+import { House } from '../base/fixed-things/House'
+import { SmallDoor } from '../base/fixed-things/SmallDoor'
+import { Chicken } from '../base/animal/Chicken'
+import { Cow } from '../base/animal/Cow'
+import { BerryTree } from '../base/tree/BerryTree'
+import { AppleTree } from '../base/tree/AppleTree'
 import { ItemDock } from '../base/ItemDock'
+import { Field } from '../base/Field/Field'
 
 import MapImg from '../assets/map.png'
 import PlayerImg from '../assets/player.png'
@@ -24,6 +25,8 @@ import { cows } from './cows'
 import { chickens } from './chicken'
 import { appleTrees } from './appleTrees'
 import { berryTrees } from './berryTrees'
+import { bridgesInfo } from './bridges'
+import { Bridge } from '../base/fixed-things/Bridge'
 
 const getBoundaries = () => {
 	const collisionMap: number[][] = []
@@ -33,7 +36,7 @@ const getBoundaries = () => {
 	}
 	collisionMap.forEach((row, i) => {
 		row.forEach((b, j) => {
-			if (b === 232) {
+			if (b === 360) {
 				boundaries.push({
 					x: withGrid(j),
 					y: withGrid(i)
@@ -61,6 +64,8 @@ export const useGlobal = async () => {
 			ctx
 		}))
 	})
+
+	const bridges = bridgesInfo.map(bridge => new Bridge({ ...bridge, ctx }))
 
 	const itemDock = new ItemDock({
 		x: screenCenter.x - withGrid(6),
@@ -140,6 +145,12 @@ export const useGlobal = async () => {
 			ctx,
 			boundary,
 			player
+		}),
+		bridges,
+		field: new Field({
+			ctx,
+			boundary,
+			bridges
 		})
 	}
 

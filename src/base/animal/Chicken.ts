@@ -1,5 +1,5 @@
-import { loadImage, VIEW_OFFSET, withGrid } from '../utils'
-import { Movable } from './Movable'
+import { loadImage, VIEW_OFFSET, withGrid } from '../../utils'
+import { Movable } from '../Movable'
 
 export interface ChickenConfig {
 	x: number

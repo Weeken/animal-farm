@@ -2,15 +2,17 @@ import './style.css'
 
 import { VIEW_WIDTH, VIEW_HEIGHT } from './utils'
 
-import { Controller } from './base/Controller'
+import { Controller } from './base/control/Controller'
 
 import { useGlobal } from './gameObjects'
-import { Chicken } from './base/Chicken'
-import { Cow } from './base/Cow'
-import { BerryTree } from './base/BerryTree'
-import { AppleTreeTop } from './base/AppleTreeTop'
-import { AppleTreeStump } from './base/AppleTreeStump'
-import { BoundaryItem } from './base/BoundaryItem'
+import { Chicken } from './base/animal/Chicken'
+import { Cow } from './base/animal/Cow'
+import { BerryTree } from './base/tree/BerryTree'
+import { AppleTreeTop } from './base/tree/AppleTreeTop'
+import { AppleTreeStump } from './base/tree/AppleTreeStump'
+import { BoundaryItem } from './base/fixed-things/BoundaryItem'
+import { PlantField } from './base/Field/PlantField'
+import { Bridge } from './base/fixed-things/Bridge'
 
 const start = async () => {
 	const { ctx, player, boundary, gameObjects } = await useGlobal()
@@ -23,6 +25,11 @@ const start = async () => {
 			gameObjects.map.draw()
 			// 左上角的门
 			gameObjects.playerHouseDoor.draw()
+
+			// 桥
+			gameObjects.bridges.forEach((bridge: Bridge) => {
+				bridge.draw()
+			})
 			// 鸡
 			gameObjects.chickens.forEach((chicken: Chicken) => {
 				if (chicken.state === 'standing') {
@@ -49,6 +56,11 @@ const start = async () => {
 			// 苹果树树桩
 			gameObjects.appleTrees.treeStumps.forEach((treeStump: AppleTreeStump) => {
 				treeStump.draw()
+			})
+
+			// 菜地
+			gameObjects.field.plantFields.forEach((field: PlantField) => {
+				field.draw()
 			})
 
 			// 主角
@@ -92,13 +104,16 @@ const start = async () => {
 		...gameObjects.cows,
 		...gameObjects.berryTrees,
 		...gameObjects.appleTrees.treeTops,
-		...gameObjects.appleTrees.treeStumps
+		...gameObjects.appleTrees.treeStumps,
+		...gameObjects.field.plantFields,
+		...gameObjects.bridges
 	]
 	const controller: Controller = new Controller({
 		movableObjects,
 		player,
 		boundary,
-		appleTrees: gameObjects.appleTrees
+		appleTrees: gameObjects.appleTrees,
+		field: gameObjects.field
 	})
 
 	controller && controller.init()

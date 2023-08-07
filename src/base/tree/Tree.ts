@@ -1,5 +1,5 @@
-import { Movable } from './Movable'
-import { loadImage, VIEW_OFFSET } from '../utils'
+import { Movable } from '../Movable'
+import { loadImage, VIEW_OFFSET } from '../../utils'
 
 export type TreeState = 'bearFruit' | 'noFruit' | 'common'
 

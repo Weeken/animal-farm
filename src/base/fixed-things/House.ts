@@ -1,6 +1,6 @@
-import { Player } from './Player'
-import { loadImage, VIEW_OFFSET, isHitting } from '../utils'
-import { Movable } from './Movable'
+import { Player } from '../Player'
+import { loadImage, VIEW_OFFSET, isHitting } from '../../utils'
+import { Movable } from '../Movable'
 
 interface HouseConfig {
 	player?: Player

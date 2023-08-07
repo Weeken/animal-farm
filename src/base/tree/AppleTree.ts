@@ -1,11 +1,11 @@
 import { AppleTreeStump } from './AppleTreeStump'
 import { AppleTreeTop } from './AppleTreeTop'
-import AppleTreeTopImg from '../assets/apple-tree-top.png'
-import AppleTreeStumpImg from '../assets/apple-tree-stump.png'
-import { withGrid, hours, getPositionFormIdStr } from '../utils'
-import { Boundary } from './Boundary'
+import AppleTreeTopImg from '../../assets/apple-tree-top.png'
+import AppleTreeStumpImg from '../../assets/apple-tree-stump.png'
+import { withGrid, hours, getPositionFormIdStr } from '../../utils'
+import { Boundary } from '../fixed-things/Boundary'
 import type { TreeState } from './Tree'
-import { Player } from './Player'
+import { Player } from '../Player'
 
 interface AppleTreeConfig {
 	ctx: CanvasRenderingContext2D

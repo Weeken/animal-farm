@@ -1,4 +1,4 @@
-import { loadImage, VIEW_OFFSET, withGrid } from '../utils'
+import { loadImage, VIEW_OFFSET, withGrid, BaseRect, Position } from '../utils'
 
 interface PlayerConfig {
 	x: number
@@ -16,9 +16,17 @@ export class Player {
 	x = 0
 	y = 0
 
+	// 当前方向的下一格
+	nextGrid: BaseRect = {
+		x: 0,
+		y: 0,
+		width: withGrid(1),
+		height: withGrid(1)
+	}
+
 	src = ''
 	// 固定在视窗中间的位置
-	position = {
+	position: Position = {
 		x: 0,
 		y: 0
 	}
@@ -53,6 +61,12 @@ export class Player {
 
 		this.x = config.x - VIEW_OFFSET.x
 		this.y = config.y - VIEW_OFFSET.y
+		this.nextGrid = {
+			x: this.x,
+			y: this.y + withGrid(1),
+			width: withGrid(1),
+			height: withGrid(1)
+		}
 
 		this.src = config.src
 		this.ctx = config.ctx
@@ -98,6 +112,9 @@ export class Player {
 				this.currentFrame = 0
 				this.gap = 0
 			}
+
+			this.ctx.fillStyle = 'rgba(0, 0, 255, 0.2)'
+			this.ctx.fillRect(this.position.x, this.position.y, this.width, this.height)
 
 			if (this.image) {
 				this.ctx.drawImage(

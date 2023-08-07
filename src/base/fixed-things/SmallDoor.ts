@@ -1,6 +1,6 @@
-import { Movable } from './Movable'
-import { Player } from './Player'
-import { loadImage, withGrid, VIEW_OFFSET, isHitting } from '../utils'
+import { Movable } from '../Movable'
+import { Player } from '../Player'
+import { loadImage, withGrid, VIEW_OFFSET, isHitting } from '../../utils'
 
 interface SmallDoorConfig {
 	player?: Player

@@ -1,14 +1,17 @@
-import { Player } from './Player'
-import { Boundary } from './Boundary'
-import { BoundaryItem } from './BoundaryItem'
-import { getPositionFormIdStr, isHitting } from '../utils'
-import { AppleTree, FullTree } from './AppleTree'
+import { Player } from '../Player'
+import { Boundary } from '../fixed-things/Boundary'
+import { BoundaryItem } from '../fixed-things/BoundaryItem'
+import { getPositionFormIdStr, isHitting, withGrid } from '../../utils'
+import { AppleTree, FullTree } from '../tree/AppleTree'
+// import { PlantField } from '../Field/PlantField'
+import { Field } from '../Field/Field'
 
 interface ControllerConfig {
 	movableObjects: any[]
 	player: Player
 	boundary: Boundary
 	appleTrees: AppleTree
+	field: Field
 }
 
 export class Controller {
@@ -25,11 +28,13 @@ export class Controller {
 	player: Player
 	boundary: Boundary
 	appleTrees: AppleTree
+	field: Field
 	constructor(config: ControllerConfig) {
 		this.movableObjects = config.movableObjects
 		this.player = config.player
 		this.boundary = config.boundary
 		this.appleTrees = config.appleTrees
+		this.field = config.field
 	}
 
 	checkHitting(direction: { x?: number; y?: number }) {
@@ -80,6 +85,20 @@ export class Controller {
 		return target
 	}
 
+	findAllDirectionBoundary() {
+		let targetTreeBoundary: BoundaryItem | null = null
+		if (this.player.movingDirection === 'right') {
+			targetTreeBoundary = this.findTargetBoundary({ x: -this.moveStep })
+		} else if (this.player.movingDirection === 'left') {
+			targetTreeBoundary = this.findTargetBoundary({ x: this.moveStep })
+		} else if (this.player.movingDirection === 'up') {
+			targetTreeBoundary = this.findTargetBoundary({ y: this.moveStep })
+		} else if (this.player.movingDirection === 'down') {
+			targetTreeBoundary = this.findTargetBoundary({ y: -this.moveStep })
+		}
+		return targetTreeBoundary
+	}
+
 	handleMove() {
 		this.player.selectAction('Moving')
 
@@ -110,18 +129,21 @@ export class Controller {
 		}
 	}
 
+	setPlayerNextGrid(direction: 'up' | 'down' | 'left' | 'right') {
+		if (direction === 'up') {
+			this.player.nextGrid = { ...this.player.nextGrid, x: this.player.x, y: this.player.y - withGrid(1) }
+		} else if (direction === 'down') {
+			this.player.nextGrid = { ...this.player.nextGrid, x: this.player.x, y: this.player.y + withGrid(1) }
+		} else if (direction === 'left') {
+			this.player.nextGrid = { ...this.player.nextGrid, x: this.player.x - withGrid(1), y: this.player.y }
+		} else if (direction === 'right') {
+			this.player.nextGrid = { ...this.player.nextGrid, x: this.player.x + withGrid(1), y: this.player.y }
+		}
+	}
+
 	handleCuttingDownTree() {
 		this.player.selectAction('Cutting')
-		let targetTreeBoundary: BoundaryItem | null = null
-		if (this.player.movingDirection === 'right') {
-			targetTreeBoundary = this.findTargetBoundary({ x: -this.moveStep })
-		} else if (this.player.movingDirection === 'left') {
-			targetTreeBoundary = this.findTargetBoundary({ x: this.moveStep })
-		} else if (this.player.movingDirection === 'up') {
-			targetTreeBoundary = this.findTargetBoundary({ y: this.moveStep })
-		} else if (this.player.movingDirection === 'down') {
-			targetTreeBoundary = this.findTargetBoundary({ y: -this.moveStep })
-		}
+		const targetTreeBoundary: BoundaryItem | null = this.findAllDirectionBoundary()
 		const targetTree: FullTree | undefined = this.appleTrees.fullTrees.find(tree => {
 			if (targetTreeBoundary && tree.stump.boundaryBlock.id === targetTreeBoundary.id) {
 				return tree
@@ -139,30 +161,43 @@ export class Controller {
 		}
 	}
 
+	handleCreatePlantField() {
+		const nextGridIsBoundary = this.findAllDirectionBoundary()
+		if (nextGridIsBoundary === null) {
+			this.player.selectAction('Digging')
+			const newField = this.field.addField({ x: this.player.nextGrid.x, y: this.player.nextGrid.y })
+			newField && (this.movableObjects = [...this.movableObjects, newField])
+		}
+	}
+
 	init() {
 		document.addEventListener('keydown', (e: KeyboardEvent) => {
 			if (e.key === 'w') {
 				this.keyMap.w.press = true
 				this.lastPressedKey = 'w'
 				this.player.movingDirection = 'up'
+				this.setPlayerNextGrid('up')
 				this.handleMove()
 			} else if (e.key === 'a') {
 				this.keyMap.a.press = true
 				this.lastPressedKey = 'a'
 				this.player.movingDirection = 'left'
+				this.setPlayerNextGrid('left')
 				this.handleMove()
 			} else if (e.key === 'd') {
 				this.keyMap.d.press = true
 				this.lastPressedKey = 'd'
 				this.player.movingDirection = 'right'
+				this.setPlayerNextGrid('right')
 				this.handleMove()
 			} else if (e.key === 's') {
 				this.keyMap.s.press = true
 				this.lastPressedKey = 's'
 				this.player.movingDirection = 'down'
+				this.setPlayerNextGrid('down')
 				this.handleMove()
 			} else if (e.key === 'p') {
-				this.player.selectAction('Digging')
+				this.handleCreatePlantField()
 			} else if (e.key === 'o') {
 				this.handleCuttingDownTree()
 			}

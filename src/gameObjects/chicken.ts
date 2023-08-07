@@ -1,5 +1,5 @@
 import { withGrid, randomPosition } from '../utils'
-import { ChickenConfig } from '../base/Chicken'
+import { ChickenConfig } from '../base/animal/Chicken'
 import StandingChicken from '../assets/chicken-1.png'
 import WalkingChicken from '../assets/chicken-2.png'
 

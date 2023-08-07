@@ -1,4 +1,4 @@
-import type { TreeInfo } from '../base/Tree'
+import type { TreeInfo } from '../base/tree/Tree'
 
 export const berryTrees: TreeInfo[] = [
 	{ x: 44, y: 15, state: 'bearFruit' },

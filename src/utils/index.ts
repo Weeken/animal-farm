@@ -44,9 +44,11 @@ export const loadImage = (src: string) => {
 }
 
 // 碰撞检测
-interface BaseRect {
+export interface Position {
 	x: number
 	y: number
+}
+export interface BaseRect extends Position {
 	width: number
 	height: number
 }
