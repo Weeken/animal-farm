@@ -48,6 +48,7 @@ export class Player {
 
 	// 挖
 	isDigging = false
+	diggingCount = 0
 
 	// 砍
 	isCutting = false
@@ -167,6 +168,12 @@ export class Player {
 			if (this.gap % 20 === 0) {
 				if (this.currentActionFrame < this.actionFrames - 1) {
 					this.currentActionFrame++
+					this.diggingCount++
+					console.log(
+						'%c [ this.diggingCount ]-172',
+						'font-size:13px; background:pink; color:#bf2c9f;',
+						this.diggingCount
+					)
 				} else {
 					this.currentActionFrame = 0
 				}

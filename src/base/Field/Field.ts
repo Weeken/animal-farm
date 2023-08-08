@@ -66,7 +66,7 @@ export class Field {
 				break
 			}
 		}
-		console.log('canset', canSet)
+		// console.log('canset', canSet)
 		return canSet
 	}
 

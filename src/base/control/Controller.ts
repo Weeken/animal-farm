@@ -5,6 +5,7 @@ import { getPositionFormIdStr, isHitting, withGrid } from '../../utils'
 import { AppleTree, FullTree } from '../tree/AppleTree'
 // import { PlantField } from '../Field/PlantField'
 import { Field } from '../Field/Field'
+import { PlantField } from '../Field/PlantField'
 
 interface ControllerConfig {
 	movableObjects: any[]
@@ -61,40 +62,40 @@ export class Controller {
 		return canMoving
 	}
 
-	findTargetBoundary(direction: { x?: number; y?: number }) {
-		let target: BoundaryItem | null = null
+	findTarget(list: BoundaryItem[] | PlantField[], direction: { x?: number; y?: number }) {
+		let target: BoundaryItem | PlantField | null = null
 
-		for (let i = 0; i < this.boundary.list.length; i++) {
-			const boundary = this.boundary.list[i]
+		for (let i = 0; i < list.length; i++) {
+			const item = list[i]
 			const side: { x?: number; y?: number } = {}
 			if (direction.y) {
-				side.y = boundary.y + direction.y
+				side.y = item.y + direction.y
 			} else if (direction.x) {
-				side.x = boundary.x + direction.x
+				side.x = item.x + direction.x
 			}
 			if (
 				isHitting(this.player, {
-					...boundary,
+					...item,
 					...side
 				})
 			) {
-				target = boundary
+				target = item
 				break
 			}
 		}
 		return target
 	}
 
-	findAllDirectionBoundary() {
-		let targetTreeBoundary: BoundaryItem | null = null
+	findAllDirectionBlock(list: BoundaryItem[] | PlantField[]) {
+		let targetTreeBoundary: BoundaryItem | PlantField | null = null
 		if (this.player.movingDirection === 'right') {
-			targetTreeBoundary = this.findTargetBoundary({ x: -this.moveStep })
+			targetTreeBoundary = this.findTarget(list, { x: -this.moveStep })
 		} else if (this.player.movingDirection === 'left') {
-			targetTreeBoundary = this.findTargetBoundary({ x: this.moveStep })
+			targetTreeBoundary = this.findTarget(list, { x: this.moveStep })
 		} else if (this.player.movingDirection === 'up') {
-			targetTreeBoundary = this.findTargetBoundary({ y: this.moveStep })
+			targetTreeBoundary = this.findTarget(list, { y: this.moveStep })
 		} else if (this.player.movingDirection === 'down') {
-			targetTreeBoundary = this.findTargetBoundary({ y: -this.moveStep })
+			targetTreeBoundary = this.findTarget(list, { y: -this.moveStep })
 		}
 		return targetTreeBoundary
 	}
@@ -143,7 +144,7 @@ export class Controller {
 
 	handleCuttingDownTree() {
 		this.player.selectAction('Cutting')
-		const targetTreeBoundary: BoundaryItem | null = this.findAllDirectionBoundary()
+		const targetTreeBoundary: BoundaryItem | null = this.findAllDirectionBlock(this.boundary.list)
 		const targetTree: FullTree | undefined = this.appleTrees.fullTrees.find(tree => {
 			if (targetTreeBoundary && tree.stump.boundaryBlock.id === targetTreeBoundary.id) {
 				return tree
@@ -162,11 +163,22 @@ export class Controller {
 	}
 
 	handleCreatePlantField() {
-		const nextGridIsBoundary = this.findAllDirectionBoundary()
+		const nextGridIsBoundary = this.findAllDirectionBlock(this.boundary.list)
 		if (nextGridIsBoundary === null) {
 			this.player.selectAction('Digging')
-			const newField = this.field.addField({ x: this.player.nextGrid.x, y: this.player.nextGrid.y })
-			newField && (this.movableObjects = [...this.movableObjects, newField])
+			if (this.player.diggingCount >= 3) {
+				const newField = this.field.addField({ x: this.player.nextGrid.x, y: this.player.nextGrid.y })
+				newField && (this.movableObjects = [...this.movableObjects, newField])
+				this.player.diggingCount = 0
+			}
+		}
+	}
+
+	handleRemovePlantField() {
+		const targetField = this.findAllDirectionBlock(this.field.plantFields)
+		if (targetField !== null) {
+			this.field.removeField(targetField.id)
+			this.movableObjects = this.movableObjects.filter(item => item.id !== targetField.id)
 		}
 	}
 
@@ -198,6 +210,8 @@ export class Controller {
 				this.handleMove()
 			} else if (e.key === 'p') {
 				this.handleCreatePlantField()
+			} else if (e.key === 'l') {
+				this.handleRemovePlantField()
 			} else if (e.key === 'o') {
 				this.handleCuttingDownTree()
 			}
@@ -212,7 +226,10 @@ export class Controller {
 			} else if (e.key === 's') {
 				this.keyMap.s.press = false
 			} else if (e.key === 'p') {
-				//
+				if (this.player.diggingCount !== 3) {
+					// 如果没有挖够3次，重置为0
+					this.player.diggingCount = 0
+				}
 			}
 			this.reset()
 		})
