@@ -14,6 +14,7 @@ import { BerryTree } from '../base/tree/BerryTree'
 import { AppleTree } from '../base/tree/AppleTree'
 import { ItemDock } from '../base/ItemDock'
 import { Field } from '../base/Field/Field'
+import { Crop } from '../base/plant/Crop'
 
 import MapImg from '../assets/map.png'
 import PlayerImg from '../assets/player.png'
@@ -66,6 +67,17 @@ export const useGlobal = async () => {
 	})
 
 	const bridges = bridgesInfo.map(bridge => new Bridge({ ...bridge, ctx }))
+
+	const field = new Field({
+		ctx,
+		boundary,
+		bridges
+	})
+
+	const crop = new Crop({
+		ctx,
+		field
+	})
 
 	const itemDock = new ItemDock({
 		x: screenCenter.x - withGrid(6),
@@ -147,11 +159,8 @@ export const useGlobal = async () => {
 			player
 		}),
 		bridges,
-		field: new Field({
-			ctx,
-			boundary,
-			bridges
-		})
+		field,
+		crop
 	}
 
 	return {

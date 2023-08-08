@@ -6,6 +6,8 @@ import { AppleTree, FullTree } from '../tree/AppleTree'
 // import { PlantField } from '../Field/PlantField'
 import { Field } from '../Field/Field'
 import { PlantField } from '../Field/PlantField'
+import { Crop } from '../plant/Crop'
+import { Wheat } from '../plant/Wheat'
 
 interface ControllerConfig {
 	movableObjects: any[]
@@ -13,6 +15,7 @@ interface ControllerConfig {
 	boundary: Boundary
 	appleTrees: AppleTree
 	field: Field
+	crop: Crop
 }
 
 export class Controller {
@@ -30,12 +33,14 @@ export class Controller {
 	boundary: Boundary
 	appleTrees: AppleTree
 	field: Field
+	crop: Crop
 	constructor(config: ControllerConfig) {
 		this.movableObjects = config.movableObjects
 		this.player = config.player
 		this.boundary = config.boundary
 		this.appleTrees = config.appleTrees
 		this.field = config.field
+		this.crop = config.crop
 	}
 
 	checkHitting(direction: { x?: number; y?: number }) {
@@ -176,9 +181,22 @@ export class Controller {
 
 	handleRemovePlantField() {
 		const targetField = this.findAllDirectionBlock(this.field.plantFields)
-		if (targetField !== null) {
+		if (targetField !== null && targetField instanceof PlantField) {
 			this.field.removeField(targetField.id)
 			this.movableObjects = this.movableObjects.filter(item => item.id !== targetField.id)
+		}
+	}
+
+	handleCreateACrop(cropType: 'wheat' | 'tomato') {
+		const targetField = this.findAllDirectionBlock(this.field.plantFields)
+		if (targetField !== null && targetField instanceof PlantField) {
+			let newCrop: Wheat | null = null
+			if (cropType === 'wheat') {
+				newCrop = this.crop.addWheat(targetField)
+			} else if (cropType === 'tomato') {
+				newCrop = this.crop.addTomato(targetField)
+			}
+			newCrop && (this.movableObjects = [...this.movableObjects, newCrop])
 		}
 	}
 
@@ -209,10 +227,19 @@ export class Controller {
 				this.setPlayerNextGrid('down')
 				this.handleMove()
 			} else if (e.key === 'p') {
+				// 新增一块菜地
 				this.handleCreatePlantField()
 			} else if (e.key === 'l') {
+				// 删除一块菜地
 				this.handleRemovePlantField()
+			} else if (e.key === 'k') {
+				// 种一个小麦
+				this.handleCreateACrop('wheat')
+			} else if (e.key === 'j') {
+				// 种一个番茄
+				this.handleCreateACrop('tomato')
 			} else if (e.key === 'o') {
+				// 砍树
 				this.handleCuttingDownTree()
 			}
 		})

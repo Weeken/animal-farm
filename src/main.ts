@@ -13,6 +13,8 @@ import { AppleTreeStump } from './base/tree/AppleTreeStump'
 import { BoundaryItem } from './base/fixed-things/BoundaryItem'
 import { PlantField } from './base/Field/PlantField'
 import { Bridge } from './base/fixed-things/Bridge'
+import { Wheat } from './base/plant/Wheat'
+import { Tomato } from './base/plant/Tomato'
 
 const start = async () => {
 	const { ctx, player, boundary, gameObjects } = await useGlobal()
@@ -63,6 +65,14 @@ const start = async () => {
 				field.draw()
 			})
 
+			// 作物--小麦
+			gameObjects.crop.wheats.forEach((wheat: Wheat) => {
+				wheat.draw()
+			})
+			gameObjects.crop.tomatoes.forEach((tomato: Tomato) => {
+				tomato.draw()
+			})
+
 			// 主角
 			if (player.isDigging) {
 				player.digging()
@@ -106,14 +116,16 @@ const start = async () => {
 		...gameObjects.appleTrees.treeTops,
 		...gameObjects.appleTrees.treeStumps,
 		...gameObjects.field.plantFields,
-		...gameObjects.bridges
+		...gameObjects.bridges,
+		...gameObjects.crop.wheats
 	]
 	const controller: Controller = new Controller({
 		movableObjects,
 		player,
 		boundary,
 		appleTrees: gameObjects.appleTrees,
-		field: gameObjects.field
+		field: gameObjects.field,
+		crop: gameObjects.crop
 	})
 
 	controller && controller.init()

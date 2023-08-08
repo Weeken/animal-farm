@@ -114,8 +114,8 @@ export class Player {
 				this.gap = 0
 			}
 
-			this.ctx.fillStyle = 'rgba(0, 0, 255, 0.2)'
-			this.ctx.fillRect(this.position.x, this.position.y, this.width, this.height)
+			// this.ctx.fillStyle = 'rgba(0, 0, 255, 0.2)'
+			// this.ctx.fillRect(this.position.x, this.position.y, this.width, this.height)
 
 			if (this.image) {
 				this.ctx.drawImage(
@@ -169,11 +169,6 @@ export class Player {
 				if (this.currentActionFrame < this.actionFrames - 1) {
 					this.currentActionFrame++
 					this.diggingCount++
-					console.log(
-						'%c [ this.diggingCount ]-172',
-						'font-size:13px; background:pink; color:#bf2c9f;',
-						this.diggingCount
-					)
 				} else {
 					this.currentActionFrame = 0
 				}

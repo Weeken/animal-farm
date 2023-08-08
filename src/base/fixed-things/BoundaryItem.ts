@@ -27,7 +27,7 @@ export class BoundaryItem extends Movable {
 	}
 
 	draw() {
-		this.ctx.fillStyle = 'rgba(255, 0, 0, 0.1)'
+		this.ctx.fillStyle = 'rgba(255, 0, 0, 0.0)'
 		this.ctx.fillRect(this.x + VIEW_OFFSET.x, this.y + VIEW_OFFSET.y, this.width, this.height)
 	}
 }
