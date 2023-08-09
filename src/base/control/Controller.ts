@@ -8,6 +8,7 @@ import { Field } from '../Field/Field'
 import { PlantField } from '../Field/PlantField'
 import { Crop } from '../plant/Crop'
 import { Wheat } from '../plant/Wheat'
+import { ItemDock } from '../ItemDock'
 
 interface ControllerConfig {
 	movableObjects: any[]
@@ -16,6 +17,7 @@ interface ControllerConfig {
 	appleTrees: AppleTree
 	field: Field
 	crop: Crop
+	itemDock: ItemDock
 }
 
 export class Controller {
@@ -34,6 +36,7 @@ export class Controller {
 	appleTrees: AppleTree
 	field: Field
 	crop: Crop
+	itemDock: ItemDock
 	constructor(config: ControllerConfig) {
 		this.movableObjects = config.movableObjects
 		this.player = config.player
@@ -41,6 +44,7 @@ export class Controller {
 		this.appleTrees = config.appleTrees
 		this.field = config.field
 		this.crop = config.crop
+		this.itemDock = config.itemDock
 	}
 
 	checkHitting(direction: { x?: number; y?: number }) {
@@ -241,6 +245,8 @@ export class Controller {
 			} else if (e.key === 'o') {
 				// 砍树
 				this.handleCuttingDownTree()
+			} else if (e.key === 'e') {
+				this.itemDock.switch()
 			}
 		})
 		document.addEventListener('keyup', (e: KeyboardEvent) => {

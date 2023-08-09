@@ -35,7 +35,7 @@ export class Player {
 
 	// 行走动画
 	frames = 4
-	currentFrame = 0
+	currentFrame = 1
 	gap = 0
 
 	// 站、走

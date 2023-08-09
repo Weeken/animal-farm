@@ -15,9 +15,10 @@ import { PlantField } from './base/Field/PlantField'
 import { Bridge } from './base/fixed-things/Bridge'
 import { Wheat } from './base/plant/Wheat'
 import { Tomato } from './base/plant/Tomato'
+import { Material } from './base/Material'
 
 const start = async () => {
-	const { ctx, player, boundary, gameObjects } = await useGlobal()
+	const { ctx, player, boundary, itemDock, gameObjects } = await useGlobal()
 
 	const gameLoop = () => {
 		const frame = () => {
@@ -96,7 +97,10 @@ const start = async () => {
 			})
 
 			// 物品栏
-			// itemDock.draw()
+			itemDock.draw()
+			itemDock.list.forEach((item: Material) => {
+				item.draw()
+			})
 
 			window.requestAnimationFrame(() => {
 				frame()
@@ -125,7 +129,8 @@ const start = async () => {
 		boundary,
 		appleTrees: gameObjects.appleTrees,
 		field: gameObjects.field,
-		crop: gameObjects.crop
+		crop: gameObjects.crop,
+		itemDock
 	})
 
 	controller && controller.init()

@@ -1,4 +1,4 @@
-import { screenCenter, withGrid, ROW_GRID_NUM, VIEW_OFFSET, ROLE_WIDTH, ROLE_HEIGHT, VIEW_HEIGHT } from '../utils'
+import { screenCenter, withGrid, ROW_GRID_NUM, VIEW_OFFSET, ROLE_WIDTH, ROLE_HEIGHT } from '../utils'
 
 import { getCtx } from '../utils/canvas'
 
@@ -80,12 +80,11 @@ export const useGlobal = async () => {
 	})
 
 	const itemDock = new ItemDock({
-		x: screenCenter.x - withGrid(6),
-		y: VIEW_HEIGHT - withGrid(2.4),
-		width: withGrid(12),
-		height: withGrid(3),
 		ctx
 	})
+
+	itemDock.addItem('apple')
+	itemDock.addItem('berry')
 
 	const gameObjects = {
 		// 地图
