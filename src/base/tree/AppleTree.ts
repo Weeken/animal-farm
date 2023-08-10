@@ -6,9 +6,10 @@ import { withGrid, hours, getPositionFormIdStr } from '../../utils'
 import { Boundary } from '../fixed-things/Boundary'
 import type { TreeState } from './Tree'
 import { Player } from '../Player'
+import { Ctx } from '../../utils/canvas'
 
 interface AppleTreeConfig {
-	ctx: CanvasRenderingContext2D
+	ctx: Ctx
 	boundary: Boundary
 	player: Player
 	trees: TreeInfo[]
@@ -40,7 +41,7 @@ export class AppleTree {
 				width: withGrid(2),
 				height: withGrid(2),
 				state: appleTree.state,
-				ctx: config.ctx,
+				ctx: config.ctx.upper,
 				matureTime: appleTree.matureTime || hours(1),
 				id: `appleTree-${appleTree.x}-${appleTree.y}`
 			})
@@ -51,7 +52,7 @@ export class AppleTree {
 				width: withGrid(1),
 				height: withGrid(1),
 				state: appleTree.state,
-				ctx: config.ctx,
+				ctx: config.ctx.down,
 				boundary: config.boundary,
 				matureTime: appleTree.matureTime || hours(1),
 				player: config.player,

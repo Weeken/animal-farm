@@ -34,7 +34,7 @@ export class Material {
 	position: Position
 	ctx: CanvasRenderingContext2D
 	image: HTMLImageElement | null = null
-	isShow = true
+	isShow = false
 	constructor(config: MaterialConfig) {
 		this.type = config.type
 		this.count = config.count

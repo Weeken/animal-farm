@@ -1,6 +1,6 @@
 import { screenCenter, withGrid, ROW_GRID_NUM, VIEW_OFFSET, ROLE_WIDTH, ROLE_HEIGHT } from '../utils'
 
-import { getCtx } from '../utils/canvas'
+import { generateCtx } from '../utils/canvas'
 
 import { IslandMap } from '../base/Map'
 import { Boundary } from '../base/fixed-things/Boundary'
@@ -49,38 +49,38 @@ const getBoundaries = () => {
 }
 
 export const useGlobal = async () => {
-	const ctx = await getCtx()
+	const ctx = await generateCtx()
 	const player = new Player({
 		x: screenCenter.x,
 		y: screenCenter.y,
 		src: PlayerImg,
 		width: ROLE_WIDTH,
 		height: ROLE_HEIGHT,
-		ctx
+		ctx: ctx.middle
 	})
 
 	const boundary = new Boundary({
 		list: getBoundaries().map(item => ({
 			...item,
-			ctx
+			ctx: ctx.down
 		}))
 	})
 
-	const bridges = bridgesInfo.map(bridge => new Bridge({ ...bridge, ctx }))
+	const bridges = bridgesInfo.map(bridge => new Bridge({ ...bridge, ctx: ctx.down }))
 
 	const field = new Field({
-		ctx,
+		ctx: ctx.middle,
 		boundary,
 		bridges
 	})
 
 	const crop = new Crop({
-		ctx,
+		ctx: ctx.middle,
 		field
 	})
 
 	const itemDock = new ItemDock({
-		ctx
+		ctx: ctx.upper
 	})
 
 	itemDock.addItem('apple')
@@ -92,7 +92,7 @@ export const useGlobal = async () => {
 			src: MapImg,
 			x: VIEW_OFFSET.x,
 			y: VIEW_OFFSET.y,
-			ctx
+			ctx: ctx.down
 		}),
 		// 玩家
 		// player,
@@ -105,7 +105,7 @@ export const useGlobal = async () => {
 			y: withGrid(12),
 			width: withGrid(5),
 			height: withGrid(5),
-			ctx,
+			ctx: ctx.upper,
 			player: player
 		}),
 		// 玩家房子的门
@@ -115,7 +115,7 @@ export const useGlobal = async () => {
 			y: withGrid(16),
 			width: withGrid(1),
 			height: withGrid(1),
-			ctx,
+			ctx: ctx.middle,
 			player
 		}),
 		chickens: [
@@ -123,7 +123,7 @@ export const useGlobal = async () => {
 				chicken =>
 					new Chicken({
 						...chicken,
-						ctx
+						ctx: ctx.down
 					})
 			)
 		],
@@ -132,7 +132,7 @@ export const useGlobal = async () => {
 				cow =>
 					new Cow({
 						...cow,
-						ctx
+						ctx: ctx.down
 					})
 			)
 		],
@@ -146,14 +146,14 @@ export const useGlobal = async () => {
 						width: withGrid(1),
 						height: withGrid(1),
 						state: berryTree.state,
-						ctx,
+						ctx: ctx.middle,
 						boundary
 					})
 			)
 		],
 		appleTrees: new AppleTree({
 			trees: appleTrees,
-			ctx,
+			ctx: ctx,
 			boundary,
 			player
 		}),

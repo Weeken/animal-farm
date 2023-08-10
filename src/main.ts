@@ -23,7 +23,9 @@ const start = async () => {
 	const gameLoop = () => {
 		const frame = () => {
 			// 清除画布
-			ctx.clearRect(0, 0, VIEW_WIDTH, VIEW_HEIGHT)
+			ctx.down.clearRect(0, 0, VIEW_WIDTH, VIEW_HEIGHT)
+			ctx.middle.clearRect(0, 0, VIEW_WIDTH, VIEW_HEIGHT)
+			ctx.upper.clearRect(0, 0, VIEW_WIDTH, VIEW_HEIGHT)
 			// 地图
 			gameObjects.map.draw()
 			// 左上角的门

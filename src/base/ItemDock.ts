@@ -13,7 +13,7 @@ export class ItemDock {
 	height = withGrid(3)
 	ctx: CanvasRenderingContext2D
 	image: HTMLImageElement | null = null
-	isShow = true
+	isShow = false
 	list: Material[] = []
 	constructor(config: ItemDockConfig) {
 		this.ctx = config.ctx
