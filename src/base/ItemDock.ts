@@ -41,7 +41,7 @@ export class ItemDock {
 		})
 	}
 
-	addItem(type: MaterialType) {
+	addItem(type: MaterialType, count?: number) {
 		const target: Material | undefined = this.list.find(item => item.type === type)
 		if (target) {
 			target.count += 1
@@ -55,7 +55,7 @@ export class ItemDock {
 						// x: this.x + withGrid(1) * this.list.length - 1,
 						// y: this.y + withGrid(1)
 					},
-					count: 1,
+					count: count || 1,
 					type
 				})
 			)

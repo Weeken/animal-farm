@@ -44,7 +44,7 @@ export class Player {
 	movingDirection = 'down'
 
 	actionFrames = 2
-	currentActionFrame = 0
+	currentActionFrame = 1
 
 	// 挖
 	isDigging = false
@@ -110,7 +110,7 @@ export class Player {
 					}
 				}
 			} else {
-				this.currentFrame = 0
+				this.currentFrame = 1
 				this.gap = 0
 			}
 
@@ -276,7 +276,7 @@ export class Player {
 				}
 			}
 		} else {
-			this.currentActionFrame = 0
+			this.currentActionFrame = 1
 			this.gap = 0
 		}
 

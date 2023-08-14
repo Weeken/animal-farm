@@ -16,9 +16,11 @@ export interface BerryConfig {
 
 export class BerryTree extends Tree {
 	boundary: Boundary
+	id: string
 
 	constructor(config: BerryConfig) {
 		super(config)
+		this.id = `berryTree-${config.x}-${config.y}`
 
 		this.matureTime = hours(0.5)
 		this.boundary = config.boundary
