@@ -9,12 +9,16 @@ import { PlantField } from '../Field/PlantField'
 import { Crop } from '../plant/Crop'
 import { Wheat } from '../plant/Wheat'
 import { ItemDock } from '../ItemDock'
+import { BerryTree } from '../tree/BerryTree'
+import { BerryTreeItem } from '../tree/BerryTreeItem'
+// import { AppleTreeStump } from '../tree/AppleTreeStump'
 
 interface ControllerConfig {
 	movableObjects: any[]
 	player: Player
 	boundary: Boundary
 	appleTrees: AppleTree
+	berryTree: BerryTree
 	field: Field
 	crop: Crop
 	itemDock: ItemDock
@@ -34,6 +38,7 @@ export class Controller {
 	player: Player
 	boundary: Boundary
 	appleTrees: AppleTree
+	berryTree: BerryTree
 	field: Field
 	crop: Crop
 	itemDock: ItemDock
@@ -42,6 +47,7 @@ export class Controller {
 		this.player = config.player
 		this.boundary = config.boundary
 		this.appleTrees = config.appleTrees
+		this.berryTree = config.berryTree
 		this.field = config.field
 		this.crop = config.crop
 		this.itemDock = config.itemDock
@@ -154,19 +160,40 @@ export class Controller {
 	handleCuttingDownTree() {
 		this.player.selectAction('Cutting')
 		const targetTreeBoundary: BoundaryItem | null = this.findAllDirectionBlock(this.boundary.list)
-		const targetTree: FullTree | undefined = this.appleTrees.fullTrees.find(tree => {
+		const targetAppleTree: FullTree | undefined = this.appleTrees.fullTrees.find(tree => {
 			if (targetTreeBoundary && tree.stump.boundaryBlock.id === targetTreeBoundary.id) {
 				return tree
 			}
 		})
-		if (targetTree) {
-			const position = getPositionFormIdStr(targetTree.id)
-			targetTree.stump.isBeingCut = true
-			targetTree.top.isBeingCut = true
+		if (targetAppleTree) {
+			// 砍苹果树
+			const position = getPositionFormIdStr(targetAppleTree.id)
+			targetAppleTree.stump.isBeingCut = true
+			targetAppleTree.top.isBeingCut = true
 			// 树被砍3次就移除
-			if (targetTree.top.cuttingCount === 2) {
+			if (targetAppleTree.top.cuttingCount === 3) {
 				this.appleTrees.removeTree({ gridX: position.x, gridY: position.y })
 				targetTreeBoundary && this.boundary.removeItem(targetTreeBoundary.id)
+			}
+			return true
+		} else {
+			// 砍浆果树
+			const targetBerryTree: BerryTreeItem | undefined = this.berryTree.list.find(tree => {
+				if (targetTreeBoundary && tree.boundaryBlock.id === targetTreeBoundary.id) {
+					return tree
+				}
+			})
+			if (targetBerryTree) {
+				const position = getPositionFormIdStr(targetBerryTree.id)
+				targetBerryTree.isBeingCut = true
+				// 树被砍3次就移除
+				if (targetBerryTree.cuttingCount === 3) {
+					this.berryTree.removeTree({ gridX: position.x, gridY: position.y })
+					targetTreeBoundary && this.boundary.removeItem(targetTreeBoundary.id)
+				}
+				return true
+			} else {
+				return false
 			}
 		}
 	}

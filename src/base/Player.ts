@@ -114,8 +114,8 @@ export class Player {
 				this.gap = 0
 			}
 
-			// this.ctx.fillStyle = 'rgba(0, 0, 255, 0.2)'
-			// this.ctx.fillRect(this.position.x, this.position.y, this.width, this.height)
+			this.ctx.fillStyle = 'rgba(0, 0, 255, 0.2)'
+			this.ctx.fillRect(this.position.x, this.position.y, this.width, this.height)
 
 			if (this.image) {
 				this.ctx.drawImage(
@@ -281,8 +281,8 @@ export class Player {
 		}
 
 		if (this.image) {
-			// this.ctx.fillStyle = 'rgba(0, 0, 255, 0.2)'
-			// this.ctx.fillRect(positionX, positionY, frameW, frameH)
+			this.ctx.fillStyle = 'rgba(0, 0, 255, 0.2)'
+			this.ctx.fillRect(positionX, positionY, frameW, frameH)
 			this.ctx.drawImage(this.image, frameX, frameY, frameW, frameH, positionX, positionY, frameW, frameH)
 		}
 	}

@@ -3,6 +3,7 @@ import { Boundary } from '../fixed-things/Boundary'
 import { withGrid } from '../../utils'
 import { Player } from '../Player'
 import { AppleTree } from './AppleTree'
+import { BaseRect } from '../../utils'
 
 interface AppleTreeConfig extends TreeConfig {
 	boundary: Boundary
@@ -11,12 +12,8 @@ interface AppleTreeConfig extends TreeConfig {
 	id: string
 }
 
-interface BoundaryBlock {
+interface BoundaryBlock extends BaseRect {
 	id: string
-	x: number
-	y: number
-	width: number
-	height: number
 }
 
 export class AppleTreeStump extends Tree {

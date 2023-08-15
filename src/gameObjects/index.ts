@@ -20,7 +20,6 @@ import MapImg from '../assets/map.png'
 import PlayerImg from '../assets/player.png'
 import HouseRoot from '../assets/house/house-root.png'
 import SmallDoorImg from '../assets/house/door.png'
-import BerryTreeImg from '../assets/berry-tree.png'
 
 import { cows } from './cows'
 import { chickens } from './chicken'
@@ -136,21 +135,26 @@ export const useGlobal = async () => {
 					})
 			)
 		],
-		berryTrees: [
-			...berryTrees.map(
-				berryTree =>
-					new BerryTree({
-						src: BerryTreeImg,
-						x: withGrid(berryTree.x),
-						y: withGrid(berryTree.y),
-						width: withGrid(1),
-						height: withGrid(1),
-						state: berryTree.state,
-						ctx: ctx.middle,
-						boundary
-					})
-			)
-		],
+		berryTree: new BerryTree({
+			trees: berryTrees,
+			ctx: ctx.middle,
+			boundary
+		}),
+		// [
+		// 	...berryTrees.map(
+		// 		berryTree =>
+		// 			new BerryTree({
+		// 				src: BerryTreeImg,
+		// 				x: withGrid(berryTree.x),
+		// 				y: withGrid(berryTree.y),
+		// 				width: withGrid(1),
+		// 				height: withGrid(1),
+		// 				state: berryTree.state,
+		// 				ctx: ctx.middle,
+		// 				boundary
+		// 			})
+		// 	)
+		// ],
 		appleTrees: new AppleTree({
 			trees: appleTrees,
 			ctx: ctx,

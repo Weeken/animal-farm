@@ -7,7 +7,7 @@ import { Controller } from './base/control/Controller'
 import { useGlobal } from './gameObjects'
 import { Chicken } from './base/animal/Chicken'
 import { Cow } from './base/animal/Cow'
-import { BerryTree } from './base/tree/BerryTree'
+import { BerryTreeItem } from './base/tree/BerryTreeItem'
 import { AppleTreeTop } from './base/tree/AppleTreeTop'
 import { AppleTreeStump } from './base/tree/AppleTreeStump'
 import { BoundaryItem } from './base/fixed-things/BoundaryItem'
@@ -54,7 +54,7 @@ const start = async () => {
 			})
 
 			// 浆果树
-			gameObjects.berryTrees.forEach((tree: BerryTree) => {
+			gameObjects.berryTree.list.forEach((tree: BerryTreeItem) => {
 				tree.draw()
 			})
 
@@ -118,7 +118,7 @@ const start = async () => {
 		gameObjects.playerHouseDoor,
 		...gameObjects.chickens,
 		...gameObjects.cows,
-		...gameObjects.berryTrees,
+		...gameObjects.berryTree.list,
 		...gameObjects.appleTrees.treeTops,
 		...gameObjects.appleTrees.treeStumps,
 		...gameObjects.field.plantFields,
@@ -132,7 +132,8 @@ const start = async () => {
 		appleTrees: gameObjects.appleTrees,
 		field: gameObjects.field,
 		crop: gameObjects.crop,
-		itemDock
+		itemDock,
+		berryTree: gameObjects.berryTree
 	})
 
 	controller && controller.init()

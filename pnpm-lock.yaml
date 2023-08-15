@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  collider2d:
+    specifier: ^1.1.1
+    version: 1.1.1
   leafer-ui:
     specifier: 1.0.0-beta.6
     version: 1.0.0-beta.6
@@ -1687,6 +1690,10 @@ packages:
     resolution: {integrity: sha512-JQHZ2QMW6l3aH/j6xCqQThY/9OH4D/9ls34cgkUBiEeocRTU04tHfKPBsUK1PqZCUQM7GiA0IIXJSuXHI64Kbg==}
     engines: {node: '>=0.8'}
     dev: true
+
+  /collider2d@1.1.1:
+    resolution: {integrity: sha512-dm9TjFSWivV2vzP+TIRHODr/NZOG5BpSt3zYNYWqz+GWQ0+tYuMr4psns/ID84Sm7ng2OgGT2tEIXYQ5BHIJXw==}
+    dev: false
 
   /color-convert@1.9.3:
     resolution: {integrity: sha512-QfAUtd+vFdAtFQcC8CCyYt1fYWxSqAiK2cSD6zDB8N3cpsEBAvRxp9zOGg6G/SHHJYAT88/az/IuDGALsNVbGg==}

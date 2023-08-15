@@ -101,7 +101,7 @@ export class Tree extends Movable {
 				if (this.cuttingGap % 10 === 0) {
 					this.shakeCount++
 
-					if (this.shakeCount >= 2) {
+					if (this.shakeCount >= 3) {
 						this.cuttingGap = 0
 						this.isBeingCut = false
 						this.shakeCount = 0
