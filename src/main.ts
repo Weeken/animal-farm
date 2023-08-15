@@ -16,6 +16,7 @@ import { Bridge } from './base/fixed-things/Bridge'
 import { Wheat } from './base/plant/Wheat'
 import { Tomato } from './base/plant/Tomato'
 import { Material } from './base/Material'
+import { DropItem } from './base/drop/DropItem'
 
 const start = async () => {
 	const { ctx, player, boundary, itemDock, gameObjects } = await useGlobal()
@@ -76,6 +77,10 @@ const start = async () => {
 				tomato.draw()
 			})
 
+			gameObjects.drop.list.forEach((drop: DropItem) => {
+				drop.draw()
+			})
+
 			// 主角
 			if (player.isDigging) {
 				player.digging()
@@ -123,7 +128,8 @@ const start = async () => {
 		...gameObjects.appleTrees.treeStumps,
 		...gameObjects.field.plantFields,
 		...gameObjects.bridges,
-		...gameObjects.crop.wheats
+		...gameObjects.crop.wheats,
+		...gameObjects.drop.list
 	]
 	const controller: Controller = new Controller({
 		movableObjects,
@@ -133,7 +139,8 @@ const start = async () => {
 		field: gameObjects.field,
 		crop: gameObjects.crop,
 		itemDock,
-		berryTree: gameObjects.berryTree
+		berryTree: gameObjects.berryTree,
+		drop: gameObjects.drop
 	})
 
 	controller && controller.init()

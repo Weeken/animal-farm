@@ -3,6 +3,7 @@ import { TreeInfo } from './Tree'
 import { withGrid, getPositionFormIdStr } from '../../utils'
 import { Boundary } from '../fixed-things/Boundary'
 import BerryTreeImg from '../../assets/berry-tree.png'
+import { DropItem } from '../drop/DropItem'
 
 export interface BerryConfig {
 	trees: TreeInfo[]
@@ -12,7 +13,9 @@ export interface BerryConfig {
 
 export class BerryTree {
 	list: BerryTreeItem[] = []
+	ctx: CanvasRenderingContext2D
 	constructor(config: BerryConfig) {
+		this.ctx = config.ctx
 		this.list = config.trees.map(berryTree => {
 			const treeItem = new BerryTreeItem({
 				src: BerryTreeImg,
@@ -38,6 +41,29 @@ export class BerryTree {
 		})
 		if (tree) {
 			this.list = this.list.filter(item => item.id !== tree.id)
+			return tree
 		}
+	}
+	createDrop(tree: BerryTreeItem) {
+		const woods = new DropItem({
+			x: tree.x,
+			y: tree.y,
+			ctx: this.ctx,
+			type: 'branch',
+			count: 3
+		})
+		const drops: DropItem[] = [woods]
+		if (tree.state === 'bearFruit') {
+			drops.push(
+				new DropItem({
+					x: tree.x + withGrid(0.5),
+					y: tree.y + withGrid(0.4),
+					ctx: this.ctx,
+					type: 'berry',
+					count: 3
+				})
+			)
+		}
+		return drops
 	}
 }

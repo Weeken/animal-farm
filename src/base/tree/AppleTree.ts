@@ -7,6 +7,7 @@ import { Boundary } from '../fixed-things/Boundary'
 import type { TreeState } from './Tree'
 import { Player } from '../Player'
 import { Ctx } from '../../utils/canvas'
+import { DropItem } from '../drop/DropItem'
 
 interface AppleTreeConfig {
 	ctx: Ctx
@@ -32,7 +33,9 @@ export class AppleTree {
 	treeTops: AppleTreeTop[] = []
 	treeStumps: AppleTreeStump[] = []
 	fullTrees: FullTree[] = []
+	ctx: Ctx
 	constructor(config: AppleTreeConfig) {
+		this.ctx = config.ctx
 		config.trees.forEach(appleTree => {
 			const top = new AppleTreeTop({
 				src: AppleTreeTopImg,
@@ -67,7 +70,7 @@ export class AppleTree {
 
 	removeTree(info: { gridX: number; gridY: number }) {
 		// console.log('%c [ info ]-59', 'font-size:13px; background:pink; color:#bf2c9f;', info)
-		const tree = this.treeTops.find(item => {
+		const tree: AppleTreeTop | undefined = this.treeTops.find(item => {
 			const position: { x: number; y: number } = getPositionFormIdStr(item.id)
 			// console.log('%c [ position ]-71', 'font-size:13px; background:pink; color:#bf2c9f;', position)
 			if (info.gridX === position.x && info.gridY === position.y) {
@@ -77,6 +80,30 @@ export class AppleTree {
 		if (tree) {
 			this.treeTops = this.treeTops.filter(item => item.id !== tree.id)
 			this.treeStumps = this.treeStumps.filter(item => item.id !== tree.id)
+			return tree
 		}
+	}
+
+	createDrop(tree: AppleTreeTop) {
+		const woods = new DropItem({
+			x: tree.x + withGrid(0.5),
+			y: tree.y + withGrid(1),
+			ctx: this.ctx.middle,
+			type: 'wood',
+			count: 3
+		})
+		const drops: DropItem[] = [woods]
+		if (tree.state === 'bearFruit') {
+			drops.push(
+				new DropItem({
+					x: tree.x + withGrid(0.8),
+					y: tree.y + withGrid(0.4),
+					ctx: this.ctx.middle,
+					type: 'apple',
+					count: 3
+				})
+			)
+		}
+		return drops
 	}
 }

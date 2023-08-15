@@ -10,14 +10,14 @@ import branchImg from '../assets/material/branch.png'
 
 export type MaterialType = 'berry' | 'apple' | 'wheat' | 'tomato' | 'cowFoodGrass' | 'milk' | 'wood' | 'branch'
 
-interface MaterialConfig {
+export interface MaterialConfig {
 	type: MaterialType
 	count: number
 	position: Position
 	ctx: CanvasRenderingContext2D
 }
 
-const map = {
+export const MaterialImagesMap = {
 	berry: berryImg,
 	apple: appleImg,
 	wheat: wheatImg,
@@ -52,13 +52,13 @@ export class Material {
 					0,
 					withGrid(1),
 					withGrid(1),
-					this.position.x,
-					this.position.y,
-					withGrid(1) - 10,
-					withGrid(1) - 10
+					this.position.x + 4,
+					this.position.y + 10,
+					withGrid(1) - 20,
+					withGrid(1) - 20
 				)
 			} else {
-				loadImage(map[this.type]).then(img => {
+				loadImage(MaterialImagesMap[this.type]).then(img => {
 					this.image = img
 					this.ctx.drawImage(
 						this.image,
@@ -66,14 +66,14 @@ export class Material {
 						0,
 						withGrid(1),
 						withGrid(1),
-						this.position.x,
-						this.position.y,
-						withGrid(1) - 10,
-						withGrid(1) - 10
+						this.position.x + 4,
+						this.position.y + 10,
+						withGrid(1) - 20,
+						withGrid(1) - 20
 					)
 				})
 			}
-			this.ctx.font = 'bold 20px Microsoft Yahei'
+			this.ctx.font = 'bold 16px Microsoft Yahei'
 			this.ctx.fillStyle = 'white'
 			this.ctx.fillText(`${this.count}`, this.position.x + withGrid(1) - 20, this.position.y + withGrid(1) - 10)
 			resolve(this.image)

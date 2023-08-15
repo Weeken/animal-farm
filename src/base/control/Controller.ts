@@ -11,6 +11,7 @@ import { Wheat } from '../plant/Wheat'
 import { ItemDock } from '../ItemDock'
 import { BerryTree } from '../tree/BerryTree'
 import { BerryTreeItem } from '../tree/BerryTreeItem'
+import { Drop } from '../drop/Drop'
 // import { AppleTreeStump } from '../tree/AppleTreeStump'
 
 interface ControllerConfig {
@@ -22,6 +23,7 @@ interface ControllerConfig {
 	field: Field
 	crop: Crop
 	itemDock: ItemDock
+	drop: Drop
 }
 
 export class Controller {
@@ -42,6 +44,7 @@ export class Controller {
 	field: Field
 	crop: Crop
 	itemDock: ItemDock
+	drop: Drop
 	constructor(config: ControllerConfig) {
 		this.movableObjects = config.movableObjects
 		this.player = config.player
@@ -51,6 +54,7 @@ export class Controller {
 		this.field = config.field
 		this.crop = config.crop
 		this.itemDock = config.itemDock
+		this.drop = config.drop
 	}
 
 	checkHitting(direction: { x?: number; y?: number }) {
@@ -172,9 +176,16 @@ export class Controller {
 			targetAppleTree.top.isBeingCut = true
 			// 树被砍3次就移除
 			if (targetAppleTree.top.cuttingCount === 3) {
-				this.appleTrees.removeTree({ gridX: position.x, gridY: position.y })
+				const tree = this.appleTrees.removeTree({ gridX: position.x, gridY: position.y })
 				targetTreeBoundary && this.boundary.removeItem(targetTreeBoundary.id)
+				// 掉落木柴
+				if (tree) {
+					const newDrop = this.appleTrees.createDrop(tree)
+					newDrop.forEach(drop => this.drop.addDrops(drop))
+					this.movableObjects = [...this.movableObjects, ...newDrop]
+				}
 			}
+
 			return true
 		} else {
 			// 砍浆果树
@@ -188,8 +199,13 @@ export class Controller {
 				targetBerryTree.isBeingCut = true
 				// 树被砍3次就移除
 				if (targetBerryTree.cuttingCount === 3) {
-					this.berryTree.removeTree({ gridX: position.x, gridY: position.y })
+					const tree = this.berryTree.removeTree({ gridX: position.x, gridY: position.y })
 					targetTreeBoundary && this.boundary.removeItem(targetTreeBoundary.id)
+					if (tree) {
+						const newDrop = this.berryTree.createDrop(tree)
+						newDrop.forEach(drop => this.drop.addDrops(drop))
+						this.movableObjects = [...this.movableObjects, ...newDrop]
+					}
 				}
 				return true
 			} else {

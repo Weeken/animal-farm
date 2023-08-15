@@ -27,6 +27,7 @@ import { appleTrees } from './appleTrees'
 import { berryTrees } from './berryTrees'
 import { bridgesInfo } from './bridges'
 import { Bridge } from '../base/fixed-things/Bridge'
+import { Drop } from '../base/drop/Drop'
 
 const getBoundaries = () => {
 	const collisionMap: number[][] = []
@@ -82,8 +83,7 @@ export const useGlobal = async () => {
 		ctx: ctx.upper
 	})
 
-	itemDock.addItem('apple')
-	itemDock.addItem('berry')
+	const drop = new Drop()
 
 	const gameObjects = {
 		// 地图
@@ -140,21 +140,6 @@ export const useGlobal = async () => {
 			ctx: ctx.middle,
 			boundary
 		}),
-		// [
-		// 	...berryTrees.map(
-		// 		berryTree =>
-		// 			new BerryTree({
-		// 				src: BerryTreeImg,
-		// 				x: withGrid(berryTree.x),
-		// 				y: withGrid(berryTree.y),
-		// 				width: withGrid(1),
-		// 				height: withGrid(1),
-		// 				state: berryTree.state,
-		// 				ctx: ctx.middle,
-		// 				boundary
-		// 			})
-		// 	)
-		// ],
 		appleTrees: new AppleTree({
 			trees: appleTrees,
 			ctx: ctx,
@@ -163,7 +148,8 @@ export const useGlobal = async () => {
 		}),
 		bridges,
 		field,
-		crop
+		crop,
+		drop
 	}
 
 	return {

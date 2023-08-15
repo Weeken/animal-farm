@@ -8,17 +8,17 @@ export const appleTrees: TreeInfo[] = [
 	{ x: 16, y: 11, state: 'common' },
 	{ x: 18, y: 11, state: 'common' },
 	{ x: 22, y: 12, state: 'common' },
-	{ x: 21, y: 13, state: 'common' },
+	{ x: 21, y: 13, state: 'bearFruit' },
 	{ x: 23, y: 13, state: 'common' },
 	// 中间山丘上的树
-	{ x: 42, y: 13, state: 'common' },
+	{ x: 42, y: 13, state: 'bearFruit' },
 	{ x: 45, y: 13, state: 'common' },
 	{ x: 51, y: 13, state: 'common' },
 	{ x: 41, y: 14, state: 'common' },
 	{ x: 51, y: 14, state: 'common' },
 	{ x: 41, y: 15, state: 'common' },
 	// 中间山丘下的树
-	{ x: 54, y: 19, state: 'common' },
+	{ x: 54, y: 19, state: 'bearFruit' },
 	{ x: 56, y: 20, state: 'common' },
 	{ x: 57, y: 21, state: 'common' },
 	// 中间下方森林
