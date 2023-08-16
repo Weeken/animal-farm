@@ -42,7 +42,7 @@ export class SmallDoor extends Movable {
 
 	draw() {
 		return new Promise(resolve => {
-			if (this.player && isHitting(this.player, this)) {
+			if (this.player && isHitting(this.player.collisionGrid, this)) {
 				this.gap++
 				if (this.gap % 10 === 0) {
 					if (!this.isOpened && this.currentFrame < this.frames - 1) {

@@ -33,7 +33,7 @@ export class Animation {
 	image: HTMLImageElement
 
 	isPlaying = false
-	isShowRect = true
+	isShowRect = false
 
 	constructor(config: AnimationConfig) {
 		this.totalFrames = config.totalFrames
@@ -44,7 +44,6 @@ export class Animation {
 		this.y = config.y
 		this.imgX = config.imgX || 0
 		this.imgY = config.imgY || 0
-		this.y = config.y
 		this.width = config.width
 		this.imgWidth = config.imgWidth || config.width
 		this.height = config.height
@@ -53,10 +52,10 @@ export class Animation {
 		this.image = config.image
 	}
 
-	draw() {
+	draw(x?: number, y?: number) {
 		if (this.isShowRect) {
 			this.ctx.fillStyle = 'rgba(0, 0, 255, 0.2)'
-			this.ctx.fillRect(this.x, this.y, this.width, this.height)
+			this.ctx.fillRect(x || this.x, y || this.y, this.width, this.height)
 		}
 		// console.log(this.currentFrame)
 		this.ctx.drawImage(
@@ -65,14 +64,14 @@ export class Animation {
 			this.imgY,
 			this.imgWidth,
 			this.imgHeight,
-			this.x,
-			this.y,
+			x || this.x,
+			y || this.y,
 			this.width,
 			this.height
 		)
 	}
 
-	play() {
+	play(x?: number, y?: number) {
 		!this.isPlaying && (this.isPlaying = true)
 		this.timer++
 		if (this.timer % this.interval === 0) {
@@ -83,6 +82,6 @@ export class Animation {
 				this.timer = 0
 			}
 		}
-		this.draw()
+		this.draw(x, y)
 	}
 }

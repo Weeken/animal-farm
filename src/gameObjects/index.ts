@@ -9,7 +9,7 @@ import { collisions } from '../collisions'
 import { House } from '../base/fixed-things/House'
 import { SmallDoor } from '../base/fixed-things/SmallDoor'
 import { Chicken } from '../base/animal/Chicken'
-import { Cow } from '../base/animal/Cow'
+// import { Cow } from '../base/animal/Cow'
 import { BerryTree } from '../base/tree/BerryTree'
 import { AppleTree } from '../base/tree/AppleTree'
 import { ItemDock } from '../base/ItemDock'
@@ -21,7 +21,7 @@ import MapImg from '../assets/map.png'
 import HouseRoot from '../assets/house/house-root.png'
 import SmallDoorImg from '../assets/house/door.png'
 
-import { cows } from './cows'
+// import { cows } from './cows'
 import { chickens } from './chicken'
 import { appleTrees } from './appleTrees'
 import { berryTrees } from './berryTrees'
@@ -121,15 +121,15 @@ export const useGlobal = async () => {
 					})
 			)
 		],
-		cows: [
-			...cows.map(
-				cow =>
-					new Cow({
-						...cow,
-						ctx: ctx.down
-					})
-			)
-		],
+		// cows: [
+		// 	...cows.map(
+		// 		cow =>
+		// 			new Cow({
+		// 				...cow,
+		// 				ctx: ctx.down
+		// 			})
+		// 	)
+		// ],
 		berryTree: new BerryTree({
 			trees: berryTrees,
 			ctx: ctx.middle,

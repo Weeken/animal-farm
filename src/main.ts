@@ -6,7 +6,7 @@ import { Controller } from './base/control/Controller'
 
 import { useGlobal } from './gameObjects'
 import { Chicken } from './base/animal/Chicken'
-import { Cow } from './base/animal/Cow'
+// import { Cow } from './base/animal/Cow'
 import { BerryTreeItem } from './base/tree/BerryTreeItem'
 import { AppleTreeTop } from './base/tree/AppleTreeTop'
 import { AppleTreeStump } from './base/tree/AppleTreeStump'
@@ -38,21 +38,17 @@ const start = async () => {
 			})
 			// 鸡
 			gameObjects.chickens.forEach((chicken: Chicken) => {
-				if (chicken.state === 'standing') {
-					chicken.standing()
-				} else {
-					chicken.walking()
-				}
+				chicken.action()
 			})
 
 			// 牛
-			gameObjects.cows.forEach((cow: Cow) => {
-				if (cow.state === 'standing') {
-					cow.standing()
-				} else {
-					cow.walking()
-				}
-			})
+			// gameObjects.cows.forEach((cow: Cow) => {
+			// 	if (cow.state === 'standing') {
+			// 		cow.standing()
+			// 	} else {
+			// 		cow.walking()
+			// 	}
+			// })
 
 			// 浆果树
 			gameObjects.berryTree.list.forEach((tree: BerryTreeItem) => {
@@ -123,7 +119,7 @@ const start = async () => {
 		gameObjects.playerHouse,
 		gameObjects.playerHouseDoor,
 		...gameObjects.chickens,
-		...gameObjects.cows,
+		// ...gameObjects.cows,
 		...gameObjects.berryTree.list,
 		...gameObjects.appleTrees.treeTops,
 		...gameObjects.appleTrees.treeStumps,

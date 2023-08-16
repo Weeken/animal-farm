@@ -1,31 +1,22 @@
 import { withGrid, randomPosition } from '../utils'
-import { ChickenConfig } from '../base/animal/Chicken'
-import StandingChicken from '../assets/chicken-1.png'
-import WalkingChicken from '../assets/chicken-2.png'
+import { ChickenConfig, CHICKEN_ACTION } from '../base/animal/Chicken'
 
-type ChickenInfo = Pick<
-	ChickenConfig,
-	'x' | 'y' | 'src' | 'width' | 'frames' | 'height' | 'state' | 'walkingLeftStartFrame'
->
+type ChickenInfo = Pick<ChickenConfig, 'x' | 'y' | 'width' | 'height' | 'action'>
 
 export const chickens: ChickenInfo[] = [
 	{
-		x: randomPosition({ min: withGrid(33), max: withGrid(36) }),
-		y: randomPosition({ min: withGrid(15), max: withGrid(16) }),
-		src: StandingChicken,
-		width: withGrid(1),
-		height: withGrid(1),
-		frames: 2,
-		state: 'standing'
+		x: withGrid(20),
+		y: withGrid(19),
+		action: CHICKEN_ACTION.STANDING
 	},
 	{
-		x: withGrid(33),
-		y: withGrid(17),
-		src: WalkingChicken,
-		width: withGrid(1),
-		height: withGrid(1),
-		frames: 8,
-		state: 'moving',
-		walkingLeftStartFrame: 4
+		x: randomPosition({ min: withGrid(33), max: withGrid(36) }),
+		y: randomPosition({ min: withGrid(15), max: withGrid(16) }),
+		action: CHICKEN_ACTION.SLEEPING
+	},
+	{
+		x: randomPosition({ min: withGrid(33), max: withGrid(36) }),
+		y: randomPosition({ min: withGrid(15), max: withGrid(16) }),
+		action: CHICKEN_ACTION.STANDING
 	}
 ]

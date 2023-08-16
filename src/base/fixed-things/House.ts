@@ -39,7 +39,7 @@ export class House extends Movable {
 	draw() {
 		return new Promise(resolve => {
 			let width = this.width
-			if (this.player && isHitting(this.player, this)) {
+			if (this.player && isHitting(this.player.collisionGrid, this)) {
 				width = 0
 			}
 			if (this.image) {
