@@ -1,4 +1,4 @@
-import { Player } from '../Player'
+import { Player, ACTION, DIRECTION } from '../newPlayer'
 import { Boundary } from '../fixed-things/Boundary'
 import { BoundaryItem } from '../fixed-things/BoundaryItem'
 import { getPositionFormIdStr, isHitting, withGrid } from '../../utils'
@@ -12,6 +12,7 @@ import { ItemDock } from '../ItemDock'
 import { BerryTree } from '../tree/BerryTree'
 import { BerryTreeItem } from '../tree/BerryTreeItem'
 import { Drop } from '../drop/Drop'
+import { DropItem } from '../drop/DropItem'
 // import { AppleTreeStump } from '../tree/AppleTreeStump'
 
 interface ControllerConfig {
@@ -69,7 +70,7 @@ export class Controller {
 				side.x = boundary.x + direction.x
 			}
 			if (
-				isHitting(this.player, {
+				isHitting(this.player.collisionGrid, {
 					...boundary,
 					...side
 				})
@@ -81,8 +82,8 @@ export class Controller {
 		return canMoving
 	}
 
-	findTarget(list: BoundaryItem[] | PlantField[], direction: { x?: number; y?: number }) {
-		let target: BoundaryItem | PlantField | null = null
+	findTarget(list: BoundaryItem[] | PlantField[] | DropItem[], direction: { x?: number; y?: number }) {
+		let target: BoundaryItem | PlantField | DropItem | null = null
 
 		for (let i = 0; i < list.length; i++) {
 			const item = list[i]
@@ -93,7 +94,7 @@ export class Controller {
 				side.x = item.x + direction.x
 			}
 			if (
-				isHitting(this.player, {
+				isHitting(this.player.collisionGrid, {
 					...item,
 					...side
 				})
@@ -105,22 +106,22 @@ export class Controller {
 		return target
 	}
 
-	findAllDirectionBlock(list: BoundaryItem[] | PlantField[]) {
-		let targetTreeBoundary: BoundaryItem | PlantField | null = null
-		if (this.player.movingDirection === 'right') {
+	findAllDirectionBlock(list: BoundaryItem[] | PlantField[] | DropItem[]) {
+		let targetTreeBoundary: BoundaryItem | PlantField | DropItem | null = null
+		if (this.player.towardDirection === 'right') {
 			targetTreeBoundary = this.findTarget(list, { x: -this.moveStep })
-		} else if (this.player.movingDirection === 'left') {
+		} else if (this.player.towardDirection === 'left') {
 			targetTreeBoundary = this.findTarget(list, { x: this.moveStep })
-		} else if (this.player.movingDirection === 'up') {
+		} else if (this.player.towardDirection === 'up') {
 			targetTreeBoundary = this.findTarget(list, { y: this.moveStep })
-		} else if (this.player.movingDirection === 'down') {
+		} else if (this.player.towardDirection === 'down') {
 			targetTreeBoundary = this.findTarget(list, { y: -this.moveStep })
 		}
 		return targetTreeBoundary
 	}
 
 	handleMove() {
-		this.player.selectAction('Moving')
+		this.player.selectAction(ACTION.MOVING)
 
 		if (this.keyMap.w.press && this.lastPressedKey === 'w') {
 			this.isMoving = this.checkHitting({ y: this.moveStep })
@@ -151,18 +152,18 @@ export class Controller {
 
 	setPlayerNextGrid(direction: 'up' | 'down' | 'left' | 'right') {
 		if (direction === 'up') {
-			this.player.nextGrid = { ...this.player.nextGrid, x: this.player.x, y: this.player.y - withGrid(1) }
-		} else if (direction === 'down') {
-			this.player.nextGrid = { ...this.player.nextGrid, x: this.player.x, y: this.player.y + withGrid(1) }
-		} else if (direction === 'left') {
-			this.player.nextGrid = { ...this.player.nextGrid, x: this.player.x - withGrid(1), y: this.player.y }
-		} else if (direction === 'right') {
 			this.player.nextGrid = { ...this.player.nextGrid, x: this.player.x + withGrid(1), y: this.player.y }
+		} else if (direction === 'down') {
+			this.player.nextGrid = { ...this.player.nextGrid, x: this.player.x + withGrid(1), y: this.player.y + withGrid(1) }
+		} else if (direction === 'left') {
+			this.player.nextGrid = { ...this.player.nextGrid, x: this.player.x, y: this.player.y + withGrid(1) }
+		} else if (direction === 'right') {
+			this.player.nextGrid = { ...this.player.nextGrid, x: this.player.x + withGrid(2), y: this.player.y + withGrid(1) }
 		}
 	}
 
 	handleCuttingDownTree() {
-		this.player.selectAction('Cutting')
+		this.player.selectAction(ACTION.CUTTING)
 		const targetTreeBoundary: BoundaryItem | null = this.findAllDirectionBlock(this.boundary.list)
 		const targetAppleTree: FullTree | undefined = this.appleTrees.fullTrees.find(tree => {
 			if (targetTreeBoundary && tree.stump.boundaryBlock.id === targetTreeBoundary.id) {
@@ -217,7 +218,7 @@ export class Controller {
 	handleCreatePlantField() {
 		const nextGridIsBoundary = this.findAllDirectionBlock(this.boundary.list)
 		if (nextGridIsBoundary === null) {
-			this.player.selectAction('Digging')
+			this.player.selectAction(ACTION.DIGGING)
 			if (this.player.diggingCount >= 3) {
 				const newField = this.field.addField({ x: this.player.nextGrid.x, y: this.player.nextGrid.y })
 				newField && (this.movableObjects = [...this.movableObjects, newField])
@@ -247,30 +248,38 @@ export class Controller {
 		}
 	}
 
+	pickUpDrops() {
+		const targetDrop = this.findAllDirectionBlock(this.drop.list)
+		if (targetDrop !== null && targetDrop instanceof DropItem) {
+			this.drop.removeDrop(targetDrop.id)
+			this.movableObjects = this.movableObjects.filter(item => item.id !== targetDrop.id)
+		}
+	}
+
 	init() {
 		document.addEventListener('keydown', (e: KeyboardEvent) => {
 			if (e.key === 'w') {
 				this.keyMap.w.press = true
 				this.lastPressedKey = 'w'
-				this.player.movingDirection = 'up'
+				this.player.towardDirection = DIRECTION.UP
 				this.setPlayerNextGrid('up')
 				this.handleMove()
 			} else if (e.key === 'a') {
 				this.keyMap.a.press = true
 				this.lastPressedKey = 'a'
-				this.player.movingDirection = 'left'
+				this.player.towardDirection = DIRECTION.LEFT
 				this.setPlayerNextGrid('left')
 				this.handleMove()
 			} else if (e.key === 'd') {
 				this.keyMap.d.press = true
 				this.lastPressedKey = 'd'
-				this.player.movingDirection = 'right'
+				this.player.towardDirection = DIRECTION.RIGHT
 				this.setPlayerNextGrid('right')
 				this.handleMove()
 			} else if (e.key === 's') {
 				this.keyMap.s.press = true
 				this.lastPressedKey = 's'
-				this.player.movingDirection = 'down'
+				this.player.towardDirection = DIRECTION.DOWN
 				this.setPlayerNextGrid('down')
 				this.handleMove()
 			} else if (e.key === 'p') {
@@ -288,8 +297,13 @@ export class Controller {
 			} else if (e.key === 'o') {
 				// 砍树
 				this.handleCuttingDownTree()
+			} else if (e.key === 'u') {
+				// 浇水
+				this.player.selectAction(ACTION.WATERING)
 			} else if (e.key === 'e') {
 				this.itemDock.switch()
+			} else if (e.key === 'r') {
+				this.pickUpDrops()
 			}
 		})
 		document.addEventListener('keyup', (e: KeyboardEvent) => {
@@ -313,6 +327,6 @@ export class Controller {
 
 	reset() {
 		this.isMoving = true
-		this.player.selectAction('Standing')
+		this.player.resetToStanding()
 	}
 }

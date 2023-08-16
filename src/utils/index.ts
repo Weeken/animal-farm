@@ -8,19 +8,26 @@ export const GRID_SCALE = 4 // 每个格子放大了4倍
 export const VIEW_WIDTH = 1120
 export const VIEW_HEIGHT = 640
 
+// 游戏界面的一格
+export const withGrid = (num: number) => {
+	const x = GRID_W * num * GRID_SCALE
+	return x
+}
+// 图片中的一格
+export const picGrid = (num: number) => {
+	const x = GRID_W * num
+	return x
+}
+
 // 游戏主角图片尺寸
-export const ROLE_WIDTH = 64
-export const ROLE_HEIGHT = 64
+export const ROLE_WIDTH = withGrid(3)
+export const ROLE_HEIGHT = withGrid(3)
 
 export const screenCenter = {
 	x: VIEW_WIDTH / 2 - ROLE_WIDTH / 2, // 屏幕中心 - 角色图片一半的宽度
 	y: VIEW_HEIGHT / 2 - ROLE_HEIGHT / 2
 }
 
-export const withGrid = (num: number) => {
-	const x = GRID_W * num * GRID_SCALE
-	return x
-}
 // 地图初始偏移量
 export const VIEW_OFFSET = {
 	x: -withGrid(12),

@@ -5,7 +5,7 @@ import AppleTreeStumpImg from '../../assets/apple-tree-stump.png'
 import { withGrid, hours, getPositionFormIdStr } from '../../utils'
 import { Boundary } from '../fixed-things/Boundary'
 import type { TreeState } from './Tree'
-import { Player } from '../Player'
+import { Player } from '../newPlayer'
 import { Ctx } from '../../utils/canvas'
 import { DropItem } from '../drop/DropItem'
 

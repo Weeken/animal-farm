@@ -1,10 +1,10 @@
-import { screenCenter, withGrid, ROW_GRID_NUM, VIEW_OFFSET, ROLE_WIDTH, ROLE_HEIGHT } from '../utils'
+import { withGrid, ROW_GRID_NUM, VIEW_OFFSET } from '../utils'
 
 import { generateCtx } from '../utils/canvas'
 
 import { IslandMap } from '../base/Map'
 import { Boundary } from '../base/fixed-things/Boundary'
-import { Player } from '../base/Player'
+import { Player } from '../base/newPlayer'
 import { collisions } from '../collisions'
 import { House } from '../base/fixed-things/House'
 import { SmallDoor } from '../base/fixed-things/SmallDoor'
@@ -17,7 +17,7 @@ import { Field } from '../base/Field/Field'
 import { Crop } from '../base/plant/Crop'
 
 import MapImg from '../assets/map.png'
-import PlayerImg from '../assets/player.png'
+
 import HouseRoot from '../assets/house/house-root.png'
 import SmallDoorImg from '../assets/house/door.png'
 
@@ -51,11 +51,6 @@ const getBoundaries = () => {
 export const useGlobal = async () => {
 	const ctx = await generateCtx()
 	const player = new Player({
-		x: screenCenter.x,
-		y: screenCenter.y,
-		src: PlayerImg,
-		width: ROLE_WIDTH,
-		height: ROLE_HEIGHT,
 		ctx: ctx.middle
 	})
 

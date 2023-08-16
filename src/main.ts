@@ -82,13 +82,14 @@ const start = async () => {
 			})
 
 			// 主角
-			if (player.isDigging) {
-				player.digging()
-			} else if (player.isCutting) {
-				player.cutting()
-			} else {
-				player.draw()
-			}
+			// if (player.isDigging) {
+			// 	player.digging()
+			// } else if (player.isCutting) {
+			// 	player.cutting()
+			// } else {
+			// 	player.draw()
+			// }
+			player.action()
 
 			// 苹果树树冠
 			gameObjects.appleTrees.treeTops.forEach((treeTop: AppleTreeTop) => {

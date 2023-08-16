@@ -1,4 +1,4 @@
-import { Player } from '../Player'
+import { Player } from '../newPlayer'
 import { loadImage, VIEW_OFFSET, isHitting } from '../../utils'
 import { Movable } from '../Movable'
 

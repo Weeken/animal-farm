@@ -1,11 +1,12 @@
 import { loadImage, VIEW_OFFSET, withGrid, BaseRect, Position } from '../utils'
+import PlayerImg from '../assets/premium-player.png'
 
 interface PlayerConfig {
 	x: number
 	y: number
 	width: number
 	height: number
-	src: string
+	// src: string
 	ctx: CanvasRenderingContext2D
 }
 
@@ -41,7 +42,8 @@ export class Player {
 	// 站、走
 	isStanding = true
 	isMoving = false
-	movingDirection = 'down'
+	// 朝向
+	towardDirection = 'down'
 
 	actionFrames = 2
 	currentActionFrame = 1
@@ -69,7 +71,7 @@ export class Player {
 			height: withGrid(1)
 		}
 
-		this.src = config.src
+		// this.src = config.src
 		this.ctx = config.ctx
 		this.width = config.width
 		this.height = config.height
@@ -89,11 +91,11 @@ export class Player {
 	draw() {
 		return new Promise(resolve => {
 			let frameY = 0
-			if (this.movingDirection === 'down') {
+			if (this.towardDirection === 'down') {
 				frameY = 0
-			} else if (this.movingDirection === 'up') {
-				frameY = withGrid(1)
-			} else if (this.movingDirection === 'left') {
+			} else if (this.towardDirection === 'up') {
+				frameY = withGrid(3)
+			} else if (this.towardDirection === 'left') {
 				frameY = withGrid(2)
 			} else {
 				frameY = withGrid(3)
@@ -130,21 +132,20 @@ export class Player {
 					this.height
 				)
 			} else {
-				this.src &&
-					loadImage(this.src).then(img => {
-						this.image = img
-						this.ctx.drawImage(
-							this.image,
-							this.currentFrame * this.width,
-							frameY,
-							this.width,
-							this.height - 1,
-							this.position.x,
-							this.position.y,
-							this.width,
-							this.height
-						)
-					})
+				loadImage(PlayerImg).then(img => {
+					this.image = img
+					this.ctx.drawImage(
+						this.image,
+						this.currentFrame * this.width,
+						frameY,
+						this.width,
+						this.height - 1,
+						this.position.x,
+						this.position.y,
+						this.width,
+						this.height
+					)
+				})
 			}
 
 			resolve(this.image)
@@ -153,11 +154,11 @@ export class Player {
 
 	digging() {
 		let frameY = 0
-		if (this.movingDirection === 'down') {
+		if (this.towardDirection === 'down') {
 			frameY = withGrid(4)
-		} else if (this.movingDirection === 'up') {
+		} else if (this.towardDirection === 'up') {
 			frameY = withGrid(7)
-		} else if (this.movingDirection === 'left') {
+		} else if (this.towardDirection === 'left') {
 			frameY = withGrid(10)
 		} else {
 			frameY = withGrid(13)
@@ -183,11 +184,11 @@ export class Player {
 				this.image,
 				this.currentActionFrame * withGrid(2),
 				frameY,
-				this.movingDirection === 'right' ? withGrid(3) : withGrid(2),
+				this.towardDirection === 'right' ? withGrid(3) : withGrid(2),
 				withGrid(2),
 				this.position.x - withGrid(1),
 				this.position.y - withGrid(1),
-				this.movingDirection === 'right' ? withGrid(3) : withGrid(2),
+				this.towardDirection === 'right' ? withGrid(3) : withGrid(2),
 				withGrid(2)
 			)
 		}
@@ -200,7 +201,7 @@ export class Player {
 		let frameH = 0
 		let positionX = 0
 		let positionY = 0
-		if (this.movingDirection === 'down') {
+		if (this.towardDirection === 'down') {
 			if (this.currentActionFrame === 0) {
 				frameX = withGrid(2)
 				frameY = withGrid(16)
@@ -216,7 +217,7 @@ export class Player {
 				positionX = this.position.x - withGrid(1)
 				positionY = this.position.y - withGrid(1)
 			}
-		} else if (this.movingDirection === 'up') {
+		} else if (this.towardDirection === 'up') {
 			if (this.currentActionFrame === 0) {
 				frameX = withGrid(3)
 				frameY = withGrid(19)
@@ -232,7 +233,7 @@ export class Player {
 				positionX = this.position.x - withGrid(1)
 				positionY = this.position.y - withGrid(1)
 			}
-		} else if (this.movingDirection === 'left') {
+		} else if (this.towardDirection === 'left') {
 			if (this.currentActionFrame === 0) {
 				frameX = withGrid(3)
 				frameY = withGrid(22)

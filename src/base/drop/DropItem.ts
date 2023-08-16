@@ -15,6 +15,8 @@ export class DropItem extends Movable {
 	count = 1
 	x = 0
 	y = 0
+	width = withGrid(1)
+	height = withGrid(1)
 	ctx: CanvasRenderingContext2D
 	image: HTMLImageElement | null = null
 
@@ -22,6 +24,7 @@ export class DropItem extends Movable {
 	movingDistance = 0
 	gap = 0
 	direction: 'up' | 'down' = 'up'
+	id = ''
 
 	constructor(config: DropConfig) {
 		super({ x: config.x, y: config.y })
@@ -30,6 +33,7 @@ export class DropItem extends Movable {
 		this.x = config.x
 		this.y = config.y
 		this.ctx = config.ctx
+		this.id = `drop-${this.x}-${this.y}`
 	}
 
 	draw() {

@@ -24,7 +24,7 @@ export const chickens: ChickenInfo[] = [
 		src: WalkingChicken,
 		width: withGrid(1),
 		height: withGrid(1),
-		frames: 6,
+		frames: 8,
 		state: 'moving',
 		walkingLeftStartFrame: 4
 	}

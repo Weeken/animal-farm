@@ -6,4 +6,8 @@ export class Drop {
 	addDrops(drop: DropItem) {
 		this.list.push(drop)
 	}
+
+	removeDrop(id: string) {
+		this.list = this.list.filter(item => item.id !== id)
+	}
 }
