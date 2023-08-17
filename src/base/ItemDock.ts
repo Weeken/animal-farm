@@ -35,7 +35,7 @@ export class ItemDock {
 	addItem(type: MaterialType, count?: number) {
 		const target: Material | undefined = this.list.find(item => item.type === type)
 		if (target) {
-			target.count += 1
+			target.count += count || 1
 		} else {
 			this.list.push(
 				new Material({
@@ -43,11 +43,10 @@ export class ItemDock {
 					position: {
 						x: this.x + withGrid(1) + withGrid(1) * this.list.length,
 						y: this.y + withGrid(1)
-						// x: this.x + withGrid(1) * this.list.length - 1,
-						// y: this.y + withGrid(1)
 					},
 					count: count || 1,
-					type
+					type,
+					isShow: this.isShow
 				})
 			)
 		}

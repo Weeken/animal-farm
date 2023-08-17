@@ -1,3 +1,6 @@
+import { Vector, Box, Collider2d } from 'collider2d'
+
+const collider2d = new Collider2d()
 // 计算坐标
 export const GRID_W = 16 // 每个格子的宽度
 export const GRID_H = 16 // 每个格子的高度
@@ -59,6 +62,23 @@ export interface BaseRect extends Position {
 	width: number
 	height: number
 }
+
+export const isCollide = (rect1: Required<BaseRect>, rect2: Required<BaseRect>) => {
+	// console.log('%c [ rect1 ]-67', 'font-size:13px; background:pink; color:#bf2c9f;', rect1)
+	// console.log('%c [ rect2 ]-67', 'font-size:13px; background:pink; color:#bf2c9f;', rect2)
+	const box1 = new Box(new Vector(rect1.x, rect1.y), rect1.width, rect1.height)
+	const box2 = new Box(new Vector(rect2.x, rect2.y), rect2.width, rect2.height)
+	const collided = collider2d.testPolygonPolygon(box1.toPolygon(), box2.toPolygon())
+	// console.log('%c [ box1.toPolygon() ]-72', 'font-size:13px; background:pink; color:#bf2c9f;', box1.toPolygon())
+	return collided
+	// return (
+	// 	rect1.x + rect1.width >= rect2.x + 24 &&
+	// 	rect1.x <= rect2.x + rect2.width - 24 &&
+	// 	rect1.y + rect1.height >= rect2.y + 16 &&
+	// 	rect1.y <= rect2.y + rect2.height - 32
+	// )
+}
+// console.log(isHittingNew({ x: 15, y: 15, width: 10, height: 10 }, { x: 15, y: 26, width: 10, height: 10 }))
 
 export const isHitting = (rect1: Required<BaseRect>, rect2: Required<BaseRect>) => {
 	return (

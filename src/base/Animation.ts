@@ -15,6 +15,8 @@ export interface AnimationConfig {
 	imgHeight?: number
 	ctx: CanvasRenderingContext2D
 	image: HTMLImageElement
+
+	isShowRect?: boolean
 }
 
 export class Animation {
@@ -42,6 +44,8 @@ export class Animation {
 		this.totalFrames = config.totalFrames
 		this.currentFrame = config.currentFrame || 0
 		this.interval = config.interval || 20
+
+		this.isShowRect = config.isShowRect || false
 
 		this.x = config.x
 		this.y = config.y

@@ -154,7 +154,7 @@ export class Controller {
 		if (direction === 'up') {
 			this.player.nextGrid = { ...this.player.nextGrid, x: this.player.x + withGrid(1), y: this.player.y }
 		} else if (direction === 'down') {
-			this.player.nextGrid = { ...this.player.nextGrid, x: this.player.x + withGrid(1), y: this.player.y + withGrid(1) }
+			this.player.nextGrid = { ...this.player.nextGrid, x: this.player.x + withGrid(1), y: this.player.y + withGrid(2) }
 		} else if (direction === 'left') {
 			this.player.nextGrid = { ...this.player.nextGrid, x: this.player.x, y: this.player.y + withGrid(1) }
 		} else if (direction === 'right') {
@@ -219,7 +219,8 @@ export class Controller {
 		const nextGridIsBoundary = this.findAllDirectionBlock(this.boundary.list)
 		if (nextGridIsBoundary === null) {
 			this.player.selectAction(ACTION.DIGGING)
-			if (this.player.diggingCount >= 3) {
+			// interval * 8帧 * 循环三次
+			if (this.player.diggingCount >= this.player.diggingDown.interval * 8 * 3) {
 				const newField = this.field.addField({ x: this.player.nextGrid.x, y: this.player.nextGrid.y })
 				newField && (this.movableObjects = [...this.movableObjects, newField])
 				this.player.diggingCount = 0
@@ -253,6 +254,7 @@ export class Controller {
 		if (targetDrop !== null && targetDrop instanceof DropItem) {
 			this.drop.removeDrop(targetDrop.id)
 			this.movableObjects = this.movableObjects.filter(item => item.id !== targetDrop.id)
+			this.itemDock.addItem(targetDrop.type, targetDrop.count)
 		}
 	}
 

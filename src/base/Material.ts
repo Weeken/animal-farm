@@ -15,6 +15,7 @@ export interface MaterialConfig {
 	count: number
 	position: Position
 	ctx: CanvasRenderingContext2D
+	isShow: boolean
 }
 
 export const MaterialImagesMap = {
@@ -40,6 +41,7 @@ export class Material {
 		this.count = config.count
 		this.position = config.position
 		this.ctx = config.ctx
+		this.isShow = config.isShow
 	}
 
 	draw() {

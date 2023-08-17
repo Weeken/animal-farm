@@ -61,30 +61,30 @@ export class Player {
 	diggingCount = 0
 
 	// 站立动画
-	standingDown: Animation | null = null
-	standingUp: Animation | null = null
-	standingLeft: Animation | null = null
-	standingRight: Animation | null = null
+	standingDown: Animation
+	standingUp: Animation
+	standingLeft: Animation
+	standingRight: Animation
 	// 行走动画
-	movingDown: Animation | null = null
-	movingUp: Animation | null = null
-	movingLeft: Animation | null = null
-	movingRight: Animation | null = null
+	movingDown: Animation
+	movingUp: Animation
+	movingLeft: Animation
+	movingRight: Animation
 	// 挖土动画
-	diggingDown: Animation | null = null
-	diggingUp: Animation | null = null
-	diggingLeft: Animation | null = null
-	diggingRight: Animation | null = null
+	diggingDown: Animation
+	diggingUp: Animation
+	diggingLeft: Animation
+	diggingRight: Animation
 	// 砍伐动画
-	cuttingDown: Animation | null = null
-	cuttingUp: Animation | null = null
-	cuttingLeft: Animation | null = null
-	cuttingRight: Animation | null = null
+	cuttingDown: Animation
+	cuttingUp: Animation
+	cuttingLeft: Animation
+	cuttingRight: Animation
 	// 浇水动画
-	wateringDown: Animation | null = null
-	wateringUp: Animation | null = null
-	wateringLeft: Animation | null = null
-	wateringRight: Animation | null = null
+	wateringDown: Animation
+	wateringUp: Animation
+	wateringLeft: Animation
+	wateringRight: Animation
 
 	constructor() {
 		this.ctx = window.myGameGlobalData.ctx.middle
@@ -210,6 +210,7 @@ export class Player {
 					break
 			}
 		} else if (this.currentAction === ACTION.DIGGING) {
+			this.diggingCount++
 			switch (this.towardDirection) {
 				case DIRECTION.DOWN:
 					this.diggingDown?.play()
