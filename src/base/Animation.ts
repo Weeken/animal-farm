@@ -1,3 +1,5 @@
+// import { Movable } from './Movable'
+
 export interface AnimationConfig {
 	totalFrames: number
 	currentFrame?: number
@@ -36,6 +38,7 @@ export class Animation {
 	isShowRect = false
 
 	constructor(config: AnimationConfig) {
+		// super({ x: config.x, y: config.y })
 		this.totalFrames = config.totalFrames
 		this.currentFrame = config.currentFrame || 0
 		this.interval = config.interval || 20
@@ -52,10 +55,10 @@ export class Animation {
 		this.image = config.image
 	}
 
-	draw(x?: number, y?: number) {
+	draw() {
 		if (this.isShowRect) {
 			this.ctx.fillStyle = 'rgba(0, 0, 255, 0.2)'
-			this.ctx.fillRect(x || this.x, y || this.y, this.width, this.height)
+			this.ctx.fillRect(this.x, this.y, this.width, this.height)
 		}
 		// console.log(this.currentFrame)
 		this.ctx.drawImage(
@@ -64,14 +67,14 @@ export class Animation {
 			this.imgY,
 			this.imgWidth,
 			this.imgHeight,
-			x || this.x,
-			y || this.y,
+			this.x,
+			this.y,
 			this.width,
 			this.height
 		)
 	}
 
-	play(x?: number, y?: number) {
+	play() {
 		!this.isPlaying && (this.isPlaying = true)
 		this.timer++
 		if (this.timer % this.interval === 0) {
@@ -82,6 +85,6 @@ export class Animation {
 				this.timer = 0
 			}
 		}
-		this.draw(x, y)
+		this.draw()
 	}
 }
