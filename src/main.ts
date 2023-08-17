@@ -2,9 +2,12 @@ import './style.css'
 
 import { VIEW_WIDTH, VIEW_HEIGHT } from './utils'
 
+import { useGlobal } from './gameObjects'
+import { useAssets } from './utils/assets'
+import { generateCtx } from './utils/canvas'
+
 import { Controller } from './base/control/Controller'
 
-import { useGlobal } from './gameObjects'
 import { Chicken } from './base/animal/Chicken'
 import { Cow } from './base/animal/Cow'
 import { BerryTreeItem } from './base/tree/BerryTreeItem'
@@ -18,8 +21,22 @@ import { Tomato } from './base/plant/Tomato'
 import { Material } from './base/Material'
 import { DropItem } from './base/drop/DropItem'
 
+const setGlobalData = async (data: any) => {
+	window.myGameGlobalData = data
+}
+
 const start = async () => {
-	const { ctx, player, boundary, itemDock, gameObjects } = await useGlobal()
+	const { imageAssets } = await useAssets()
+
+	const ctx = await generateCtx()
+
+	// 设置全局数据
+	await setGlobalData({
+		ctx,
+		assets: imageAssets
+	})
+
+	const { player, boundary, itemDock, gameObjects } = await useGlobal()
 
 	const gameLoop = () => {
 		const frame = () => {

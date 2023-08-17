@@ -40,8 +40,7 @@ export class AppleTreeStump extends Tree {
 		}
 		if (this.boundary) {
 			this.boundary.addItem({
-				...this.boundaryBlock,
-				ctx: this.ctx
+				...this.boundaryBlock
 			})
 		}
 	}

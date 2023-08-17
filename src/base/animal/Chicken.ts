@@ -1,10 +1,5 @@
-import { loadImage, VIEW_OFFSET, withGrid } from '../../utils'
+import { VIEW_OFFSET, withGrid } from '../../utils'
 import { Movable } from '../Movable'
-import Chicken_yellow from '../../assets/chicken-default.png'
-import Chicken_blue from '../../assets/chicken-blue.png'
-import Chicken_green from '../../assets/chicken-green.png'
-import Chicken_brown from '../../assets/chicken-brown.png'
-import Chicken_red from '../../assets/chicken-red.png'
 import { Animation, AnimationConfig } from '../Animation'
 
 export enum CHICKEN_ACTION {
@@ -25,25 +20,17 @@ export interface ChickenConfig {
 	y: number
 	width?: number
 	height?: number
-	ctx: CanvasRenderingContext2D
 	action?: CHICKEN_ACTION
 	color?: CHICKEN_COLOR
 }
 
-const imgMap = {
-	[CHICKEN_COLOR.YELLOW]: Chicken_yellow,
-	[CHICKEN_COLOR.BLUE]: Chicken_blue,
-	[CHICKEN_COLOR.GREEN]: Chicken_green,
-	[CHICKEN_COLOR.RED]: Chicken_red,
-	[CHICKEN_COLOR.BROWN]: Chicken_brown
-}
 export class Chicken extends Movable {
 	x = 0
 	y = 0
 	width = 0
 	height = 0
 	ctx: CanvasRenderingContext2D
-	image: HTMLImageElement | null = null
+	image: HTMLImageElement
 
 	currentAction: CHICKEN_ACTION = CHICKEN_ACTION.STANDING
 	color: CHICKEN_COLOR = CHICKEN_COLOR.YELLOW
@@ -53,21 +40,31 @@ export class Chicken extends Movable {
 
 	constructor(config: ChickenConfig) {
 		super({ x: config.x, y: config.y })
+
+		const chickenImgs = (window.myGameGlobalData.assets.animal as LoadedAssets).chicken as LoadedAssets
+
+		const imgMap = {
+			[CHICKEN_COLOR.YELLOW]: chickenImgs.yellow as HTMLImageElement,
+			[CHICKEN_COLOR.BLUE]: chickenImgs.blue as HTMLImageElement,
+			[CHICKEN_COLOR.GREEN]: chickenImgs.green as HTMLImageElement,
+			[CHICKEN_COLOR.RED]: chickenImgs.red as HTMLImageElement,
+			[CHICKEN_COLOR.BROWN]: chickenImgs.brown as HTMLImageElement
+		}
+
 		this.x = config.x + VIEW_OFFSET.x
 		this.y = config.y + VIEW_OFFSET.y
 
-		this.ctx = config.ctx
+		this.ctx = window.myGameGlobalData.ctx.middle
 		this.width = config.width || withGrid(1)
 		this.height = config.height || withGrid(1)
 		this.currentAction = config.action || CHICKEN_ACTION.STANDING
 		this.color = config.color || CHICKEN_COLOR.YELLOW
-		loadImage(imgMap[this.color]).then(img => {
-			this.sleeping = this.createAnimation(img, 0, 4, 60)
-			this.standing = this.createAnimation(img, withGrid(1), 7)
-		})
+		this.image = imgMap[this.color]
+		this.sleeping = this.createAnimation(0, 4, 60)
+		this.standing = this.createAnimation(withGrid(1), 7)
 	}
 
-	createAnimation(img: HTMLImageElement, imgY: number, totalFrames: number, interval = 30) {
+	createAnimation(imgY: number, totalFrames: number, interval = 30) {
 		const animationConfig: AnimationConfig = {
 			totalFrames: totalFrames,
 			interval: interval,
@@ -80,7 +77,7 @@ export class Chicken extends Movable {
 			width: this.width,
 			height: this.height,
 			ctx: this.ctx,
-			image: img || this.image
+			image: this.image
 		}
 		return new Animation(animationConfig)
 	}

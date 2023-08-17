@@ -8,8 +8,6 @@ export interface BerryConfig {
 	y: number
 	width: number
 	height: number
-	src: string
-	ctx: CanvasRenderingContext2D
 	state: TreeState
 	boundary: Boundary
 }
@@ -26,7 +24,11 @@ export class BerryTreeItem extends Tree {
 	cuttingCount: number = 0
 
 	constructor(config: BerryConfig) {
-		super(config)
+		super({
+			...config,
+			ctx: window.myGameGlobalData.ctx.middle,
+			image: (window.myGameGlobalData.assets.trees as LoadedAssets).berryTree as HTMLImageElement
+		})
 		this.id = `berryTree-${config.x}-${config.y}`
 
 		this.matureTime = hours(0.5)
@@ -39,8 +41,7 @@ export class BerryTreeItem extends Tree {
 			height: withGrid(1)
 		}
 		this.boundary.addItem({
-			...this.boundaryBlock,
-			ctx: this.ctx
+			...this.boundaryBlock
 		})
 	}
 }

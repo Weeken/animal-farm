@@ -5,24 +5,20 @@ import { Wheat } from './Wheat'
 
 interface CropConfig {
 	field: Field
-	ctx: CanvasRenderingContext2D
 }
 
 export class Crop {
 	wheats: Wheat[] = []
 	tomatoes: Tomato[] = []
 	field: Field
-	ctx: CanvasRenderingContext2D
 	constructor(config: CropConfig) {
 		this.field = config.field
-		this.ctx = config.ctx
 	}
 
 	addWheat(field: PlantField) {
 		const newWheat = new Wheat({
 			x: field.x,
 			y: field.y,
-			ctx: this.ctx,
 			field
 		})
 		if (field.isEmpty) {
@@ -38,7 +34,6 @@ export class Crop {
 		const newTomato = new Tomato({
 			x: field.x,
 			y: field.y,
-			ctx: this.ctx,
 			field
 		})
 		if (field.isEmpty) {

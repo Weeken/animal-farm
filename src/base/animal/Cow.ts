@@ -1,10 +1,5 @@
-import { loadImage, VIEW_OFFSET, withGrid } from '../../utils'
+import { VIEW_OFFSET, withGrid } from '../../utils'
 import { Movable } from '../Movable'
-import Cow_yellow from '../../assets/light-cow.png'
-import Cow_purple from '../../assets/purple-cow.png'
-import Cow_green from '../../assets/green-cow.png'
-import Cow_brown from '../../assets/brown-cow.png'
-import Cow_pink from '../../assets/pink-cow.png'
 import { Animation, AnimationConfig } from '../Animation'
 
 export enum COW_ACTION {
@@ -25,25 +20,17 @@ export interface CowConfig {
 	y: number
 	width?: number
 	height?: number
-	ctx: CanvasRenderingContext2D
 	action?: COW_ACTION
 	color?: COW_COLOR
 }
 
-const imgMap = {
-	[COW_COLOR.YELLOW]: Cow_yellow,
-	[COW_COLOR.PINK]: Cow_pink,
-	[COW_COLOR.GREEN]: Cow_green,
-	[COW_COLOR.PURPLE]: Cow_purple,
-	[COW_COLOR.BROWN]: Cow_brown
-}
 export class Cow extends Movable {
 	x = 0
 	y = 0
 	width = 0
 	height = 0
 	ctx: CanvasRenderingContext2D
-	image: HTMLImageElement | null = null
+	image: HTMLImageElement
 
 	currentAction: COW_ACTION = COW_ACTION.STANDING
 	color: COW_COLOR = COW_COLOR.YELLOW
@@ -53,21 +40,30 @@ export class Cow extends Movable {
 
 	constructor(config: CowConfig) {
 		super({ x: config.x, y: config.y })
+
+		const cowImgs = (window.myGameGlobalData.assets.animal as LoadedAssets).cow as LoadedAssets
+
+		const imgMap = {
+			[COW_COLOR.YELLOW]: cowImgs.yellow as HTMLImageElement,
+			[COW_COLOR.PINK]: cowImgs.pink as HTMLImageElement,
+			[COW_COLOR.GREEN]: cowImgs.green as HTMLImageElement,
+			[COW_COLOR.PURPLE]: cowImgs.purple as HTMLImageElement,
+			[COW_COLOR.BROWN]: cowImgs.brown as HTMLImageElement
+		}
 		this.x = config.x + VIEW_OFFSET.x
 		this.y = config.y + VIEW_OFFSET.y
 
-		this.ctx = config.ctx
+		this.ctx = window.myGameGlobalData.ctx.middle
 		this.width = config.width || withGrid(2)
 		this.height = config.height || withGrid(2)
 		this.currentAction = config.action || COW_ACTION.STANDING
 		this.color = config.color || COW_COLOR.YELLOW
-		loadImage(imgMap[this.color]).then(img => {
-			this.sleeping = this.createAnimation(img, withGrid(8), 4, 60)
-			this.standing = this.createAnimation(img, 0, 3, 40)
-		})
+		this.image = imgMap[this.color]
+		this.sleeping = this.createAnimation(withGrid(8), 4, 60)
+		this.standing = this.createAnimation(0, 3, 40)
 	}
 
-	createAnimation(img: HTMLImageElement, imgY: number, totalFrames: number, interval = 30) {
+	createAnimation(imgY: number, totalFrames: number, interval = 30) {
 		const animationConfig: AnimationConfig = {
 			totalFrames: totalFrames,
 			interval: interval,
@@ -80,7 +76,7 @@ export class Cow extends Movable {
 			width: this.width,
 			height: this.height,
 			ctx: this.ctx,
-			image: img || this.image
+			image: this.image
 		}
 		return new Animation(animationConfig)
 	}

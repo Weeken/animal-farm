@@ -1,16 +1,12 @@
 import { AppleTreeStump } from './AppleTreeStump'
 import { AppleTreeTop } from './AppleTreeTop'
-import AppleTreeTopImg from '../../assets/apple-tree-top.png'
-import AppleTreeStumpImg from '../../assets/apple-tree-stump.png'
 import { withGrid, hours, getPositionFormIdStr } from '../../utils'
 import { Boundary } from '../fixed-things/Boundary'
 import type { TreeState } from './Tree'
 import { Player } from '../newPlayer'
-import { Ctx } from '../../utils/canvas'
 import { DropItem } from '../drop/DropItem'
 
 interface AppleTreeConfig {
-	ctx: Ctx
 	boundary: Boundary
 	player: Player
 	trees: TreeInfo[]
@@ -33,29 +29,29 @@ export class AppleTree {
 	treeTops: AppleTreeTop[] = []
 	treeStumps: AppleTreeStump[] = []
 	fullTrees: FullTree[] = []
-	ctx: Ctx
 	constructor(config: AppleTreeConfig) {
-		this.ctx = config.ctx
 		config.trees.forEach(appleTree => {
 			const top = new AppleTreeTop({
-				src: AppleTreeTopImg,
+				image: ((window.myGameGlobalData.assets.trees as LoadedAssets).appleTree as LoadedAssets)
+					.top as HTMLImageElement,
 				x: withGrid(appleTree.x),
 				y: withGrid(appleTree.y),
 				width: withGrid(2),
 				height: withGrid(2),
 				state: appleTree.state,
-				ctx: config.ctx.upper,
+				ctx: window.myGameGlobalData.ctx.upper,
 				matureTime: appleTree.matureTime || hours(1),
 				id: `appleTree-${appleTree.x}-${appleTree.y}`
 			})
 			const stump = new AppleTreeStump({
-				src: AppleTreeStumpImg,
+				image: ((window.myGameGlobalData.assets.trees as LoadedAssets).appleTree as LoadedAssets)
+					.stump as HTMLImageElement,
 				x: withGrid(appleTree.x + 0.5),
 				y: withGrid(appleTree.y + 1),
 				width: withGrid(1),
 				height: withGrid(1),
 				state: appleTree.state,
-				ctx: config.ctx.down,
+				ctx: window.myGameGlobalData.ctx.down,
 				boundary: config.boundary,
 				matureTime: appleTree.matureTime || hours(1),
 				player: config.player,
@@ -88,9 +84,9 @@ export class AppleTree {
 		const woods = new DropItem({
 			x: tree.x + withGrid(0.5),
 			y: tree.y + withGrid(1),
-			ctx: this.ctx.middle,
 			type: 'wood',
-			count: 3
+			count: 3,
+			image: (window.myGameGlobalData.assets.materials as LoadedAssets).wood as HTMLImageElement
 		})
 		const drops: DropItem[] = [woods]
 		if (tree.state === 'bearFruit') {
@@ -98,9 +94,9 @@ export class AppleTree {
 				new DropItem({
 					x: tree.x + withGrid(0.8),
 					y: tree.y + withGrid(0.4),
-					ctx: this.ctx.middle,
 					type: 'apple',
-					count: 3
+					count: 3,
+					image: (window.myGameGlobalData.assets.materials as LoadedAssets).apple as HTMLImageElement
 				})
 			)
 		}

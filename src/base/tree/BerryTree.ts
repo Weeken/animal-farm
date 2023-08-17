@@ -2,29 +2,23 @@ import { BerryTreeItem } from './BerryTreeItem'
 import { TreeInfo } from './Tree'
 import { withGrid, getPositionFormIdStr } from '../../utils'
 import { Boundary } from '../fixed-things/Boundary'
-import BerryTreeImg from '../../assets/berry-tree.png'
 import { DropItem } from '../drop/DropItem'
 
 export interface BerryConfig {
 	trees: TreeInfo[]
-	ctx: CanvasRenderingContext2D
 	boundary: Boundary
 }
 
 export class BerryTree {
 	list: BerryTreeItem[] = []
-	ctx: CanvasRenderingContext2D
 	constructor(config: BerryConfig) {
-		this.ctx = config.ctx
 		this.list = config.trees.map(berryTree => {
 			const treeItem = new BerryTreeItem({
-				src: BerryTreeImg,
 				x: withGrid(berryTree.x),
 				y: withGrid(berryTree.y),
 				width: withGrid(1),
 				height: withGrid(1),
 				state: berryTree.state,
-				ctx: config.ctx,
 				boundary: config.boundary
 			})
 			return treeItem
@@ -48,9 +42,9 @@ export class BerryTree {
 		const woods = new DropItem({
 			x: tree.x,
 			y: tree.y,
-			ctx: this.ctx,
 			type: 'branch',
-			count: 3
+			count: 3,
+			image: (window.myGameGlobalData.assets.materials as LoadedAssets).branch as HTMLImageElement
 		})
 		const drops: DropItem[] = [woods]
 		if (tree.state === 'bearFruit') {
@@ -58,9 +52,9 @@ export class BerryTree {
 				new DropItem({
 					x: tree.x + withGrid(0.5),
 					y: tree.y + withGrid(0.4),
-					ctx: this.ctx,
 					type: 'berry',
-					count: 3
+					count: 3,
+					image: (window.myGameGlobalData.assets.materials as LoadedAssets).berry as HTMLImageElement
 				})
 			)
 		}

@@ -1,10 +1,10 @@
 import { VIEW_WIDTH, VIEW_HEIGHT } from './index'
 
-export interface Ctx {
-	upper: CanvasRenderingContext2D
-	middle: CanvasRenderingContext2D
-	down: CanvasRenderingContext2D
-}
+// export interface Ctx {
+// 	upper: CanvasRenderingContext2D
+// 	middle: CanvasRenderingContext2D
+// 	down: CanvasRenderingContext2D
+// }
 
 export const getCtx = (id: string) => {
 	return new Promise<CanvasRenderingContext2D>((resolve, reject) => {

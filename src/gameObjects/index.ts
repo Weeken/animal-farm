@@ -1,13 +1,11 @@
 import { withGrid, ROW_GRID_NUM, VIEW_OFFSET } from '../utils'
 
-import { generateCtx } from '../utils/canvas'
-
-import { IslandMap } from '../base/Map'
+import { Island } from '../base/Island'
 import { Boundary } from '../base/fixed-things/Boundary'
 import { Player } from '../base/newPlayer'
 import { collisions } from '../collisions'
 import { House } from '../base/fixed-things/House'
-import { SmallDoor } from '../base/fixed-things/SmallDoor'
+import { HouseDoor } from '../base/fixed-things/HouseDoor'
 import { Chicken } from '../base/animal/Chicken'
 import { Cow } from '../base/animal/Cow'
 import { BerryTree } from '../base/tree/BerryTree'
@@ -15,11 +13,6 @@ import { AppleTree } from '../base/tree/AppleTree'
 import { ItemDock } from '../base/ItemDock'
 import { Field } from '../base/Field/Field'
 import { Crop } from '../base/plant/Crop'
-
-import MapImg from '../assets/map.png'
-
-import HouseRoot from '../assets/house/house-root.png'
-import SmallDoorImg from '../assets/house/door.png'
 
 import { cows } from './cows'
 import { chickens } from './chicken'
@@ -49,44 +42,32 @@ const getBoundaries = () => {
 }
 
 export const useGlobal = async () => {
-	const ctx = await generateCtx()
-	const player = new Player({
-		ctx: ctx.middle
-	})
+	const player = new Player()
 
 	const boundary = new Boundary({
-		list: getBoundaries().map(item => ({
-			...item,
-			ctx: ctx.down
-		}))
+		list: getBoundaries()
 	})
 
-	const bridges = bridgesInfo.map(bridge => new Bridge({ ...bridge, ctx: ctx.down }))
+	const bridges = bridgesInfo.map(bridge => new Bridge({ ...bridge }))
 
 	const field = new Field({
-		ctx: ctx.middle,
 		boundary,
 		bridges
 	})
 
 	const crop = new Crop({
-		ctx: ctx.middle,
 		field
 	})
 
-	const itemDock = new ItemDock({
-		ctx: ctx.upper
-	})
+	const itemDock = new ItemDock()
 
 	const drop = new Drop()
 
 	const gameObjects = {
 		// 地图
-		map: new IslandMap({
-			src: MapImg,
+		map: new Island({
 			x: VIEW_OFFSET.x,
-			y: VIEW_OFFSET.y,
-			ctx: ctx.down
+			y: VIEW_OFFSET.y
 		}),
 		// 玩家
 		// player,
@@ -94,30 +75,25 @@ export const useGlobal = async () => {
 		// boundaries: boundaries,
 		// 玩家的房子
 		playerHouse: new House({
-			src: HouseRoot,
 			x: withGrid(15),
 			y: withGrid(12),
 			width: withGrid(5),
 			height: withGrid(5),
-			ctx: ctx.upper,
 			player: player
 		}),
 		// 玩家房子的门
-		playerHouseDoor: new SmallDoor({
-			src: SmallDoorImg,
+		playerHouseDoor: new HouseDoor({
 			x: withGrid(17),
 			y: withGrid(16),
 			width: withGrid(1),
 			height: withGrid(1),
-			ctx: ctx.middle,
 			player
 		}),
 		chickens: [
 			...chickens.map(
 				chicken =>
 					new Chicken({
-						...chicken,
-						ctx: ctx.down
+						...chicken
 					})
 			)
 		],
@@ -125,19 +101,16 @@ export const useGlobal = async () => {
 			...cows.map(
 				cow =>
 					new Cow({
-						...cow,
-						ctx: ctx.down
+						...cow
 					})
 			)
 		],
 		berryTree: new BerryTree({
 			trees: berryTrees,
-			ctx: ctx.middle,
 			boundary
 		}),
 		appleTrees: new AppleTree({
 			trees: appleTrees,
-			ctx: ctx,
 			boundary,
 			player
 		}),
@@ -148,7 +121,6 @@ export const useGlobal = async () => {
 	}
 
 	return {
-		ctx,
 		player,
 		boundary,
 		itemDock,

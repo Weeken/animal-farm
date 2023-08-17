@@ -4,7 +4,6 @@ import { Movable } from '../Movable'
 export interface BoundaryInfo {
 	x: number
 	y: number
-	ctx: CanvasRenderingContext2D
 	width?: number
 	height?: number
 }
@@ -20,7 +19,7 @@ export class BoundaryItem extends Movable {
 		super({ x: props.x, y: props.y })
 		this.x = props.x
 		this.y = props.y
-		this.ctx = props.ctx
+		this.ctx = window.myGameGlobalData.ctx.down
 		this.width = props.width || withGrid(1)
 		this.height = props.height || withGrid(1)
 		this.id = 'boundaryItem-' + props.x + '-' + props.y

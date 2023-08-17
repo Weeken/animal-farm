@@ -1,10 +1,10 @@
-import { loadImage, withGrid, VIEW_HEIGHT, screenCenter } from '../utils'
-import ItemDockImg from '../assets/item-dock.png'
+import { withGrid, VIEW_HEIGHT, screenCenter } from '../utils'
+// import ItemDockImg from '../assets/item-dock.png'
 import { Material, type MaterialType } from './Material'
 
-interface ItemDockConfig {
-	ctx: CanvasRenderingContext2D
-}
+// interface ItemDockConfig {
+// 	ctx: CanvasRenderingContext2D
+// }
 
 export class ItemDock {
 	x = screenCenter.x - withGrid(6)
@@ -12,26 +12,17 @@ export class ItemDock {
 	width = withGrid(12)
 	height = withGrid(3)
 	ctx: CanvasRenderingContext2D
-	image: HTMLImageElement | null = null
+	image: HTMLImageElement
 	isShow = false
 	list: Material[] = []
-	constructor(config: ItemDockConfig) {
-		this.ctx = config.ctx
+	constructor() {
+		this.ctx = window.myGameGlobalData.ctx.upper
+		this.image = window.myGameGlobalData.assets.itemDock as HTMLImageElement
 	}
 
 	draw() {
 		if (!this.isShow) return
-		return new Promise(resolve => {
-			if (this.image) {
-				this.ctx.drawImage(this.image, this.x, this.y)
-			} else {
-				loadImage(ItemDockImg).then(img => {
-					this.image = img
-					this.ctx.drawImage(img, this.x, this.y)
-				})
-			}
-			resolve(this.image)
-		})
+		this.ctx.drawImage(this.image, this.x, this.y)
 	}
 
 	switch() {

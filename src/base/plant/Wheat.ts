@@ -1,6 +1,6 @@
 import { Movable } from '../Movable'
-import WheatImg from '../../assets/wheat.png'
-import { loadImage, VIEW_OFFSET, withGrid } from '../../utils'
+// import WheatImg from '../../assets/wheat.png'
+import { VIEW_OFFSET, withGrid } from '../../utils'
 import { PlantField } from '../Field/PlantField'
 
 export type PlantState = 'gemmiparous' | 'growing' | 'fruitful' | 'mature'
@@ -10,7 +10,6 @@ export interface WheatConfig {
 	y: number
 	width?: number
 	height?: number
-	ctx: CanvasRenderingContext2D
 	state?: PlantState
 	field: PlantField
 }
@@ -20,8 +19,8 @@ export class Wheat extends Movable {
 	y = 0
 	width = 0
 	height = 0
-	src = WheatImg
-	image: HTMLImageElement | null = null
+	// src = WheatImg
+	image: HTMLImageElement
 	ctx: CanvasRenderingContext2D
 	state: PlantState = 'gemmiparous'
 	field: PlantField
@@ -33,7 +32,8 @@ export class Wheat extends Movable {
 		this.y = config.y
 		this.width = config.width || withGrid(1)
 		this.height = config.height || withGrid(1)
-		this.ctx = config.ctx
+		this.ctx = window.myGameGlobalData.ctx.middle
+		this.image = (window.myGameGlobalData.assets.crop as LoadedAssets).wheat as HTMLImageElement
 		this.state = config.state || 'gemmiparous'
 		this.field = config.field
 		this.id = `wheat-${this.x}-${this.y}`
@@ -56,52 +56,31 @@ export class Wheat extends Movable {
 	}
 
 	draw() {
-		return new Promise(resolve => {
-			const positionX = this.x + VIEW_OFFSET.x
-			const positionY = this.y + VIEW_OFFSET.y - withGrid(0.2)
-			const framePositionX = {
-				gemmiparous: 0,
-				growing: withGrid(1),
-				fruitful: withGrid(2),
-				mature: withGrid(3)
-			}
+		const positionX = this.x + VIEW_OFFSET.x
+		const positionY = this.y + VIEW_OFFSET.y - withGrid(0.2)
+		const framePositionX = {
+			gemmiparous: 0,
+			growing: withGrid(1),
+			fruitful: withGrid(2),
+			mature: withGrid(3)
+		}
 
-			this.growUp()
+		this.growUp()
 
-			if (this.field) {
-				// this.ctx.fillStyle = 'rgba(0, 0, 255, 0.2)'
-				// this.ctx.fillRect(positionX, positionY, this.width, this.height)
-				if (this.image) {
-					this.ctx.drawImage(
-						this.image,
-						framePositionX[this.state],
-						0,
-						this.width,
-						this.height,
-						positionX,
-						positionY,
-						this.width,
-						this.height
-					)
-				} else {
-					this.src &&
-						loadImage(this.src).then(img => {
-							this.image = img
-							this.ctx.drawImage(
-								this.image,
-								framePositionX[this.state],
-								0,
-								this.width,
-								this.height,
-								positionX,
-								positionY,
-								this.width,
-								this.height
-							)
-						})
-				}
-			}
-			resolve(this.image)
-		})
+		if (this.field) {
+			// this.ctx.fillStyle = 'rgba(0, 0, 255, 0.2)'
+			// this.ctx.fillRect(positionX, positionY, this.width, this.height)
+			this.ctx.drawImage(
+				this.image,
+				framePositionX[this.state],
+				0,
+				this.width,
+				this.height,
+				positionX,
+				positionY,
+				this.width,
+				this.height
+			)
+		}
 	}
 }

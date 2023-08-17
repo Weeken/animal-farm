@@ -4,7 +4,6 @@ import { Bridge } from '../fixed-things/Bridge'
 import { PlantField } from './PlantField'
 
 interface FieldConfig {
-	ctx: CanvasRenderingContext2D
 	boundary: Boundary
 	bridges: Bridge[]
 }
@@ -16,11 +15,9 @@ interface Position {
 
 export class Field {
 	plantFields: PlantField[] = []
-	ctx: CanvasRenderingContext2D
 	boundary: Boundary
 	bridges: Bridge[]
 	constructor(config: FieldConfig) {
-		this.ctx = config.ctx
 		this.boundary = config.boundary
 		this.bridges = config.bridges
 	}
@@ -76,8 +73,7 @@ export class Field {
 		// const y = Math.ceil(position.y / withGrid(1))
 		const newPlantField = new PlantField({
 			x: position.x,
-			y: position.y,
-			ctx: this.ctx
+			y: position.y
 		})
 		if (this.checkCanSetField(position)) {
 			this.plantFields.push(newPlantField)

@@ -1,10 +1,8 @@
-import { loadImage, VIEW_OFFSET, withGrid, BaseRect, Position, screenCenter, ROLE_WIDTH, ROLE_HEIGHT } from '../utils'
-import PlayerImg from '../assets/premium-player.png'
+import { VIEW_OFFSET, withGrid, BaseRect, Position, screenCenter, ROLE_WIDTH, ROLE_HEIGHT } from '../utils'
+// import PlayerImg from '../assets/premium-player.png'
 import { Animation, AnimationConfig } from './Animation'
 
-interface PlayerConfig {
-	ctx: CanvasRenderingContext2D
-}
+// interface PlayerConfig {}
 
 export enum ACTION {
 	STANDING = 'standing',
@@ -22,7 +20,7 @@ export enum DIRECTION {
 }
 
 export class Player {
-	image: HTMLImageElement | null = null
+	image: HTMLImageElement
 	ctx: CanvasRenderingContext2D
 	// 固定在视窗中间的位置
 	position: Position = {
@@ -88,8 +86,9 @@ export class Player {
 	wateringLeft: Animation | null = null
 	wateringRight: Animation | null = null
 
-	constructor(config: PlayerConfig) {
-		this.ctx = config.ctx
+	constructor() {
+		this.ctx = window.myGameGlobalData.ctx.middle
+		this.image = window.myGameGlobalData.assets.player as HTMLImageElement
 		this.nextGrid = {
 			x: this.x + withGrid(1),
 			y: this.y + withGrid(1),
@@ -102,36 +101,34 @@ export class Player {
 			width: withGrid(1),
 			height: withGrid(1)
 		}
-		loadImage(PlayerImg).then(img => {
-			this.image = img
-			this.standingDown = this.createAnimation(img, 0, 8)
-			this.standingUp = this.createAnimation(img, withGrid(3), 8)
-			this.standingLeft = this.createAnimation(img, withGrid(6), 8)
-			this.standingRight = this.createAnimation(img, withGrid(9), 8)
-			//
-			this.movingDown = this.createAnimation(img, withGrid(12))
-			this.movingUp = this.createAnimation(img, withGrid(15))
-			this.movingRight = this.createAnimation(img, withGrid(18))
-			this.movingLeft = this.createAnimation(img, withGrid(21))
-			//
-			this.diggingDown = this.createAnimation(img, withGrid(36))
-			this.diggingUp = this.createAnimation(img, withGrid(39))
-			this.diggingLeft = this.createAnimation(img, withGrid(42))
-			this.diggingRight = this.createAnimation(img, withGrid(45))
-			//
-			this.cuttingDown = this.createAnimation(img, withGrid(48))
-			this.cuttingUp = this.createAnimation(img, withGrid(51))
-			this.cuttingLeft = this.createAnimation(img, withGrid(54))
-			this.cuttingRight = this.createAnimation(img, withGrid(57))
-			//
-			this.wateringDown = this.createAnimation(img, withGrid(60), 8)
-			this.wateringUp = this.createAnimation(img, withGrid(63), 8)
-			this.wateringLeft = this.createWateringAnimation(img, withGrid(66), 8, true)
-			this.wateringRight = this.createWateringAnimation(img, withGrid(69))
-		})
+
+		this.standingDown = this.createAnimation(0, 8)
+		this.standingUp = this.createAnimation(withGrid(3), 8)
+		this.standingLeft = this.createAnimation(withGrid(6), 8)
+		this.standingRight = this.createAnimation(withGrid(9), 8)
+		//
+		this.movingDown = this.createAnimation(withGrid(12))
+		this.movingUp = this.createAnimation(withGrid(15))
+		this.movingRight = this.createAnimation(withGrid(18))
+		this.movingLeft = this.createAnimation(withGrid(21))
+		//
+		this.diggingDown = this.createAnimation(withGrid(36))
+		this.diggingUp = this.createAnimation(withGrid(39))
+		this.diggingLeft = this.createAnimation(withGrid(42))
+		this.diggingRight = this.createAnimation(withGrid(45))
+		//
+		this.cuttingDown = this.createAnimation(withGrid(48))
+		this.cuttingUp = this.createAnimation(withGrid(51))
+		this.cuttingLeft = this.createAnimation(withGrid(54))
+		this.cuttingRight = this.createAnimation(withGrid(57))
+		//
+		this.wateringDown = this.createAnimation(withGrid(60), 8)
+		this.wateringUp = this.createAnimation(withGrid(63), 8)
+		this.wateringLeft = this.createWateringAnimation(withGrid(66), 8, true)
+		this.wateringRight = this.createWateringAnimation(withGrid(69))
 	}
 
-	createWateringAnimation(img: HTMLImageElement, imgY: number, interval = 8, isLeft = false) {
+	createWateringAnimation(imgY: number, interval = 8, isLeft = false) {
 		const animationConfig: AnimationConfig = {
 			totalFrames: 8,
 			interval: interval,
@@ -144,12 +141,12 @@ export class Player {
 			width: withGrid(4),
 			height: this.height,
 			ctx: this.ctx,
-			image: img || this.image
+			image: this.image
 		}
 		return new Animation(animationConfig)
 	}
 
-	createAnimation(img: HTMLImageElement, imgY: number, interval = 4) {
+	createAnimation(imgY: number, interval = 4) {
 		const animationConfig: AnimationConfig = {
 			totalFrames: 8,
 			interval: interval,
@@ -162,7 +159,7 @@ export class Player {
 			width: this.width,
 			height: this.height,
 			ctx: this.ctx,
-			image: img || this.image
+			image: this.image
 		}
 		return new Animation(animationConfig)
 	}
