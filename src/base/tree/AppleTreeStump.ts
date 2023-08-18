@@ -1,7 +1,7 @@
 import { Tree, TreeConfig } from './Tree'
 import { Boundary } from '../fixed-things/Boundary'
 import { withGrid } from '../../utils'
-import { Player } from '../newPlayer'
+import { Player } from '../Player'
 import { AppleTree } from './AppleTree'
 import { BaseRect } from '../../utils'
 

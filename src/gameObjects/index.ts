@@ -2,12 +2,12 @@ import { withGrid, ROW_GRID_NUM, VIEW_OFFSET } from '../utils'
 
 import { Island } from '../base/Island'
 import { Boundary } from '../base/fixed-things/Boundary'
-import { Player } from '../base/newPlayer'
+import { Player } from '../base/Player'
 import { collisions } from '../collisions'
 import { House } from '../base/fixed-things/House'
 import { HouseDoor } from '../base/fixed-things/HouseDoor'
 import { Chicken } from '../base/animal/Chicken'
-import { Cow } from '../base/animal/Cow'
+import { Cow } from '../base/animal/cow/Cow'
 import { BerryTree } from '../base/tree/BerryTree'
 import { AppleTree } from '../base/tree/AppleTree'
 import { ItemDock } from '../base/ItemDock'
@@ -97,14 +97,16 @@ export const useGlobal = async () => {
 					})
 			)
 		],
-		cows: [
-			...cows.map(
-				cow =>
-					new Cow({
-						...cow
-					})
-			)
-		],
+		// cows: [
+		// 	...cows.map(
+		// 		cow =>
+		// 			new Cow({
+		// 				...cow,
+		// 				boundary
+		// 			})
+		// 	)
+		// ],
+		cow: new Cow({ cows, boundary }),
 		berryTree: new BerryTree({
 			trees: berryTrees,
 			boundary

@@ -9,10 +9,7 @@ import { generateCtx } from './utils/canvas'
 import { Controller } from './base/control/Controller'
 
 import { Chicken } from './base/animal/Chicken'
-import { Cow } from './base/animal/Cow'
 import { BerryTreeItem } from './base/tree/BerryTreeItem'
-import { AppleTreeTop } from './base/tree/AppleTreeTop'
-import { AppleTreeStump } from './base/tree/AppleTreeStump'
 import { BoundaryItem } from './base/fixed-things/BoundaryItem'
 import { PlantField } from './base/Field/PlantField'
 import { Bridge } from './base/fixed-things/Bridge'
@@ -20,6 +17,8 @@ import { Wheat } from './base/plant/Wheat'
 import { Tomato } from './base/plant/Tomato'
 import { Material } from './base/Material'
 import { DropItem } from './base/drop/DropItem'
+import { FullCow } from './base/animal/cow/Cow'
+import { FullTree } from './base/tree/AppleTree'
 
 const setGlobalData = async (data: any) => {
 	window.myGameGlobalData = data
@@ -62,8 +61,9 @@ const start = async () => {
 			})
 
 			// 牛
-			gameObjects.cows.forEach((cow: Cow) => {
-				cow.action()
+			gameObjects.cow.fullCow.forEach((cow: FullCow) => {
+				cow.top.action()
+				cow.bottom.action()
 			})
 
 			// 浆果树
@@ -72,9 +72,9 @@ const start = async () => {
 			})
 
 			// 苹果树树桩
-			gameObjects.appleTrees.treeStumps.forEach((treeStump: AppleTreeStump) => {
-				treeStump.draw()
-			})
+			// gameObjects.appleTrees.treeStumps.forEach((treeStump: AppleTreeStump) => {
+			// 	treeStump.draw()
+			// })
 
 			// 菜地
 			gameObjects.field.plantFields.forEach((field: PlantField) => {
@@ -104,8 +104,9 @@ const start = async () => {
 			player.action()
 
 			// 苹果树树冠
-			gameObjects.appleTrees.treeTops.forEach((treeTop: AppleTreeTop) => {
-				treeTop.draw()
+			gameObjects.appleTrees.fullTrees.forEach((tree: FullTree) => {
+				tree.top.draw()
+				tree.stump.draw()
 			})
 
 			// 左上角房子的房顶
@@ -135,7 +136,8 @@ const start = async () => {
 		gameObjects.playerHouse,
 		gameObjects.playerHouseDoor,
 		...gameObjects.chickens,
-		...gameObjects.cows,
+		...gameObjects.cow.top,
+		...gameObjects.cow.bottom,
 		...gameObjects.berryTree.list,
 		...gameObjects.appleTrees.treeTops,
 		...gameObjects.appleTrees.treeStumps,

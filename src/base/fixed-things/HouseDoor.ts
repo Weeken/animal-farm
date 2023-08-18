@@ -1,5 +1,5 @@
 import { Movable } from '../Movable'
-import { Player } from '../newPlayer'
+import { Player } from '../Player'
 import { withGrid, VIEW_OFFSET, isHitting } from '../../utils'
 
 interface SmallDoorConfig {

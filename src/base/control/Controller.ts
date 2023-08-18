@@ -1,4 +1,4 @@
-import { Player, ACTION, DIRECTION } from '../newPlayer'
+import { Player, ACTION, DIRECTION } from '../Player'
 import { Boundary } from '../fixed-things/Boundary'
 import { BoundaryItem } from '../fixed-things/BoundaryItem'
 import { getPositionFormIdStr, isHitting, withGrid } from '../../utils'
@@ -150,14 +150,14 @@ export class Controller {
 		}
 	}
 
-	setPlayerNextGrid(direction: 'up' | 'down' | 'left' | 'right') {
-		if (direction === 'up') {
+	setPlayerNextGrid(direction: DIRECTION) {
+		if (direction === DIRECTION.UP) {
 			this.player.nextGrid = { ...this.player.nextGrid, x: this.player.x + withGrid(1), y: this.player.y }
-		} else if (direction === 'down') {
+		} else if (direction === DIRECTION.DOWN) {
 			this.player.nextGrid = { ...this.player.nextGrid, x: this.player.x + withGrid(1), y: this.player.y + withGrid(2) }
-		} else if (direction === 'left') {
+		} else if (direction === DIRECTION.LEFT) {
 			this.player.nextGrid = { ...this.player.nextGrid, x: this.player.x, y: this.player.y + withGrid(1) }
-		} else if (direction === 'right') {
+		} else if (direction === DIRECTION.RIGHT) {
 			this.player.nextGrid = { ...this.player.nextGrid, x: this.player.x + withGrid(2), y: this.player.y + withGrid(1) }
 		}
 	}
@@ -264,25 +264,25 @@ export class Controller {
 				this.keyMap.w.press = true
 				this.lastPressedKey = 'w'
 				this.player.towardDirection = DIRECTION.UP
-				this.setPlayerNextGrid('up')
+				this.setPlayerNextGrid(DIRECTION.UP)
 				this.handleMove()
 			} else if (e.key === 'a') {
 				this.keyMap.a.press = true
 				this.lastPressedKey = 'a'
 				this.player.towardDirection = DIRECTION.LEFT
-				this.setPlayerNextGrid('left')
+				this.setPlayerNextGrid(DIRECTION.LEFT)
 				this.handleMove()
 			} else if (e.key === 'd') {
 				this.keyMap.d.press = true
 				this.lastPressedKey = 'd'
 				this.player.towardDirection = DIRECTION.RIGHT
-				this.setPlayerNextGrid('right')
+				this.setPlayerNextGrid(DIRECTION.RIGHT)
 				this.handleMove()
 			} else if (e.key === 's') {
 				this.keyMap.s.press = true
 				this.lastPressedKey = 's'
 				this.player.towardDirection = DIRECTION.DOWN
-				this.setPlayerNextGrid('down')
+				this.setPlayerNextGrid(DIRECTION.DOWN)
 				this.handleMove()
 			} else if (e.key === 'p') {
 				// 新增一块菜地

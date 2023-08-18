@@ -1,21 +1,42 @@
-import { loadImage, VIEW_OFFSET, withGrid, BaseRect, Position } from '../utils'
-import PlayerImg from '../assets/premium-player.png'
+import { VIEW_OFFSET, withGrid, BaseRect, Position, screenCenter, ROLE_WIDTH, ROLE_HEIGHT } from '../utils'
+// import PlayerImg from '../assets/premium-player.png'
+import { Animation, AnimationConfig } from './Animation'
 
-interface PlayerConfig {
-	x: number
-	y: number
-	width: number
-	height: number
-	// src: string
-	ctx: CanvasRenderingContext2D
+// interface PlayerConfig {}
+
+export enum ACTION {
+	STANDING = 'standing',
+	MOVING = 'moving',
+	DIGGING = 'digging',
+	CUTTING = 'cutting',
+	WATERING = 'watering'
 }
 
-type Action = 'isMoving' | 'isDigging' | 'isCutting' | 'isStanding'
+export enum DIRECTION {
+	DOWN = 'down',
+	UP = 'up',
+	LEFT = 'left',
+	RIGHT = 'right'
+}
 
 export class Player {
+	image: HTMLImageElement
+	ctx: CanvasRenderingContext2D
+	// 固定在视窗中间的位置
+	position: Position = {
+		x: screenCenter.x,
+		y: screenCenter.y
+	}
 	// 相对于地图的坐标
-	x = 0
-	y = 0
+	x = screenCenter.x - VIEW_OFFSET.x
+	y = screenCenter.y - VIEW_OFFSET.y
+
+	// 宽高
+	width = ROLE_WIDTH
+	height = ROLE_HEIGHT
+
+	// 朝向
+	towardDirection = DIRECTION.DOWN
 
 	// 当前方向的下一格
 	nextGrid: BaseRect = {
@@ -25,266 +46,224 @@ export class Player {
 		height: withGrid(1)
 	}
 
-	src = ''
-	// 固定在视窗中间的位置
-	position: Position = {
+	// 碰撞检测位置大小
+	collisionGrid: BaseRect = {
 		x: 0,
-		y: 0
+		y: 0,
+		width: withGrid(1),
+		height: withGrid(1)
 	}
-	ctx: CanvasRenderingContext2D
-	image: HTMLImageElement | null = null
 
-	// 行走动画
-	frames = 4
-	currentFrame = 1
-	gap = 0
+	// 当前动作
+	currentAction = ACTION.STANDING
 
-	// 站、走
-	isStanding = true
-	isMoving = false
-	// 朝向
-	towardDirection = 'down'
-
-	actionFrames = 2
-	currentActionFrame = 1
-
-	// 挖
-	isDigging = false
+	//
 	diggingCount = 0
 
-	// 砍
-	isCutting = false
+	// 站立动画
+	standingDown: Animation
+	standingUp: Animation
+	standingLeft: Animation
+	standingRight: Animation
+	// 行走动画
+	movingDown: Animation
+	movingUp: Animation
+	movingLeft: Animation
+	movingRight: Animation
+	// 挖土动画
+	diggingDown: Animation
+	diggingUp: Animation
+	diggingLeft: Animation
+	diggingRight: Animation
+	// 砍伐动画
+	cuttingDown: Animation
+	cuttingUp: Animation
+	cuttingLeft: Animation
+	cuttingRight: Animation
+	// 浇水动画
+	wateringDown: Animation
+	wateringUp: Animation
+	wateringLeft: Animation
+	wateringRight: Animation
 
-	width = 0
-	height = 0
-
-	constructor(config: PlayerConfig) {
-		this.position.x = config.x
-		this.position.y = config.y
-
-		this.x = config.x - VIEW_OFFSET.x
-		this.y = config.y - VIEW_OFFSET.y
+	constructor() {
+		this.ctx = window.myGameGlobalData.ctx.middle
+		this.image = window.myGameGlobalData.assets.player as HTMLImageElement
 		this.nextGrid = {
-			x: this.x,
+			x: this.x + withGrid(1),
+			y: this.y + withGrid(1),
+			width: withGrid(1),
+			height: withGrid(1)
+		}
+		this.collisionGrid = {
+			x: this.x + withGrid(1),
 			y: this.y + withGrid(1),
 			width: withGrid(1),
 			height: withGrid(1)
 		}
 
-		// this.src = config.src
-		this.ctx = config.ctx
-		this.width = config.width
-		this.height = config.height
+		this.standingDown = this.createAnimation(0, 8)
+		this.standingUp = this.createAnimation(withGrid(3), 8)
+		this.standingLeft = this.createAnimation(withGrid(6), 8)
+		this.standingRight = this.createAnimation(withGrid(9), 8)
+		//
+		this.movingDown = this.createAnimation(withGrid(12))
+		this.movingUp = this.createAnimation(withGrid(15))
+		this.movingRight = this.createAnimation(withGrid(18))
+		this.movingLeft = this.createAnimation(withGrid(21))
+		//
+		this.diggingDown = this.createAnimation(withGrid(36))
+		this.diggingUp = this.createAnimation(withGrid(39))
+		this.diggingLeft = this.createAnimation(withGrid(42))
+		this.diggingRight = this.createAnimation(withGrid(45))
+		//
+		this.cuttingDown = this.createAnimation(withGrid(48))
+		this.cuttingUp = this.createAnimation(withGrid(51))
+		this.cuttingLeft = this.createAnimation(withGrid(54))
+		this.cuttingRight = this.createAnimation(withGrid(57))
+		//
+		this.wateringDown = this.createAnimation(withGrid(60), 8)
+		this.wateringUp = this.createAnimation(withGrid(63), 8)
+		this.wateringLeft = this.createWateringAnimation(withGrid(66), 8, true)
+		this.wateringRight = this.createWateringAnimation(withGrid(69))
 	}
 
-	selectAction(action: 'Moving' | 'Digging' | 'Cutting' | 'Standing') {
-		const actionTypes: [Action, Action, Action] = ['isMoving', 'isDigging', 'isCutting']
-		actionTypes.forEach((act: Action) => {
-			if (`is${action}` === act) {
-				this[`is${action}`] = true
-			} else {
-				this[act] = false
-			}
-		})
+	createWateringAnimation(imgY: number, interval = 8, isLeft = false) {
+		const animationConfig: AnimationConfig = {
+			totalFrames: 8,
+			interval: interval,
+			x: !isLeft ? this.position.x : this.position.x - withGrid(1),
+			y: this.position.y,
+			imgX: 0,
+			imgY: imgY,
+			imgWidth: withGrid(4),
+			imgHeight: withGrid(3),
+			width: withGrid(4),
+			height: this.height,
+			ctx: this.ctx,
+			image: this.image
+		}
+		return new Animation(animationConfig)
 	}
 
-	draw() {
-		return new Promise(resolve => {
-			let frameY = 0
-			if (this.towardDirection === 'down') {
-				frameY = 0
-			} else if (this.towardDirection === 'up') {
-				frameY = withGrid(3)
-			} else if (this.towardDirection === 'left') {
-				frameY = withGrid(2)
-			} else {
-				frameY = withGrid(3)
-			}
-
-			if (this.isMoving) {
-				this.gap++
-				if (this.gap % 10 === 0) {
-					if (this.currentFrame < this.frames - 1) {
-						this.currentFrame++
-					} else {
-						this.currentFrame = 0
-						this.gap = 0
-					}
-				}
-			} else {
-				this.currentFrame = 1
-				this.gap = 0
-			}
-
-			this.ctx.fillStyle = 'rgba(0, 0, 255, 0.2)'
-			this.ctx.fillRect(this.position.x, this.position.y, this.width, this.height)
-
-			if (this.image) {
-				this.ctx.drawImage(
-					this.image,
-					this.currentFrame * this.width,
-					frameY,
-					this.width,
-					this.height - 1,
-					this.position.x,
-					this.position.y,
-					this.width,
-					this.height
-				)
-			} else {
-				loadImage(PlayerImg).then(img => {
-					this.image = img
-					this.ctx.drawImage(
-						this.image,
-						this.currentFrame * this.width,
-						frameY,
-						this.width,
-						this.height - 1,
-						this.position.x,
-						this.position.y,
-						this.width,
-						this.height
-					)
-				})
-			}
-
-			resolve(this.image)
-		})
+	createAnimation(imgY: number, interval = 4) {
+		const animationConfig: AnimationConfig = {
+			totalFrames: 8,
+			interval: interval,
+			x: this.position.x,
+			y: this.position.y,
+			imgX: 0,
+			imgY: imgY,
+			imgWidth: withGrid(3),
+			imgHeight: withGrid(3),
+			width: this.width,
+			height: this.height,
+			ctx: this.ctx,
+			image: this.image
+		}
+		return new Animation(animationConfig)
 	}
 
-	digging() {
-		let frameY = 0
-		if (this.towardDirection === 'down') {
-			frameY = withGrid(4)
-		} else if (this.towardDirection === 'up') {
-			frameY = withGrid(7)
-		} else if (this.towardDirection === 'left') {
-			frameY = withGrid(10)
-		} else {
-			frameY = withGrid(13)
-		}
-
-		if (this.isDigging) {
-			this.gap++
-			if (this.gap % 20 === 0) {
-				if (this.currentActionFrame < this.actionFrames - 1) {
-					this.currentActionFrame++
-					this.diggingCount++
-				} else {
-					this.currentActionFrame = 0
-				}
-			}
-		} else {
-			this.currentActionFrame = 0
-			this.gap = 0
-		}
-
-		if (this.image) {
-			this.ctx.drawImage(
-				this.image,
-				this.currentActionFrame * withGrid(2),
-				frameY,
-				this.towardDirection === 'right' ? withGrid(3) : withGrid(2),
-				withGrid(2),
-				this.position.x - withGrid(1),
-				this.position.y - withGrid(1),
-				this.towardDirection === 'right' ? withGrid(3) : withGrid(2),
-				withGrid(2)
-			)
-		}
+	selectAction(action: ACTION) {
+		this.currentAction = action
 	}
 
-	cutting() {
-		let frameY = 0
-		let frameX = 0
-		let frameW = 0
-		let frameH = 0
-		let positionX = 0
-		let positionY = 0
-		if (this.towardDirection === 'down') {
-			if (this.currentActionFrame === 0) {
-				frameX = withGrid(2)
-				frameY = withGrid(16)
-				frameW = withGrid(3)
-				frameH = withGrid(3)
-				positionX = this.position.x - withGrid(1)
-				positionY = this.position.y - withGrid(1)
-			} else {
-				frameX = 0
-				frameY = withGrid(16)
-				frameW = withGrid(3)
-				frameH = withGrid(3)
-				positionX = this.position.x - withGrid(1)
-				positionY = this.position.y - withGrid(1)
-			}
-		} else if (this.towardDirection === 'up') {
-			if (this.currentActionFrame === 0) {
-				frameX = withGrid(3)
-				frameY = withGrid(19)
-				frameW = withGrid(3)
-				frameH = withGrid(3)
-				positionX = this.position.x - withGrid(1)
-				positionY = this.position.y - withGrid(1)
-			} else {
-				frameX = 0
-				frameY = withGrid(19)
-				frameW = withGrid(3)
-				frameH = withGrid(3)
-				positionX = this.position.x - withGrid(1)
-				positionY = this.position.y - withGrid(1)
-			}
-		} else if (this.towardDirection === 'left') {
-			if (this.currentActionFrame === 0) {
-				frameX = withGrid(3)
-				frameY = withGrid(22)
-				frameW = withGrid(3)
-				frameH = withGrid(2)
-				positionX = this.position.x - withGrid(1)
-				positionY = this.position.y - withGrid(1)
-			} else {
-				frameX = 0
-				frameY = withGrid(22)
-				frameW = withGrid(3)
-				frameH = withGrid(2)
-				positionX = this.position.x - withGrid(1)
-				positionY = this.position.y - withGrid(1)
-			}
-		} else {
-			if (this.currentActionFrame === 0) {
-				frameX = withGrid(2)
-				frameY = withGrid(25)
-				frameW = withGrid(3) - 8
-				frameH = withGrid(2)
-				positionX = this.position.x - withGrid(1)
-				positionY = this.position.y - withGrid(1)
-			} else {
-				frameX = 0
-				frameY = withGrid(25)
-				frameW = withGrid(3) - 8
-				frameH = withGrid(2)
-				positionX = this.position.x - withGrid(1)
-				positionY = this.position.y - withGrid(1)
-			}
-		}
+	resetToStanding() {
+		this.currentAction = ACTION.STANDING
+	}
 
-		if (this.isCutting) {
-			this.gap++
-			if (this.gap % 20 === 0) {
-				if (this.currentActionFrame < this.actionFrames - 1) {
-					this.currentActionFrame++
-				} else {
-					this.currentActionFrame = 0
-				}
+	action() {
+		if (this.currentAction === ACTION.STANDING) {
+			switch (this.towardDirection) {
+				case DIRECTION.DOWN:
+					this.standingDown?.play()
+					break
+				case DIRECTION.UP:
+					this.standingUp?.play()
+					break
+				case DIRECTION.LEFT:
+					this.standingLeft?.play()
+					break
+				case DIRECTION.RIGHT:
+					this.standingRight?.play()
+					break
+				default:
+					this.standingDown?.play()
+					break
 			}
-		} else {
-			this.currentActionFrame = 1
-			this.gap = 0
-		}
-
-		if (this.image) {
-			this.ctx.fillStyle = 'rgba(0, 0, 255, 0.2)'
-			this.ctx.fillRect(positionX, positionY, frameW, frameH)
-			this.ctx.drawImage(this.image, frameX, frameY, frameW, frameH, positionX, positionY, frameW, frameH)
+		} else if (this.currentAction === ACTION.MOVING) {
+			switch (this.towardDirection) {
+				case DIRECTION.DOWN:
+					this.movingDown?.play()
+					break
+				case DIRECTION.UP:
+					this.movingUp?.play()
+					break
+				case DIRECTION.LEFT:
+					this.movingLeft?.play()
+					break
+				case DIRECTION.RIGHT:
+					this.movingRight?.play()
+					break
+				default:
+					this.movingDown?.play()
+					break
+			}
+		} else if (this.currentAction === ACTION.DIGGING) {
+			this.diggingCount++
+			switch (this.towardDirection) {
+				case DIRECTION.DOWN:
+					this.diggingDown?.play()
+					break
+				case DIRECTION.UP:
+					this.diggingUp?.play()
+					break
+				case DIRECTION.LEFT:
+					this.diggingLeft?.play()
+					break
+				case DIRECTION.RIGHT:
+					this.diggingRight?.play()
+					break
+				default:
+					this.diggingDown?.play()
+					break
+			}
+		} else if (this.currentAction === ACTION.CUTTING) {
+			switch (this.towardDirection) {
+				case DIRECTION.DOWN:
+					this.cuttingDown?.play()
+					break
+				case DIRECTION.UP:
+					this.cuttingUp?.play()
+					break
+				case DIRECTION.LEFT:
+					this.cuttingLeft?.play()
+					break
+				case DIRECTION.RIGHT:
+					this.cuttingRight?.play()
+					break
+				default:
+					this.cuttingDown?.play()
+					break
+			}
+		} else if (this.currentAction === ACTION.WATERING) {
+			switch (this.towardDirection) {
+				case DIRECTION.DOWN:
+					this.wateringDown?.play()
+					break
+				case DIRECTION.UP:
+					this.wateringUp?.play()
+					break
+				case DIRECTION.LEFT:
+					this.wateringLeft?.play()
+					break
+				case DIRECTION.RIGHT:
+					this.wateringRight?.play()
+					break
+				default:
+					this.wateringDown?.play()
+					break
+			}
 		}
 	}
 }

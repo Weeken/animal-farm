@@ -1,13 +1,13 @@
 import { withGrid, randomPosition } from '../utils'
-import { CowConfig, COW_COLOR, COW_ACTION } from '../base/animal/Cow'
-
-type CowInfo = Pick<CowConfig, 'x' | 'y' | 'action' | 'color'>
+import { COW_COLOR, COW_ACTION } from '../base/animal/cow/BaseCow'
+import { CowInfo } from '../base/animal/cow/Cow'
 
 export const cows: CowInfo[] = [
 	{
 		x: withGrid(20),
 		y: withGrid(19),
-		action: COW_ACTION.STANDING
+		action: COW_ACTION.STANDING,
+		color: COW_COLOR.YELLOW
 	},
 	{
 		x: randomPosition({ min: withGrid(15), max: withGrid(19) }),

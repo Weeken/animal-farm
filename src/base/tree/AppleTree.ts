@@ -3,7 +3,7 @@ import { AppleTreeTop } from './AppleTreeTop'
 import { withGrid, hours, getPositionFormIdStr } from '../../utils'
 import { Boundary } from '../fixed-things/Boundary'
 import type { TreeState } from './Tree'
-import { Player } from '../newPlayer'
+import { Player } from '../Player'
 import { DropItem } from '../drop/DropItem'
 
 interface AppleTreeConfig {
@@ -76,6 +76,7 @@ export class AppleTree {
 		if (tree) {
 			this.treeTops = this.treeTops.filter(item => item.id !== tree.id)
 			this.treeStumps = this.treeStumps.filter(item => item.id !== tree.id)
+			this.fullTrees = this.fullTrees.filter(item => item.id !== tree.id)
 			return tree
 		}
 	}
