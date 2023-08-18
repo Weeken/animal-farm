@@ -1,4 +1,4 @@
-// import { Movable } from './Movable'
+import { DIRECTION } from './Player'
 
 export interface AnimationConfig {
 	totalFrames: number
@@ -8,7 +8,8 @@ export interface AnimationConfig {
 	x: number
 	y: number
 	imgX?: number
-	imgY?: number
+	leftImgY?: number
+	rightImgY?: number
 	width: number
 	height: number
 	imgWidth?: number
@@ -28,7 +29,8 @@ export class Animation {
 	x = 0
 	y = 0
 	imgX = 0
-	imgY = 0
+	leftImgY = 0
+	rightImgY = 0
 	width = 0
 	height = 0
 	imgWidth = 0
@@ -38,6 +40,9 @@ export class Animation {
 
 	isPlaying = false
 	isShowRect = false
+
+	//
+	moveDirection: DIRECTION = DIRECTION.RIGHT
 
 	constructor(config: AnimationConfig) {
 		// super({ x: config.x, y: config.y })
@@ -50,7 +55,8 @@ export class Animation {
 		this.x = config.x
 		this.y = config.y
 		this.imgX = config.imgX || 0
-		this.imgY = config.imgY || 0
+		this.leftImgY = config.leftImgY || 0
+		this.rightImgY = config.rightImgY || 0
 		this.width = config.width
 		this.imgWidth = config.imgWidth || config.width
 		this.height = config.height
@@ -68,7 +74,7 @@ export class Animation {
 		this.ctx.drawImage(
 			this.image,
 			this.currentFrame * this.imgWidth,
-			this.imgY,
+			this.moveDirection === DIRECTION.RIGHT ? this.rightImgY : this.leftImgY,
 			this.imgWidth,
 			this.imgHeight,
 			this.x,
@@ -76,6 +82,14 @@ export class Animation {
 			this.width,
 			this.height
 		)
+	}
+
+	turnAround() {
+		if (this.moveDirection === DIRECTION.RIGHT) {
+			this.moveDirection = DIRECTION.LEFT
+		} else {
+			this.moveDirection = DIRECTION.RIGHT
+		}
 	}
 
 	play() {

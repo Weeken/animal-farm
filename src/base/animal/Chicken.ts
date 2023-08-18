@@ -71,7 +71,7 @@ export class Chicken extends Movable {
 			x: this.x,
 			y: this.y,
 			imgX: 0,
-			imgY: imgY,
+			rightImgY: imgY,
 			imgWidth: withGrid(1),
 			imgHeight: withGrid(1),
 			width: this.width,

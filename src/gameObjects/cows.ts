@@ -4,9 +4,11 @@ import { CowInfo } from '../base/animal/cow/Cow'
 
 export const cows: CowInfo[] = [
 	{
-		x: withGrid(20),
-		y: withGrid(19),
-		action: COW_ACTION.STANDING,
+		x: withGrid(19),
+		y: withGrid(33),
+		// x: withGrid(18),
+		// y: withGrid(29),
+		action: COW_ACTION.WALKING,
 		color: COW_COLOR.YELLOW
 	},
 	{

@@ -18,6 +18,10 @@ export class Boundary {
 		}
 	}
 
+	getItem(id: string) {
+		return this.list.find(item => item.id === id)
+	}
+
 	removeItem(id: string) {
 		this.list = this.list.filter(item => item.id !== id)
 	}

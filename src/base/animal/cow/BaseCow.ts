@@ -1,11 +1,14 @@
 import { Movable } from '../../Movable'
 import { Animation, AnimationConfig } from '../../Animation'
-import { VIEW_OFFSET, withGrid } from '../../../utils'
+import { VIEW_OFFSET, withGrid, BaseRect } from '../../../utils'
 import { Boundary } from '../../fixed-things/Boundary'
+import { BoundaryItem } from '../../fixed-things/BoundaryItem'
+import { walkingAround } from './animationConfig'
 
 export enum COW_ACTION {
 	SLEEPING = 'sleeping',
-	STANDING = 'standing'
+	STANDING = 'standing',
+	WALKING = 'walking'
 }
 
 export enum COW_COLOR {
@@ -16,7 +19,14 @@ export enum COW_COLOR {
 	BROWN = 'brown'
 }
 
-type AnimationInfo = Pick<AnimationConfig, 'imgY' | 'imgHeight' | 'totalFrames' | 'interval' | 'ctx' | 'height'>
+interface BoundaryBlock extends BaseRect {
+	id: string
+}
+
+export type AnimationInfo = Pick<
+	AnimationConfig,
+	'leftImgY' | 'rightImgY' | 'imgHeight' | 'totalFrames' | 'interval' | 'ctx' | 'height'
+>
 
 export interface BaseCowConfig {
 	x: number
@@ -25,10 +35,11 @@ export interface BaseCowConfig {
 	height?: number
 	action?: COW_ACTION
 	color?: COW_COLOR
-	boundary?: Boundary
+	boundary: Boundary
 	animations: {
 		sleeping: AnimationInfo
 		standing: AnimationInfo
+		walking: AnimationInfo
 	}
 }
 
@@ -40,8 +51,9 @@ export class BaseCow extends Movable {
 	// ctx: CanvasRenderingContext2D
 	image: HTMLImageElement
 
-	// boundary: Boundary
-	// boundaryBlock: BoundaryBlock
+	boundary: Boundary
+	boundaryBlock: BoundaryBlock
+	targetBoundary?: BoundaryItem
 
 	currentAction: COW_ACTION = COW_ACTION.STANDING
 	color: COW_COLOR = COW_COLOR.YELLOW
@@ -49,10 +61,13 @@ export class BaseCow extends Movable {
 	animations: {
 		sleeping: AnimationInfo
 		standing: AnimationInfo
+		walking: AnimationInfo
 	}
 
 	sleeping: Animation
 	standing: Animation
+	walking: Animation
+	walkingTimer: number = 0
 
 	constructor(config: BaseCowConfig) {
 		super({ x: config.x, y: config.y })
@@ -76,10 +91,25 @@ export class BaseCow extends Movable {
 		this.color = config.color || COW_COLOR.YELLOW
 		this.image = imgMap[this.color]
 
+		this.boundary = config.boundary
+		this.boundary = config.boundary
+		this.boundaryBlock = {
+			id: 'boundaryItem-' + (config.x + withGrid(0.2)) + '-' + (config.y + withGrid(1.2)),
+			x: config.x + withGrid(0.2),
+			y: config.y + withGrid(1.2),
+			width: withGrid(1.6),
+			height: withGrid(0.6)
+		}
+		this.boundary.addItem({
+			...this.boundaryBlock
+		})
+		this.targetBoundary = this.boundary.getItem(this.boundaryBlock.id)
+
 		this.animations = config.animations
 
 		this.sleeping = this.createAnimation(this.animations.sleeping)
 		this.standing = this.createAnimation(this.animations.standing)
+		this.walking = this.createAnimation(this.animations.walking)
 	}
 
 	createAnimation(info: AnimationInfo) {
@@ -89,7 +119,8 @@ export class BaseCow extends Movable {
 			x: this.x,
 			y: this.y,
 			imgX: 0,
-			imgY: info.imgY,
+			leftImgY: info.leftImgY,
+			rightImgY: info.rightImgY,
 			imgWidth: withGrid(2),
 			imgHeight: info.imgHeight, // withGrid(1.4),
 			width: this.width,
@@ -101,6 +132,7 @@ export class BaseCow extends Movable {
 	}
 
 	action() {
+		// [this.standing, this.walking, this.standing, this.walking]
 		if (this.currentAction === COW_ACTION.SLEEPING) {
 			this.sleeping.x = this.x
 			this.sleeping.y = this.y
@@ -109,6 +141,8 @@ export class BaseCow extends Movable {
 			this.standing.x = this.x
 			this.standing.y = this.y
 			this.standing.play()
+		} else if (this.currentAction === COW_ACTION.WALKING) {
+			walkingAround.call(this)
 		}
 	}
 }

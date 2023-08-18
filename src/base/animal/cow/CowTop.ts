@@ -1,7 +1,7 @@
-import { withGrid } from '../../../utils'
 import { BaseCow, BaseCowConfig } from './BaseCow'
+import { cowAnimations } from './animationConfig'
 
-export type TopCowInfo = Pick<BaseCowConfig, 'x' | 'y' | 'action' | 'color' | 'height' | 'width'>
+export type TopCowInfo = Pick<BaseCowConfig, 'x' | 'y' | 'action' | 'color' | 'height' | 'width' | 'boundary'>
 
 export class CowTop extends BaseCow {
 	id = ''
@@ -10,22 +10,9 @@ export class CowTop extends BaseCow {
 		super({
 			...config,
 			animations: {
-				sleeping: {
-					imgY: withGrid(8),
-					imgHeight: withGrid(1.4),
-					height: withGrid(1.4),
-					interval: 60,
-					totalFrames: 4,
-					ctx: window.myGameGlobalData.ctx.upper
-				},
-				standing: {
-					imgY: 0,
-					imgHeight: withGrid(1.4),
-					height: withGrid(1.4),
-					interval: 40,
-					totalFrames: 3,
-					ctx: window.myGameGlobalData.ctx.upper
-				}
+				sleeping: cowAnimations(window.myGameGlobalData.ctx.upper).sleeping.top,
+				standing: cowAnimations(window.myGameGlobalData.ctx.upper).standing.top,
+				walking: cowAnimations(window.myGameGlobalData.ctx.upper).walking.top
 			}
 		})
 

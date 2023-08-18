@@ -1,7 +1,7 @@
 import { Player, ACTION, DIRECTION } from '../Player'
 import { Boundary } from '../fixed-things/Boundary'
 import { BoundaryItem } from '../fixed-things/BoundaryItem'
-import { getPositionFormIdStr, isHitting, withGrid } from '../../utils'
+import { getPositionFormIdStr, findTarget, withGrid, checkHittingBoundary } from '../../utils'
 import { AppleTree, FullTree } from '../tree/AppleTree'
 // import { PlantField } from '../Field/PlantField'
 import { Field } from '../Field/Field'
@@ -58,64 +58,16 @@ export class Controller {
 		this.drop = config.drop
 	}
 
-	checkHitting(direction: { x?: number; y?: number }) {
-		let canMoving = true
-
-		for (let i = 0; i < this.boundary.list.length; i++) {
-			const boundary = this.boundary.list[i]
-			const side: { x?: number; y?: number } = {}
-			if (direction.y) {
-				side.y = boundary.y + direction.y
-			} else if (direction.x) {
-				side.x = boundary.x + direction.x
-			}
-			if (
-				isHitting(this.player.collisionGrid, {
-					...boundary,
-					...side
-				})
-			) {
-				canMoving = false
-				break
-			}
-		}
-		return canMoving
-	}
-
-	findTarget(list: BoundaryItem[] | PlantField[] | DropItem[], direction: { x?: number; y?: number }) {
-		let target: BoundaryItem | PlantField | DropItem | null = null
-
-		for (let i = 0; i < list.length; i++) {
-			const item = list[i]
-			const side: { x?: number; y?: number } = {}
-			if (direction.y) {
-				side.y = item.y + direction.y
-			} else if (direction.x) {
-				side.x = item.x + direction.x
-			}
-			if (
-				isHitting(this.player.collisionGrid, {
-					...item,
-					...side
-				})
-			) {
-				target = item
-				break
-			}
-		}
-		return target
-	}
-
 	findAllDirectionBlock(list: BoundaryItem[] | PlantField[] | DropItem[]) {
 		let targetTreeBoundary: BoundaryItem | PlantField | DropItem | null = null
 		if (this.player.towardDirection === 'right') {
-			targetTreeBoundary = this.findTarget(list, { x: -this.moveStep })
+			targetTreeBoundary = findTarget(list, this.player.collisionGrid, { x: -this.moveStep })
 		} else if (this.player.towardDirection === 'left') {
-			targetTreeBoundary = this.findTarget(list, { x: this.moveStep })
+			targetTreeBoundary = findTarget(list, this.player.collisionGrid, { x: this.moveStep })
 		} else if (this.player.towardDirection === 'up') {
-			targetTreeBoundary = this.findTarget(list, { y: this.moveStep })
+			targetTreeBoundary = findTarget(list, this.player.collisionGrid, { y: this.moveStep })
 		} else if (this.player.towardDirection === 'down') {
-			targetTreeBoundary = this.findTarget(list, { y: -this.moveStep })
+			targetTreeBoundary = findTarget(list, this.player.collisionGrid, { y: -this.moveStep })
 		}
 		return targetTreeBoundary
 	}
@@ -124,25 +76,25 @@ export class Controller {
 		this.player.selectAction(ACTION.MOVING)
 
 		if (this.keyMap.w.press && this.lastPressedKey === 'w') {
-			this.isMoving = this.checkHitting({ y: this.moveStep })
+			this.isMoving = checkHittingBoundary(this.boundary.list, this.player.collisionGrid, { y: this.moveStep })
 			this.isMoving &&
 				this.movableObjects.forEach(movableObj => {
 					movableObj.moveUp(this.moveStep)
 				})
 		} else if (this.keyMap.a.press && this.lastPressedKey === 'a') {
-			this.isMoving = this.checkHitting({ x: this.moveStep })
+			this.isMoving = checkHittingBoundary(this.boundary.list, this.player.collisionGrid, { x: this.moveStep })
 			this.isMoving &&
 				this.movableObjects.forEach(movableObj => {
 					movableObj.moveLeft(this.moveStep)
 				})
 		} else if (this.keyMap.d.press && this.lastPressedKey === 'd') {
-			this.isMoving = this.checkHitting({ x: -this.moveStep })
+			this.isMoving = checkHittingBoundary(this.boundary.list, this.player.collisionGrid, { x: -this.moveStep })
 			this.isMoving &&
 				this.movableObjects.forEach(movableObj => {
 					movableObj.moveRight(this.moveStep)
 				})
 		} else if (this.keyMap.s.press && this.lastPressedKey === 's') {
-			this.isMoving = this.checkHitting({ y: -this.moveStep })
+			this.isMoving = checkHittingBoundary(this.boundary.list, this.player.collisionGrid, { y: -this.moveStep })
 			this.isMoving &&
 				this.movableObjects.forEach(movableObj => {
 					movableObj.moveDown(this.moveStep)

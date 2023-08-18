@@ -25,6 +25,23 @@ export class BoundaryItem extends Movable {
 		this.id = 'boundaryItem-' + props.x + '-' + props.y
 	}
 
+	// drawLine() {
+	// 	this.ctx.beginPath()
+	// 	const leftTop = { x: this.x + VIEW_OFFSET.x, y: this.y + VIEW_OFFSET.y }
+	// 	const rightTop = { x: this.x + VIEW_OFFSET.x + this.width, y: this.y + VIEW_OFFSET.y }
+	// 	const leftBottom = { x: this.x + VIEW_OFFSET.x, y: this.y + VIEW_OFFSET.y + this.height }
+	// 	const rightBottom = { x: this.x + VIEW_OFFSET.x + this.width, y: this.y + VIEW_OFFSET.y + this.height }
+	// 	this.ctx.moveTo(leftTop.x, leftTop.y)
+	// 	this.ctx.lineTo(rightTop.x, rightTop.y)
+	// 	this.ctx.lineTo(rightBottom.x, rightBottom.y)
+	// 	this.ctx.lineTo(leftBottom.x, leftBottom.y)
+	// 	this.ctx.closePath()
+	// 	this.ctx.stroke()
+	// 	this.ctx.font = 'bold 16px Microsoft Yahei'
+	// 	this.ctx.fillStyle = 'black'
+	// 	this.ctx.fillText(`(${this.x}, ${this.y})`, this.x + VIEW_OFFSET.x, this.y + VIEW_OFFSET.y)
+	// }
+
 	draw() {
 		this.ctx.fillStyle = 'rgba(255, 0, 0, 0.2)'
 		this.ctx.fillRect(this.x + VIEW_OFFSET.x, this.y + VIEW_OFFSET.y, this.width, this.height)

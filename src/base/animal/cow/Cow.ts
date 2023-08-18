@@ -24,7 +24,7 @@ export class Cow {
 	constructor(config: CowConfig) {
 		this.boundary = config.boundary
 		config.cows.forEach(info => {
-			const top = new CowTop({ ...info })
+			const top = new CowTop({ ...info, boundary: config.boundary })
 			const bottom = new CowBottom({ ...info, boundary: config.boundary })
 			this.top.push(top)
 			this.bottom.push(bottom)
@@ -37,7 +37,7 @@ export class Cow {
 	}
 
 	createCow(info: CowInfo) {
-		const top = new CowTop({ ...info })
+		const top = new CowTop({ ...info, boundary: this.boundary })
 		const bottom = new CowBottom({ ...info, boundary: this.boundary })
 		this.top.push(top)
 		this.bottom.push(bottom)

@@ -1,4 +1,8 @@
 import { Vector, Box, Collider2d } from 'collider2d'
+// import { Boundary } from '../base/fixed-things/Boundary'
+import { BoundaryItem } from '../base/fixed-things/BoundaryItem'
+import { PlantField } from '../base/Field/PlantField'
+import { DropItem } from '../base/drop/DropItem'
 
 const collider2d = new Collider2d()
 // 计算坐标
@@ -71,12 +75,6 @@ export const isCollide = (rect1: Required<BaseRect>, rect2: Required<BaseRect>) 
 	const collided = collider2d.testPolygonPolygon(box1.toPolygon(), box2.toPolygon())
 	// console.log('%c [ box1.toPolygon() ]-72', 'font-size:13px; background:pink; color:#bf2c9f;', box1.toPolygon())
 	return collided
-	// return (
-	// 	rect1.x + rect1.width >= rect2.x + 24 &&
-	// 	rect1.x <= rect2.x + rect2.width - 24 &&
-	// 	rect1.y + rect1.height >= rect2.y + 16 &&
-	// 	rect1.y <= rect2.y + rect2.height - 32
-	// )
 }
 // console.log(isHittingNew({ x: 15, y: 15, width: 10, height: 10 }, { x: 15, y: 26, width: 10, height: 10 }))
 
@@ -87,6 +85,62 @@ export const isHitting = (rect1: Required<BaseRect>, rect2: Required<BaseRect>) 
 		rect1.y + rect1.height >= rect2.y + 16 &&
 		rect1.y <= rect2.y + rect2.height - 32
 	)
+}
+
+export const checkHittingBoundary = (
+	boundaryList: BoundaryItem[],
+	target: BaseRect,
+	direction: { x?: number; y?: number }
+) => {
+	let canMoving = true
+
+	for (let i = 0; i < boundaryList.length; i++) {
+		const boundaryItem = boundaryList[i]
+		const side: { x?: number; y?: number } = {}
+		if (direction.y) {
+			side.y = boundaryItem.y + direction.y
+		} else if (direction.x) {
+			side.x = boundaryItem.x + direction.x
+		}
+		if (
+			isHitting(target, {
+				...boundaryItem,
+				...side
+			})
+		) {
+			canMoving = false
+			break
+		}
+	}
+	return canMoving
+}
+
+export const findTarget = (
+	list: BoundaryItem[] | PlantField[] | DropItem[],
+	hittingTarget: BaseRect,
+	direction: { x?: number; y?: number }
+) => {
+	let target: BoundaryItem | PlantField | DropItem | null = null
+
+	for (let i = 0; i < list.length; i++) {
+		const item = list[i]
+		const side: { x?: number; y?: number } = {}
+		if (direction.y) {
+			side.y = item.y + direction.y
+		} else if (direction.x) {
+			side.x = item.x + direction.x
+		}
+		if (
+			isHitting(hittingTarget, {
+				...item,
+				...side
+			})
+		) {
+			target = item
+			break
+		}
+	}
+	return target
 }
 
 interface Range {
