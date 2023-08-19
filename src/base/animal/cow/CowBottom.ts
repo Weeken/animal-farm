@@ -16,7 +16,10 @@ export class CowBottom extends BaseCow {
 			animations: {
 				sleeping: cowAnimations(window.myGameGlobalData.ctx.down).sleeping.bottom,
 				standing: cowAnimations(window.myGameGlobalData.ctx.down).standing.bottom,
-				walking: cowAnimations(window.myGameGlobalData.ctx.down).walking.bottom
+				walking: cowAnimations(window.myGameGlobalData.ctx.down).walking.bottom,
+				eating: cowAnimations(window.myGameGlobalData.ctx.down).eating.bottom,
+				chewing: cowAnimations(window.myGameGlobalData.ctx.down).chewing.bottom,
+				smiling: cowAnimations(window.myGameGlobalData.ctx.down).smiling.bottom
 			}
 		})
 

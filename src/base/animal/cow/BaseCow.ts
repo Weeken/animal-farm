@@ -8,7 +8,10 @@ import { walkingAround } from './animationConfig'
 export enum COW_ACTION {
 	SLEEPING = 'sleeping',
 	STANDING = 'standing',
-	WALKING = 'walking'
+	WALKING = 'walking',
+	EATING = 'eating',
+	CHEWING = 'chewing',
+	SMILING = 'smiling'
 }
 
 export enum COW_COLOR {
@@ -40,6 +43,9 @@ export interface BaseCowConfig {
 		sleeping: AnimationInfo
 		standing: AnimationInfo
 		walking: AnimationInfo
+		eating: AnimationInfo
+		chewing: AnimationInfo
+		smiling: AnimationInfo
 	}
 }
 
@@ -62,12 +68,18 @@ export class BaseCow extends Movable {
 		sleeping: AnimationInfo
 		standing: AnimationInfo
 		walking: AnimationInfo
+		eating: AnimationInfo
+		chewing: AnimationInfo
+		smiling: AnimationInfo
 	}
 
 	sleeping: Animation
 	standing: Animation
 	walking: Animation
 	walkingTimer: number = 0
+	eating: Animation
+	chewing: Animation
+	smiling: Animation
 
 	constructor(config: BaseCowConfig) {
 		super({ x: config.x, y: config.y })
@@ -110,6 +122,9 @@ export class BaseCow extends Movable {
 		this.sleeping = this.createAnimation(this.animations.sleeping)
 		this.standing = this.createAnimation(this.animations.standing)
 		this.walking = this.createAnimation(this.animations.walking)
+		this.eating = this.createAnimation(this.animations.eating)
+		this.chewing = this.createAnimation(this.animations.chewing)
+		this.smiling = this.createAnimation(this.animations.smiling)
 	}
 
 	createAnimation(info: AnimationInfo) {
@@ -141,6 +156,18 @@ export class BaseCow extends Movable {
 			this.standing.x = this.x
 			this.standing.y = this.y
 			this.standing.play()
+		} else if (this.currentAction === COW_ACTION.EATING) {
+			this.eating.x = this.x
+			this.eating.y = this.y
+			this.eating.play()
+		} else if (this.currentAction === COW_ACTION.CHEWING) {
+			this.chewing.x = this.x
+			this.chewing.y = this.y
+			this.chewing.play()
+		} else if (this.currentAction === COW_ACTION.SMILING) {
+			this.smiling.x = this.x
+			this.smiling.y = this.y
+			this.smiling.play()
 		} else if (this.currentAction === COW_ACTION.WALKING) {
 			walkingAround.call(this)
 		}
