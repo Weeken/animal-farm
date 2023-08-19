@@ -15,6 +15,7 @@ interface CowAnimations {
 	eating: CowConfig
 	chewing: CowConfig
 	smiling: CowConfig
+	lyingDown: CowConfig
 }
 
 export const cowAnimations: (ctx: CanvasRenderingContext2D) => CowAnimations = (ctx: CanvasRenderingContext2D) => ({
@@ -137,6 +138,26 @@ export const cowAnimations: (ctx: CanvasRenderingContext2D) => CowAnimations = (
 			totalFrames: 6,
 			ctx
 		}
+	},
+	lyingDown: {
+		top: {
+			leftImgY: withGrid(10),
+			rightImgY: withGrid(8),
+			imgHeight: withGrid(1.4),
+			height: withGrid(1.4),
+			interval: 10,
+			totalFrames: 7,
+			ctx
+		},
+		bottom: {
+			leftImgY: withGrid(11),
+			rightImgY: withGrid(9),
+			imgHeight: withGrid(1),
+			height: withGrid(1),
+			interval: 10,
+			totalFrames: 7,
+			ctx
+		}
 	}
 })
 
@@ -161,7 +182,7 @@ export function walkingAround(this: BaseCow) {
 		this.standing.y = this.y
 		this.standing.play()
 		this.walkingTimer++
-		if (this.walkingTimer >= this.standing.interval * this.standing.totalFrames) {
+		if (this.walkingTimer >= this.standing.interval * this.standing.totalFrames * 3) {
 			this.walking.turnAround()
 			this.standing.turnAround()
 			this.walking.play()

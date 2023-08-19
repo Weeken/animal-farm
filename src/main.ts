@@ -8,7 +8,6 @@ import { generateCtx } from './utils/canvas'
 
 import { Controller } from './base/control/Controller'
 
-import { Chicken } from './base/animal/Chicken'
 import { BerryTreeItem } from './base/tree/BerryTreeItem'
 import { BoundaryItem } from './base/fixed-things/BoundaryItem'
 import { PlantField } from './base/Field/PlantField'
@@ -19,6 +18,7 @@ import { Material } from './base/Material'
 import { DropItem } from './base/drop/DropItem'
 import { FullCow } from './base/animal/cow/Cow'
 import { FullTree } from './base/tree/AppleTree'
+import { BaseChicken } from './base/animal/chicken/BaseChicken'
 
 const setGlobalData = async (data: any) => {
 	window.myGameGlobalData = data
@@ -56,7 +56,7 @@ const start = async () => {
 				bridge.draw()
 			})
 			// 鸡
-			gameObjects.chickens.forEach((chicken: Chicken) => {
+			gameObjects.chicken.chickens.forEach((chicken: BaseChicken) => {
 				chicken.action()
 			})
 
@@ -135,7 +135,7 @@ const start = async () => {
 		...boundary.list,
 		gameObjects.playerHouse,
 		gameObjects.playerHouseDoor,
-		...gameObjects.chickens,
+		...gameObjects.chicken.chickens,
 		...gameObjects.cow.top,
 		...gameObjects.cow.bottom,
 		...gameObjects.berryTree.list,

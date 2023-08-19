@@ -6,7 +6,7 @@ import { Player } from '../base/Player'
 import { collisions } from '../collisions'
 import { House } from '../base/fixed-things/House'
 import { HouseDoor } from '../base/fixed-things/HouseDoor'
-import { Chicken } from '../base/animal/Chicken'
+import { Chicken } from '../base/animal/chicken/Chicken'
 import { Cow } from '../base/animal/cow/Cow'
 import { BerryTree } from '../base/tree/BerryTree'
 import { AppleTree } from '../base/tree/AppleTree'
@@ -89,14 +89,15 @@ export const useGlobal = async () => {
 			height: withGrid(1),
 			player
 		}),
-		chickens: [
-			...chickens.map(
-				chicken =>
-					new Chicken({
-						...chicken
-					})
-			)
-		],
+		chicken: new Chicken({ chickens, boundary }),
+		// chickens: [
+		// 	...chickens.map(
+		// 		chicken =>
+		// 			new Chicken({
+		// 				...chicken
+		// 			})
+		// 	)
+		// ],
 		// cows: [
 		// 	...cows.map(
 		// 		cow =>

@@ -15,7 +15,8 @@ export class CowTop extends BaseCow {
 				walking: cowAnimations(window.myGameGlobalData.ctx.upper).walking.top,
 				eating: cowAnimations(window.myGameGlobalData.ctx.upper).eating.top,
 				chewing: cowAnimations(window.myGameGlobalData.ctx.upper).chewing.top,
-				smiling: cowAnimations(window.myGameGlobalData.ctx.upper).smiling.top
+				smiling: cowAnimations(window.myGameGlobalData.ctx.upper).smiling.top,
+				lyingDown: cowAnimations(window.myGameGlobalData.ctx.upper).lyingDown.top
 			}
 		})
 

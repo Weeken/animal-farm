@@ -42,5 +42,11 @@ export const cows: CowInfo[] = [
 		y: withGrid(29),
 		action: COW_ACTION.STANDING,
 		color: COW_COLOR.GREEN
+	},
+	{
+		x: withGrid(16),
+		y: withGrid(31),
+		action: COW_ACTION.LYING_DOWN,
+		color: COW_COLOR.PINK
 	}
 ]

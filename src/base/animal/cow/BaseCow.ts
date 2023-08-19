@@ -11,7 +11,8 @@ export enum COW_ACTION {
 	WALKING = 'walking',
 	EATING = 'eating',
 	CHEWING = 'chewing',
-	SMILING = 'smiling'
+	SMILING = 'smiling',
+	LYING_DOWN = 'lyingDown'
 }
 
 export enum COW_COLOR {
@@ -46,6 +47,7 @@ export interface BaseCowConfig {
 		eating: AnimationInfo
 		chewing: AnimationInfo
 		smiling: AnimationInfo
+		lyingDown: AnimationInfo
 	}
 }
 
@@ -71,6 +73,7 @@ export class BaseCow extends Movable {
 		eating: AnimationInfo
 		chewing: AnimationInfo
 		smiling: AnimationInfo
+		lyingDown: AnimationInfo
 	}
 
 	sleeping: Animation
@@ -80,6 +83,7 @@ export class BaseCow extends Movable {
 	eating: Animation
 	chewing: Animation
 	smiling: Animation
+	lyingDown: Animation
 
 	constructor(config: BaseCowConfig) {
 		super({ x: config.x, y: config.y })
@@ -104,7 +108,6 @@ export class BaseCow extends Movable {
 		this.image = imgMap[this.color]
 
 		this.boundary = config.boundary
-		this.boundary = config.boundary
 		this.boundaryBlock = {
 			id: 'boundaryItem-' + (config.x + withGrid(0.2)) + '-' + (config.y + withGrid(1.2)),
 			x: config.x + withGrid(0.2),
@@ -125,6 +128,7 @@ export class BaseCow extends Movable {
 		this.eating = this.createAnimation(this.animations.eating)
 		this.chewing = this.createAnimation(this.animations.chewing)
 		this.smiling = this.createAnimation(this.animations.smiling)
+		this.lyingDown = this.createAnimation(this.animations.lyingDown)
 	}
 
 	createAnimation(info: AnimationInfo) {
@@ -168,6 +172,10 @@ export class BaseCow extends Movable {
 			this.smiling.x = this.x
 			this.smiling.y = this.y
 			this.smiling.play()
+		} else if (this.currentAction === COW_ACTION.LYING_DOWN) {
+			this.lyingDown.x = this.x
+			this.lyingDown.y = this.y
+			this.lyingDown.play()
 		} else if (this.currentAction === COW_ACTION.WALKING) {
 			walkingAround.call(this)
 		}
