@@ -38,7 +38,7 @@ export class Animation {
 	ctx: CanvasRenderingContext2D
 	image: HTMLImageElement
 
-	isPlaying = false
+	isPlaying = true
 	isShowRect = false
 
 	//
@@ -101,6 +101,26 @@ export class Animation {
 			} else {
 				this.currentFrame = 0
 				this.timer = 0
+			}
+		}
+		this.draw()
+	}
+
+	playOnce() {
+		if (!this.isPlaying) {
+			this.draw()
+			return
+		}
+		this.isPlaying = true
+		// !this.isPlaying && (this.isPlaying = true)
+		this.timer++
+		if (this.timer % this.interval === 0) {
+			if (this.currentFrame < this.totalFrames - 1) {
+				this.currentFrame++
+			} else {
+				this.currentFrame = 0
+				this.timer = 0
+				this.isPlaying = false
 			}
 		}
 		this.draw()

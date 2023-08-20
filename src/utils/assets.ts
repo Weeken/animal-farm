@@ -27,6 +27,11 @@ import Cow_purple from '../assets/purple-cow.png'
 import Cow_green from '../assets/green-cow.png'
 import Cow_brown from '../assets/brown-cow.png'
 import Cow_pink from '../assets/pink-cow.png'
+import Tree_common from '../assets/tree-common.png'
+import Tree_apple from '../assets/tree-apple.png'
+import Tree_peach from '../assets/tree-peach.png'
+import Tree_pear from '../assets/tree-pear.png'
+import Tree_orange from '../assets/tree-orange.png'
 
 import { loadImage } from '.'
 
@@ -69,6 +74,13 @@ export const assets: Assets = {
 			top: appleTreeTopImg,
 			stump: appleTreeStumpImg
 		}
+	},
+	fruitTree: {
+		common: Tree_common,
+		apple: Tree_apple,
+		peach: Tree_peach,
+		pear: Tree_pear,
+		orange: Tree_orange
 	},
 	// 作物
 	crops: {
