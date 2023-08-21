@@ -21,6 +21,8 @@ import { berryTrees } from './berryTrees'
 import { bridgesInfo } from './bridges'
 import { Bridge } from '../base/fixed-things/Bridge'
 import { Drop } from '../base/drop/Drop'
+import { fruitTrees } from './fruitTrees'
+import { FruitTree } from '../base/tree/fruit-tree/FruitTree'
 
 const getBoundaries = () => {
 	const collisionMap: number[][] = []
@@ -116,6 +118,10 @@ export const useGlobal = async () => {
 			trees: appleTrees,
 			boundary,
 			player
+		}),
+		fruitTree: new FruitTree({
+			list: fruitTrees,
+			boundary
 		}),
 		bridges,
 		field,

@@ -17,8 +17,9 @@ import { Tomato } from './base/plant/Tomato'
 import { Material } from './base/Material'
 import { DropItem } from './base/drop/DropItem'
 import { FullCow } from './base/animal/cow/Cow'
-import { FullTree } from './base/tree/AppleTree'
+import { FullFruitTree } from './base/tree/fruit-tree/FruitTree'
 import { BaseChicken } from './base/animal/chicken/BaseChicken'
+import { FullTree } from './base/tree/AppleTree'
 
 const setGlobalData = async (data: any) => {
 	window.myGameGlobalData = data
@@ -75,6 +76,10 @@ const start = async () => {
 			// gameObjects.appleTrees.treeStumps.forEach((treeStump: AppleTreeStump) => {
 			// 	treeStump.draw()
 			// })
+			gameObjects.fruitTree.list.forEach((tree: FullFruitTree) => {
+				tree.top.action()
+				tree.stump.action()
+			})
 
 			// 菜地
 			gameObjects.field.plantFields.forEach((field: PlantField) => {
@@ -144,7 +149,9 @@ const start = async () => {
 		...gameObjects.field.plantFields,
 		...gameObjects.bridges,
 		...gameObjects.crop.wheats,
-		...gameObjects.drop.list
+		...gameObjects.drop.list,
+		...gameObjects.fruitTree.treeTop,
+		...gameObjects.fruitTree.treeStump
 	]
 	const controller: Controller = new Controller({
 		movableObjects,
