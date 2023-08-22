@@ -2,7 +2,7 @@ import type { TreeInfo } from '../base/tree/Tree'
 
 export const berryTrees: TreeInfo[] = [
 	// 左下角山丘上
-	{ x: 20, y: 18, state: 'bearFruit' },
+	// { x: 20, y: 18, state: 'bearFruit' },
 	{ x: 44, y: 15, state: 'bearFruit' },
 	{ x: 46, y: 15, state: 'noFruit' },
 	{ x: 47, y: 14, state: 'bearFruit' },

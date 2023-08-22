@@ -2,7 +2,6 @@ import { Player, ACTION, DIRECTION } from '../Player'
 import { Boundary } from '../fixed-things/Boundary'
 import { BoundaryItem } from '../fixed-things/BoundaryItem'
 import { getPositionFormIdStr, findTarget, withGrid, checkHittingBoundary } from '../../utils'
-// import { AppleTree, FullTree } from '../tree/AppleTree'
 // import { PlantField } from '../Field/PlantField'
 import { Field } from '../Field/Field'
 import { PlantField } from '../Field/PlantField'
@@ -13,13 +12,14 @@ import { BerryTree } from '../tree/BerryTree'
 import { BerryTreeItem } from '../tree/BerryTreeItem'
 import { Drop } from '../drop/Drop'
 import { DropItem } from '../drop/DropItem'
-// import { AppleTreeStump } from '../tree/AppleTreeStump'
+import { FruitTree, FullFruitTree } from '../tree/fruit-tree/FruitTree'
+import { TREE_ACTION } from '../tree/fruit-tree/BaseTree'
 
 interface ControllerConfig {
 	movableObjects: any[]
 	player: Player
 	boundary: Boundary
-	// appleTrees: AppleTree
+	fruitTree: FruitTree
 	berryTree: BerryTree
 	field: Field
 	crop: Crop
@@ -40,7 +40,7 @@ export class Controller {
 	isMoving = false
 	player: Player
 	boundary: Boundary
-	// appleTrees: AppleTree
+	fruitTree: FruitTree
 	berryTree: BerryTree
 	field: Field
 	crop: Crop
@@ -50,7 +50,7 @@ export class Controller {
 		this.movableObjects = config.movableObjects
 		this.player = config.player
 		this.boundary = config.boundary
-		// this.appleTrees = config.appleTrees
+		this.fruitTree = config.fruitTree
 		this.berryTree = config.berryTree
 		this.field = config.field
 		this.crop = config.crop
@@ -117,28 +117,28 @@ export class Controller {
 	handleCuttingDownTree() {
 		this.player.selectAction(ACTION.CUTTING)
 		const targetTreeBoundary: BoundaryItem | null = this.findAllDirectionBlock(this.boundary.list)
-		const targetAppleTree: undefined = undefined
-		// this.appleTrees.fullTrees.find(tree => {
-		// 	if (targetTreeBoundary && tree.stump.boundaryBlock.id === targetTreeBoundary.id) {
-		// 		return tree
-		// 	}
-		// })
-		if (targetAppleTree) {
+		const targetTree: FullFruitTree | undefined = this.fruitTree.list.find(tree => {
+			if (targetTreeBoundary && tree.stump.boundaryBlock.id === targetTreeBoundary.id) {
+				return tree
+			}
+		})
+		if (targetTree) {
 			// 砍苹果树
-			// const position = getPositionFormIdStr(targetAppleTree.id)
-			// targetAppleTree.stump.isBeingCut = true
-			// targetAppleTree.top.isBeingCut = true
-			// // 树被砍3次就移除
-			// if (targetAppleTree.top.cuttingCount === 3) {
-			// 	const tree = this.appleTrees.removeTree({ gridX: position.x, gridY: position.y })
-			// 	targetTreeBoundary && this.boundary.removeItem(targetTreeBoundary.id)
-			// 	// 掉落木柴
-			// 	if (tree) {
-			// 		const newDrop = this.appleTrees.createDrop(tree)
-			// 		newDrop.forEach(drop => this.drop.addDrops(drop))
-			// 		this.movableObjects = [...this.movableObjects, ...newDrop]
-			// 	}
-			// }
+			const position = getPositionFormIdStr(targetTree.id)
+			targetTree.stump.initCutting(TREE_ACTION.BEING_CUTTING_RIGHT)
+			targetTree.top.initCutting(TREE_ACTION.BEING_CUTTING_RIGHT)
+			// 树被砍3次就移除
+			if (targetTree.top.cuttingCount === 2) {
+				const tree = this.fruitTree.removeFruitTree({ x: position.x, y: position.y })
+				targetTreeBoundary && this.boundary.removeItem(targetTreeBoundary.id)
+				// 掉落木柴
+				if (tree) {
+					console.log('%c [ tree ]-136', 'font-size:13px; background:pink; color:#bf2c9f;', tree)
+					// 	const newDrop = this.fruitTree.createDrop(tree)
+					// 	newDrop.forEach(drop => this.drop.addDrops(drop))
+					// 	this.movableObjects = [...this.movableObjects, ...newDrop]
+				}
+			}
 
 			return true
 		} else {

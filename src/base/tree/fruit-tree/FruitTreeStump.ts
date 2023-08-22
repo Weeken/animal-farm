@@ -16,20 +16,23 @@ export class FruitTreeStump extends BaseTree {
 	boundary: Boundary
 	boundaryBlock: BoundaryBlock
 	constructor(config: FruitTreeTopConfig) {
+		const position = { x: withGrid(config.x), y: withGrid(config.y) }
+		const ctx = window.myGameGlobalData.ctx.down
 		super({
 			...config,
 			animations: {
-				growUp: fruitTreeAnimations({ x: withGrid(config.x), y: withGrid(config.y) }, window.myGameGlobalData.ctx.down)
-					.growUp.stump
+				static: fruitTreeAnimations(position, ctx).static.stump,
+				growUp: fruitTreeAnimations(position, ctx).growUp.stump,
+				leftShake: fruitTreeAnimations(position, ctx).leftShake.stump
 			}
 		})
 		this.id = `treeStump-${config.x}-${config.y}`
 		this.boundary = config.boundary
 		this.boundaryBlock = {
-			id: 'boundaryItem-' + withGrid(config.x + 0.9) + '-' + withGrid(config.y + 2),
-			x: withGrid(config.x + 0.9),
+			id: 'boundaryItem-' + withGrid(config.x + 1) + '-' + withGrid(config.y + 2),
+			x: withGrid(config.x + 1),
 			y: withGrid(config.y + 2),
-			width: withGrid(1.2),
+			width: withGrid(1),
 			height: withGrid(0.8)
 		}
 		this.boundary.addItem({

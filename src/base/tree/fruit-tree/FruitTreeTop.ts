@@ -9,11 +9,14 @@ export class FruitTreeTop extends BaseTree {
 	height: number = withGrid(3)
 	id: string = ''
 	constructor(config: FruitTreeTopConfig) {
+		const position = { x: withGrid(config.x), y: withGrid(config.y) }
+		const ctx = window.myGameGlobalData.ctx.upper
 		super({
 			...config,
 			animations: {
-				growUp: fruitTreeAnimations({ x: withGrid(config.x), y: withGrid(config.y) }, window.myGameGlobalData.ctx.upper)
-					.growUp.top
+				static: fruitTreeAnimations(position, ctx).static.top,
+				growUp: fruitTreeAnimations(position, ctx).growUp.top,
+				leftShake: fruitTreeAnimations(position, ctx).leftShake.top
 			}
 		})
 		this.id = `treeTop-${config.x}-${config.y}`

@@ -73,7 +73,6 @@ export class Animation {
 			this.ctx.fillStyle = 'rgba(0, 0, 255, 0.2)'
 			this.ctx.fillRect(this.x, this.y, this.width, this.height)
 		}
-		// console.log(this.currentFrame)
 		this.ctx.drawImage(
 			this.image,
 			this.currentFrame * this.imgWidth + this.imgX,
@@ -109,7 +108,12 @@ export class Animation {
 		this.draw()
 	}
 
-	playOnce() {
+	resetPlayOnce() {
+		this.isPlaying = true
+		this.currentFrame = 0
+	}
+
+	playOnce(finishCB?: () => void) {
 		if (!this.isPlaying) {
 			this.draw()
 			return
@@ -124,6 +128,7 @@ export class Animation {
 				this.currentFrame = this.indexFrame
 				this.timer = 0
 				this.isPlaying = false
+				finishCB && finishCB()
 			}
 		}
 		this.draw()

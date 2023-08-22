@@ -151,6 +151,7 @@ const start = async () => {
 		field: gameObjects.field,
 		crop: gameObjects.crop,
 		itemDock,
+		fruitTree: gameObjects.fruitTree,
 		berryTree: gameObjects.berryTree,
 		drop: gameObjects.drop
 	})

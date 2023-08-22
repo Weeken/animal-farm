@@ -1,3 +1,4 @@
+import { Position } from '../../../utils'
 import { Boundary } from '../../fixed-things/Boundary'
 import { TreeType } from './BaseTree'
 import { FruitTreeStump } from './FruitTreeStump'
@@ -24,8 +25,10 @@ export class FruitTree {
 	list: FullFruitTree[] = []
 	treeTop: FruitTreeTop[] = []
 	treeStump: FruitTreeStump[] = []
+	boundary: Boundary
 
 	constructor(config: FruitTreeConfig) {
+		this.boundary = config.boundary
 		config.list.forEach(info => {
 			const top = new FruitTreeTop({ ...info })
 			const stump = new FruitTreeStump({ ...info, boundary: config.boundary })
@@ -33,5 +36,26 @@ export class FruitTree {
 			this.treeTop.push(top)
 			this.treeStump.push(stump)
 		})
+	}
+
+	addFruitTree(info: TreeInfo) {
+		const id = `fruitTree-${info.x}-${info.y}`
+		if (!this.list.find(tree => tree.id === id)) {
+			const top = new FruitTreeTop({ ...info })
+			const stump = new FruitTreeStump({ ...info, boundary: this.boundary })
+			this.list.push({ id, top, stump })
+			this.treeTop.push(top)
+			this.treeStump.push(stump)
+		}
+	}
+
+	removeFruitTree(position: Position) {
+		const targetTree = this.list.find(tree => tree.id === `fruitTree-${position.x}-${position.y}`)
+		if (targetTree) {
+			this.list = this.list.filter(tree => tree.id !== `fruitTree-${position.x}-${position.y}`)
+			this.treeTop = this.treeTop.filter(tree => tree.id !== `fruitTop-${position.x}-${position.y}`)
+			this.treeStump = this.treeStump.filter(tree => tree.id !== `treeStump-${position.x}-${position.y}`)
+		}
+		return targetTree
 	}
 }
