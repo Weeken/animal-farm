@@ -20,7 +20,7 @@ export interface BaseTreeConfig {
 	// state: TreeState
 	// matureTime?: number
 	// image: HTMLImageElement
-	ctx: CanvasRenderingContext2D
+	// ctx: CanvasRenderingContext2D
 	animations: {
 		growUp: AnimationInfo
 	}
@@ -33,7 +33,7 @@ export class BaseTree extends Movable {
 	height: number = withGrid(3)
 
 	image: HTMLImageElement
-	ctx: CanvasRenderingContext2D
+	// ctx: CanvasRenderingContext2D
 	type: TreeType
 
 	currentAction: TREE_ACTION = TREE_ACTION.GROW_UP
@@ -52,7 +52,6 @@ export class BaseTree extends Movable {
 		this.y = withGrid(config.y) + VIEW_OFFSET.y
 		this.type = config.type
 		this.image = treeImgs[config.type] as HTMLImageElement
-		this.ctx = config.ctx
 
 		this.animations = config.animations
 
@@ -60,7 +59,7 @@ export class BaseTree extends Movable {
 	}
 
 	createAnimation(config: AnimationConfig) {
-		return new Animation(config)
+		return new Animation({ ...config, isShowRect: false })
 	}
 
 	action() {

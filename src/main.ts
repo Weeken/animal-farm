@@ -19,7 +19,6 @@ import { DropItem } from './base/drop/DropItem'
 import { FullCow } from './base/animal/cow/Cow'
 import { FullFruitTree } from './base/tree/fruit-tree/FruitTree'
 import { BaseChicken } from './base/animal/chicken/BaseChicken'
-import { FullTree } from './base/tree/AppleTree'
 
 const setGlobalData = async (data: any) => {
 	window.myGameGlobalData = data
@@ -108,12 +107,6 @@ const start = async () => {
 			// }
 			player.action()
 
-			// 苹果树树冠
-			gameObjects.appleTrees.fullTrees.forEach((tree: FullTree) => {
-				tree.top.draw()
-				tree.stump.draw()
-			})
-
 			// 左上角房子的房顶
 			gameObjects.playerHouse.draw()
 
@@ -144,8 +137,6 @@ const start = async () => {
 		...gameObjects.cow.top,
 		...gameObjects.cow.bottom,
 		...gameObjects.berryTree.list,
-		...gameObjects.appleTrees.treeTops,
-		...gameObjects.appleTrees.treeStumps,
 		...gameObjects.field.plantFields,
 		...gameObjects.bridges,
 		...gameObjects.crop.wheats,
@@ -157,7 +148,6 @@ const start = async () => {
 		movableObjects,
 		player,
 		boundary,
-		appleTrees: gameObjects.appleTrees,
 		field: gameObjects.field,
 		crop: gameObjects.crop,
 		itemDock,

@@ -15,6 +15,7 @@ interface FruitTreeConfig {
 }
 
 export interface FullFruitTree {
+	id: string
 	top: FruitTreeTop
 	stump: FruitTreeStump
 }
@@ -27,8 +28,8 @@ export class FruitTree {
 	constructor(config: FruitTreeConfig) {
 		config.list.forEach(info => {
 			const top = new FruitTreeTop({ ...info })
-			const stump = new FruitTreeTop({ ...info })
-			this.list.push({ top, stump })
+			const stump = new FruitTreeStump({ ...info, boundary: config.boundary })
+			this.list.push({ id: `fruitTree-${info.x}-${info.y}`, top, stump })
 			this.treeTop.push(top)
 			this.treeStump.push(stump)
 		})

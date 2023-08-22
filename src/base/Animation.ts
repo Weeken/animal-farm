@@ -3,6 +3,7 @@ import { DIRECTION } from './Player'
 export interface AnimationConfig {
 	totalFrames: number
 	currentFrame?: number
+	indexFrame?: number
 	interval?: number
 
 	x: number
@@ -23,6 +24,7 @@ export interface AnimationConfig {
 export class Animation {
 	totalFrames = 4
 	currentFrame = 0
+	indexFrame = 0
 	interval = 20
 	timer = 0
 
@@ -48,6 +50,7 @@ export class Animation {
 		// super({ x: config.x, y: config.y })
 		this.totalFrames = config.totalFrames
 		this.currentFrame = config.currentFrame || 0
+		this.indexFrame = config.indexFrame || 0
 		this.interval = config.interval || 20
 
 		this.isShowRect = config.isShowRect || false
@@ -73,7 +76,7 @@ export class Animation {
 		// console.log(this.currentFrame)
 		this.ctx.drawImage(
 			this.image,
-			this.currentFrame * this.imgWidth,
+			this.currentFrame * this.imgWidth + this.imgX,
 			this.moveDirection === DIRECTION.RIGHT ? this.rightImgY : this.leftImgY,
 			this.imgWidth,
 			this.imgHeight,
@@ -118,7 +121,7 @@ export class Animation {
 			if (this.currentFrame < this.totalFrames - 1) {
 				this.currentFrame++
 			} else {
-				this.currentFrame = 0
+				this.currentFrame = this.indexFrame
 				this.timer = 0
 				this.isPlaying = false
 			}

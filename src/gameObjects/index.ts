@@ -9,14 +9,12 @@ import { HouseDoor } from '../base/fixed-things/HouseDoor'
 import { Chicken } from '../base/animal/chicken/Chicken'
 import { Cow } from '../base/animal/cow/Cow'
 import { BerryTree } from '../base/tree/BerryTree'
-import { AppleTree } from '../base/tree/AppleTree'
 import { ItemDock } from '../base/ItemDock'
 import { Field } from '../base/Field/Field'
 import { Crop } from '../base/plant/Crop'
 
 import { cows } from './cows'
 import { chickens } from './chicken'
-import { appleTrees } from './appleTrees'
 import { berryTrees } from './berryTrees'
 import { bridgesInfo } from './bridges'
 import { Bridge } from '../base/fixed-things/Bridge'
@@ -113,11 +111,6 @@ export const useGlobal = async () => {
 		berryTree: new BerryTree({
 			trees: berryTrees,
 			boundary
-		}),
-		appleTrees: new AppleTree({
-			trees: appleTrees,
-			boundary,
-			player
 		}),
 		fruitTree: new FruitTree({
 			list: fruitTrees,

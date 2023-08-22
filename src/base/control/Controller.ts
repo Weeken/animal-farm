@@ -2,7 +2,7 @@ import { Player, ACTION, DIRECTION } from '../Player'
 import { Boundary } from '../fixed-things/Boundary'
 import { BoundaryItem } from '../fixed-things/BoundaryItem'
 import { getPositionFormIdStr, findTarget, withGrid, checkHittingBoundary } from '../../utils'
-import { AppleTree, FullTree } from '../tree/AppleTree'
+// import { AppleTree, FullTree } from '../tree/AppleTree'
 // import { PlantField } from '../Field/PlantField'
 import { Field } from '../Field/Field'
 import { PlantField } from '../Field/PlantField'
@@ -19,7 +19,7 @@ interface ControllerConfig {
 	movableObjects: any[]
 	player: Player
 	boundary: Boundary
-	appleTrees: AppleTree
+	// appleTrees: AppleTree
 	berryTree: BerryTree
 	field: Field
 	crop: Crop
@@ -40,7 +40,7 @@ export class Controller {
 	isMoving = false
 	player: Player
 	boundary: Boundary
-	appleTrees: AppleTree
+	// appleTrees: AppleTree
 	berryTree: BerryTree
 	field: Field
 	crop: Crop
@@ -50,7 +50,7 @@ export class Controller {
 		this.movableObjects = config.movableObjects
 		this.player = config.player
 		this.boundary = config.boundary
-		this.appleTrees = config.appleTrees
+		// this.appleTrees = config.appleTrees
 		this.berryTree = config.berryTree
 		this.field = config.field
 		this.crop = config.crop
@@ -117,27 +117,28 @@ export class Controller {
 	handleCuttingDownTree() {
 		this.player.selectAction(ACTION.CUTTING)
 		const targetTreeBoundary: BoundaryItem | null = this.findAllDirectionBlock(this.boundary.list)
-		const targetAppleTree: FullTree | undefined = this.appleTrees.fullTrees.find(tree => {
-			if (targetTreeBoundary && tree.stump.boundaryBlock.id === targetTreeBoundary.id) {
-				return tree
-			}
-		})
+		const targetAppleTree: undefined = undefined
+		// this.appleTrees.fullTrees.find(tree => {
+		// 	if (targetTreeBoundary && tree.stump.boundaryBlock.id === targetTreeBoundary.id) {
+		// 		return tree
+		// 	}
+		// })
 		if (targetAppleTree) {
 			// 砍苹果树
-			const position = getPositionFormIdStr(targetAppleTree.id)
-			targetAppleTree.stump.isBeingCut = true
-			targetAppleTree.top.isBeingCut = true
-			// 树被砍3次就移除
-			if (targetAppleTree.top.cuttingCount === 3) {
-				const tree = this.appleTrees.removeTree({ gridX: position.x, gridY: position.y })
-				targetTreeBoundary && this.boundary.removeItem(targetTreeBoundary.id)
-				// 掉落木柴
-				if (tree) {
-					const newDrop = this.appleTrees.createDrop(tree)
-					newDrop.forEach(drop => this.drop.addDrops(drop))
-					this.movableObjects = [...this.movableObjects, ...newDrop]
-				}
-			}
+			// const position = getPositionFormIdStr(targetAppleTree.id)
+			// targetAppleTree.stump.isBeingCut = true
+			// targetAppleTree.top.isBeingCut = true
+			// // 树被砍3次就移除
+			// if (targetAppleTree.top.cuttingCount === 3) {
+			// 	const tree = this.appleTrees.removeTree({ gridX: position.x, gridY: position.y })
+			// 	targetTreeBoundary && this.boundary.removeItem(targetTreeBoundary.id)
+			// 	// 掉落木柴
+			// 	if (tree) {
+			// 		const newDrop = this.appleTrees.createDrop(tree)
+			// 		newDrop.forEach(drop => this.drop.addDrops(drop))
+			// 		this.movableObjects = [...this.movableObjects, ...newDrop]
+			// 	}
+			// }
 
 			return true
 		} else {
