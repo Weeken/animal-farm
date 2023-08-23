@@ -23,7 +23,8 @@ export class FruitTreeStump extends BaseTree {
 			animations: {
 				static: fruitTreeAnimations(position, ctx).static.stump,
 				growUp: fruitTreeAnimations(position, ctx).growUp.stump,
-				leftShake: fruitTreeAnimations(position, ctx).leftShake.stump
+				leftShake: fruitTreeAnimations(position, ctx).leftShake.stump,
+				rightShake: fruitTreeAnimations(position, ctx).rightShake.stump
 			}
 		})
 		this.id = `treeStump-${config.x}-${config.y}`

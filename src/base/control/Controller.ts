@@ -125,18 +125,23 @@ export class Controller {
 		if (targetTree) {
 			// 砍苹果树
 			const position = getPositionFormIdStr(targetTree.id)
-			targetTree.stump.initCutting(TREE_ACTION.BEING_CUTTING_RIGHT)
-			targetTree.top.initCutting(TREE_ACTION.BEING_CUTTING_RIGHT)
+			if (this.player.towardDirection === DIRECTION.UP || this.player.towardDirection === DIRECTION.LEFT) {
+				targetTree.stump.initCutting(TREE_ACTION.BEING_CUTTING_RIGHT)
+				targetTree.top.initCutting(TREE_ACTION.BEING_CUTTING_RIGHT)
+			} else {
+				targetTree.stump.initCutting(TREE_ACTION.BEING_CUTTING_LEFT)
+				targetTree.top.initCutting(TREE_ACTION.BEING_CUTTING_LEFT)
+			}
+
 			// 树被砍3次就移除
 			if (targetTree.top.cuttingCount === 2) {
-				const tree = this.fruitTree.removeFruitTree({ x: position.x, y: position.y })
+				const tree = this.fruitTree.removeFruitTree(position)
 				targetTreeBoundary && this.boundary.removeItem(targetTreeBoundary.id)
 				// 掉落木柴
 				if (tree) {
-					console.log('%c [ tree ]-136', 'font-size:13px; background:pink; color:#bf2c9f;', tree)
-					// 	const newDrop = this.fruitTree.createDrop(tree)
-					// 	newDrop.forEach(drop => this.drop.addDrops(drop))
-					// 	this.movableObjects = [...this.movableObjects, ...newDrop]
+					const newDrop = this.fruitTree.createDrop(tree)
+					newDrop.forEach(drop => this.drop.addDrops(drop))
+					this.movableObjects = [...this.movableObjects, ...newDrop]
 				}
 			}
 

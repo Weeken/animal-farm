@@ -59,6 +59,8 @@ export class DropItem extends Movable {
 			}
 		}
 		positionY += this.movingDistance
+		// this.ctx.fillStyle = 'rgba(0, 0, 255, 0.2)'
+		// this.ctx.fillRect(this.x + 4 + VIEW_OFFSET.x, positionY, this.width, this.height)
 		this.ctx.drawImage(
 			this.image,
 			0,

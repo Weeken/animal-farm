@@ -16,7 +16,8 @@ export class FruitTreeTop extends BaseTree {
 			animations: {
 				static: fruitTreeAnimations(position, ctx).static.top,
 				growUp: fruitTreeAnimations(position, ctx).growUp.top,
-				leftShake: fruitTreeAnimations(position, ctx).leftShake.top
+				leftShake: fruitTreeAnimations(position, ctx).leftShake.top,
+				rightShake: fruitTreeAnimations(position, ctx).rightShake.top
 			}
 		})
 		this.id = `treeTop-${config.x}-${config.y}`

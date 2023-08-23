@@ -5,6 +5,7 @@ export interface AnimationConfig {
 	currentFrame?: number
 	indexFrame?: number
 	interval?: number
+	delay?: number
 
 	x: number
 	y: number
@@ -27,6 +28,7 @@ export class Animation {
 	indexFrame = 0
 	interval = 20
 	timer = 0
+	delay = 0
 
 	x = 0
 	y = 0
@@ -52,6 +54,7 @@ export class Animation {
 		this.currentFrame = config.currentFrame || 0
 		this.indexFrame = config.indexFrame || 0
 		this.interval = config.interval || 20
+		this.delay = config.delay || 0
 
 		this.isShowRect = config.isShowRect || false
 
@@ -126,8 +129,8 @@ export class Animation {
 				this.currentFrame++
 			} else {
 				this.currentFrame = this.indexFrame
-				this.timer = 0
 				this.isPlaying = false
+				this.timer = 0
 				finishCB && finishCB()
 			}
 		}

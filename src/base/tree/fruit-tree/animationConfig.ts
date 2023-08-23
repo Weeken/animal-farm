@@ -26,6 +26,7 @@ export interface FruitTreeAnimations {
 	static: FruitTreeConfig
 	growUp: FruitTreeConfig
 	leftShake: FruitTreeConfig
+	rightShake: FruitTreeConfig
 }
 
 export const fruitTreeAnimations: (position: Position, ctx: CanvasRenderingContext2D) => FruitTreeAnimations = (
@@ -104,10 +105,11 @@ export const fruitTreeAnimations: (position: Position, ctx: CanvasRenderingConte
 			imgHeight: withGrid(2.4),
 			indexFrame: 3,
 			interval: 10,
-			totalFrames: 4,
+			totalFrames: 3,
 			ctx,
 			width: withGrid(3),
-			height: withGrid(2.4)
+			height: withGrid(2.4),
+			delay: 30 * 2
 		},
 		stump: {
 			x: position.x,
@@ -119,10 +121,44 @@ export const fruitTreeAnimations: (position: Position, ctx: CanvasRenderingConte
 			imgWidth: withGrid(3),
 			indexFrame: 3,
 			interval: 10,
-			totalFrames: 4,
+			totalFrames: 3,
 			ctx,
 			width: withGrid(3),
-			height: withGrid(3)
+			height: withGrid(3),
+			delay: 30 * 2
+		}
+	},
+	rightShake: {
+		top: {
+			x: position.x,
+			y: position.y,
+			imgX: 0,
+			leftImgY: withGrid(8),
+			rightImgY: withGrid(8),
+			imgHeight: withGrid(2.4),
+			indexFrame: 3,
+			interval: 10,
+			totalFrames: 3,
+			ctx,
+			width: withGrid(3),
+			height: withGrid(2.4),
+			delay: 30 * 2
+		},
+		stump: {
+			x: position.x,
+			y: position.y,
+			imgX: withGrid(9),
+			leftImgY: withGrid(8),
+			rightImgY: withGrid(8),
+			imgHeight: withGrid(3),
+			imgWidth: withGrid(3),
+			indexFrame: 3,
+			interval: 10,
+			totalFrames: 3,
+			ctx,
+			width: withGrid(3),
+			height: withGrid(3),
+			delay: 30 * 2
 		}
 	}
 })

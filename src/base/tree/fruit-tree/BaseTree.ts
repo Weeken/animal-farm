@@ -26,6 +26,7 @@ export interface BaseTreeConfig {
 		static: AnimationInfo
 		growUp: AnimationInfo
 		leftShake: AnimationInfo
+		rightShake: AnimationInfo
 	}
 }
 
@@ -45,11 +46,13 @@ export class BaseTree extends Movable {
 		static: AnimationInfo
 		growUp: AnimationInfo
 		leftShake: AnimationInfo
+		rightShake: AnimationInfo
 	}
 
 	static: Animation
 	growUp: Animation
 	leftShake: Animation
+	rightShake: Animation
 
 	isBeingCut = false
 	isShaking = false
@@ -69,6 +72,7 @@ export class BaseTree extends Movable {
 		this.static = this.createAnimation({ ...this.animations.static, image: this.image })
 		this.growUp = this.createAnimation({ ...this.animations.growUp, image: this.image })
 		this.leftShake = this.createAnimation({ ...this.animations.leftShake, image: this.image })
+		this.rightShake = this.createAnimation({ ...this.animations.rightShake, image: this.image })
 	}
 
 	createAnimation(config: AnimationConfig) {
@@ -76,12 +80,10 @@ export class BaseTree extends Movable {
 	}
 
 	initCutting(cuttingAction: TREE_ACTION.BEING_CUTTING_RIGHT | TREE_ACTION.BEING_CUTTING_LEFT) {
-		console.log('%c [ cuttingAction ]-79', 'font-size:13px; background:pink; color:#bf2c9f;', cuttingAction)
 		this.currentAction = cuttingAction
 	}
 
 	resetToStatic() {
-		console.log('%c [ resetToStatic ]-84', 'font-size:13px; background:pink; color:#bf2c9f;')
 		this.currentAction = TREE_ACTION.STATIC
 	}
 
@@ -101,11 +103,14 @@ export class BaseTree extends Movable {
 				this.leftShake.resetPlayOnce()
 				this.cuttingCount += 1
 				this.resetToStatic()
-				console.log(
-					'%c [ this.cuttingCount ]-105',
-					'font-size:13px; background:pink; color:#bf2c9f;',
-					this.cuttingCount
-				)
+			})
+		} else if (this.currentAction === TREE_ACTION.BEING_CUTTING_LEFT) {
+			this.rightShake.x = this.x
+			this.rightShake.y = this.y
+			this.rightShake.playOnce(() => {
+				this.rightShake.resetPlayOnce()
+				this.cuttingCount += 1
+				this.resetToStatic()
 			})
 		}
 	}

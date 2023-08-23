@@ -1,4 +1,5 @@
-import { Position } from '../../../utils'
+import { Position, VIEW_OFFSET, withGrid } from '../../../utils'
+import { DropItem } from '../../drop/DropItem'
 import { Boundary } from '../../fixed-things/Boundary'
 import { TreeType } from './BaseTree'
 import { FruitTreeStump } from './FruitTreeStump'
@@ -57,5 +58,28 @@ export class FruitTree {
 			this.treeStump = this.treeStump.filter(tree => tree.id !== `treeStump-${position.x}-${position.y}`)
 		}
 		return targetTree
+	}
+
+	createDrop(tree: FullFruitTree) {
+		const woods = new DropItem({
+			x: tree.top.x - VIEW_OFFSET.x + withGrid(1),
+			y: tree.top.y - VIEW_OFFSET.y + withGrid(2),
+			type: 'wood',
+			count: 3,
+			image: (window.myGameGlobalData.assets.materials as LoadedAssets).wood as HTMLImageElement
+		})
+		const drops: DropItem[] = [woods]
+		// if (tree.state === 'bearFruit') {
+		// 	drops.push(
+		// 		new DropItem({
+		// 			x: withGrid(tree.x + 0.5),
+		// 			y: withGrid(tree.y + 0.4),
+		// 			type: 'berry',
+		// 			count: 3,
+		// 			image: (window.myGameGlobalData.assets.materials as LoadedAssets).berry as HTMLImageElement
+		// 		})
+		// 	)
+		// }
+		return drops
 	}
 }
