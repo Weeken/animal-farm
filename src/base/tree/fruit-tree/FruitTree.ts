@@ -65,21 +65,19 @@ export class FruitTree {
 			x: tree.top.x - VIEW_OFFSET.x + withGrid(1),
 			y: tree.top.y - VIEW_OFFSET.y + withGrid(2),
 			type: 'wood',
-			count: 3,
-			image: (window.myGameGlobalData.assets.materials as LoadedAssets).wood as HTMLImageElement
+			count: 3
 		})
 		const drops: DropItem[] = [woods]
-		// if (tree.state === 'bearFruit') {
-		// 	drops.push(
-		// 		new DropItem({
-		// 			x: withGrid(tree.x + 0.5),
-		// 			y: withGrid(tree.y + 0.4),
-		// 			type: 'berry',
-		// 			count: 3,
-		// 			image: (window.myGameGlobalData.assets.materials as LoadedAssets).berry as HTMLImageElement
-		// 		})
-		// 	)
-		// }
+		if (tree.top.type !== 'common') {
+			drops.push(
+				new DropItem({
+					x: tree.top.x - VIEW_OFFSET.x + withGrid(1.5),
+					y: tree.top.y - VIEW_OFFSET.y + withGrid(2.4),
+					type: tree.top.type,
+					count: 3
+				})
+			)
+		}
 		return drops
 	}
 }

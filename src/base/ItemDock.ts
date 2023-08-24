@@ -1,6 +1,7 @@
 import { withGrid, VIEW_HEIGHT, screenCenter } from '../utils'
 // import ItemDockImg from '../assets/item-dock.png'
-import { Material, type MaterialType } from './Material'
+import { Material } from './material/Material'
+import { MaterialType } from './material/position'
 
 // interface ItemDockConfig {
 // 	ctx: CanvasRenderingContext2D

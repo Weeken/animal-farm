@@ -1,4 +1,3 @@
-// import { loadImage, VIEW_OFFSET, withGrid } from '../utils'
 import { Tree, TreeState } from './Tree'
 import { Boundary } from '../fixed-things/Boundary'
 import { hours, BaseRect, withGrid } from '../../utils'

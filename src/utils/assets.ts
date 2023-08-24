@@ -1,13 +1,6 @@
 import islandImg from '../assets/map.png'
 import PlayerImg from '../assets/premium-player.png'
-import berryImg from '../assets/material/berry.png'
-import appleImg from '../assets/material/apple.png'
-import wheatImg from '../assets/material/wheat.png'
-import tomatoImg from '../assets/material/tomato.png'
-import cowFoodGrassImg from '../assets/material/cowFoodGrass.png'
-import milkImg from '../assets/material/milk.png'
-import woodImg from '../assets/material/wood.png'
-import branchImg from '../assets/material/branch.png'
+import materialImg from '../assets/material.png'
 import ItemDockImg from '../assets/item-dock.png'
 import berryTreeImg from '../assets/berry-tree.png'
 import appleTreeTopImg from '../assets/apple-tree-top.png'
@@ -57,16 +50,7 @@ export const assets: Assets = {
 	// 物品栏
 	itemDock: ItemDockImg,
 	// 掉落物
-	materials: {
-		berry: berryImg,
-		apple: appleImg,
-		wheat: wheatImg,
-		tomato: tomatoImg,
-		cowFoodGrass: cowFoodGrassImg,
-		milk: milkImg,
-		wood: woodImg,
-		branch: branchImg
-	},
+	materials: materialImg,
 	// 树
 	trees: {
 		berryTree: berryTreeImg,

@@ -42,9 +42,8 @@ export class BerryTree {
 		const woods = new DropItem({
 			x: tree.x,
 			y: tree.y,
-			type: 'branch',
-			count: 3,
-			image: (window.myGameGlobalData.assets.materials as LoadedAssets).branch as HTMLImageElement
+			type: 'bigBranch',
+			count: 3
 		})
 		const drops: DropItem[] = [woods]
 		if (tree.state === 'bearFruit') {
@@ -52,9 +51,8 @@ export class BerryTree {
 				new DropItem({
 					x: tree.x + withGrid(0.5),
 					y: tree.y + withGrid(0.4),
-					type: 'berry',
-					count: 3,
-					image: (window.myGameGlobalData.assets.materials as LoadedAssets).berry as HTMLImageElement
+					type: 'strawberry',
+					count: 3
 				})
 			)
 		}

@@ -1,5 +1,5 @@
 import { withGrid, VIEW_OFFSET } from '../../utils'
-import { MaterialType } from '../Material'
+import { materialPosition, MaterialType } from '../material/position'
 import { Movable } from '../Movable'
 
 export interface DropConfig {
@@ -7,7 +7,7 @@ export interface DropConfig {
 	x: number
 	y: number
 	count: number
-	image: HTMLImageElement
+	// image: HTMLImageElement
 }
 
 export class DropItem extends Movable {
@@ -33,7 +33,7 @@ export class DropItem extends Movable {
 		this.x = config.x
 		this.y = config.y
 		this.ctx = window.myGameGlobalData.ctx.middle
-		this.image = config.image
+		this.image = window.myGameGlobalData.assets.materials as HTMLImageElement
 		this.id = `drop-${this.x}-${this.y}`
 	}
 
@@ -63,8 +63,8 @@ export class DropItem extends Movable {
 		// this.ctx.fillRect(this.x + 4 + VIEW_OFFSET.x, positionY, this.width, this.height)
 		this.ctx.drawImage(
 			this.image,
-			0,
-			0,
+			withGrid(materialPosition[this.type].x),
+			withGrid(materialPosition[this.type].y),
 			withGrid(1),
 			withGrid(1),
 			this.x + 4 + VIEW_OFFSET.x,
