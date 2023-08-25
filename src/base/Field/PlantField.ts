@@ -29,7 +29,7 @@ export class PlantField extends Movable {
 		this.height = config.height || withGrid(1)
 		this.ctx = window.myGameGlobalData.ctx.down
 		this.image = (window.myGameGlobalData.assets.building as LoadedAssets).field as HTMLImageElement
-		this.id = `field-${this.x}-${this.y}`
+		this.id = `field-${Date.now()}`
 	}
 	draw() {
 		const positionX = this.x + VIEW_OFFSET.x
