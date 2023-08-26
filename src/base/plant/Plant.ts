@@ -1,43 +1,47 @@
 import { Movable } from '../Movable'
-// import WheatImg from '../../assets/wheat.png'
 import { VIEW_OFFSET, withGrid } from '../../utils'
 import { PlantField } from '../Field/PlantField'
+import { PlantType, plantPosition } from './position'
 
 export type PlantState = 'gemmiparous' | 'growing' | 'fruitful' | 'mature'
 
-export interface WheatConfig {
-	x: number
-	y: number
+export interface PlantConfig {
+	// x: number
+	// y: number
 	width?: number
 	height?: number
 	state?: PlantState
+	type: PlantType
 	field: PlantField
 }
 
-export class Wheat extends Movable {
+export class Plant extends Movable {
 	x = 0
 	y = 0
 	width = 0
 	height = 0
-	// src = WheatImg
 	image: HTMLImageElement
 	ctx: CanvasRenderingContext2D
 	state: PlantState = 'gemmiparous'
 	field: PlantField
+	type: PlantType
 	id: string = ''
 	createTime = 0
-	constructor(config: WheatConfig) {
-		super({ x: config.x, y: config.y })
-		this.x = config.x
-		this.y = config.y
+	constructor(config: PlantConfig) {
+		super({ x: config.field.x, y: config.field.y })
+		// this.x = config.x + VIEW_OFFSET.x
+		// this.y = config.y + VIEW_OFFSET.y - withGrid(0.2)
+		this.x = config.field.x
+		this.y = config.field.y
 		this.width = config.width || withGrid(1)
 		this.height = config.height || withGrid(1)
-		this.ctx = window.myGameGlobalData.ctx.middle
-		this.image = (window.myGameGlobalData.assets.crop as LoadedAssets).wheat as HTMLImageElement
+		this.ctx = window.myGameGlobalData.ctx.down
+		this.image = window.myGameGlobalData.assets.farmingPlant as HTMLImageElement
 		this.state = config.state || 'gemmiparous'
+		this.type = config.type
 		this.field = config.field
-		this.id = `wheat-${this.x}-${this.y}`
 		this.createTime = +new Date()
+		this.id = `plant-${this.createTime}`
 	}
 
 	growUp() {
@@ -73,7 +77,7 @@ export class Wheat extends Movable {
 			this.ctx.drawImage(
 				this.image,
 				framePositionX[this.state],
-				0,
+				withGrid(plantPosition[this.type].y),
 				this.width,
 				this.height,
 				positionX,

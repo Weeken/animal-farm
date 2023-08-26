@@ -1,24 +1,22 @@
-import { BerryTreeItem } from './BerryTreeItem'
-import { TreeInfo } from './Tree'
-import { withGrid, getPositionFormIdStr } from '../../utils'
-import { Boundary } from '../fixed-things/Boundary'
-import { DropItem } from '../drop/DropItem'
+import { withGrid, getPositionFormIdStr, VIEW_OFFSET } from '../../../utils'
+import { Boundary } from '../../fixed-things/Boundary'
+import { DropItem } from '../../drop/DropItem'
+import { BaseBerryTree, BerryTreeInfo } from './BaseBerryTree'
 
 export interface BerryConfig {
-	trees: TreeInfo[]
+	trees: BerryTreeInfo[]
 	boundary: Boundary
 }
 
 export class BerryTree {
-	list: BerryTreeItem[] = []
+	list: BaseBerryTree[] = []
 	constructor(config: BerryConfig) {
 		this.list = config.trees.map(berryTree => {
-			const treeItem = new BerryTreeItem({
+			const treeItem = new BaseBerryTree({
 				x: withGrid(berryTree.x),
 				y: withGrid(berryTree.y),
-				width: withGrid(1),
-				height: withGrid(1),
 				state: berryTree.state,
+				type: berryTree.type,
 				boundary: config.boundary
 			})
 			return treeItem
@@ -38,10 +36,10 @@ export class BerryTree {
 			return tree
 		}
 	}
-	createDrop(tree: BerryTreeItem) {
+	createDrop(tree: BaseBerryTree) {
 		const woods = new DropItem({
-			x: tree.x,
-			y: tree.y,
+			x: tree.x - VIEW_OFFSET.x,
+			y: tree.y - VIEW_OFFSET.y,
 			type: 'bigBranch',
 			count: 3
 		})
@@ -49,9 +47,9 @@ export class BerryTree {
 		if (tree.state === 'bearFruit') {
 			drops.push(
 				new DropItem({
-					x: tree.x + withGrid(0.5),
-					y: tree.y + withGrid(0.4),
-					type: 'strawberry',
+					x: tree.x + withGrid(0.5) - VIEW_OFFSET.x,
+					y: tree.y + withGrid(0.4) - VIEW_OFFSET.y,
+					type: tree.type,
 					count: 3
 				})
 			)

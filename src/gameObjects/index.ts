@@ -8,7 +8,7 @@ import { House } from '../base/fixed-things/House'
 import { HouseDoor } from '../base/fixed-things/HouseDoor'
 import { Chicken } from '../base/animal/chicken/Chicken'
 import { Cow } from '../base/animal/cow/Cow'
-import { BerryTree } from '../base/tree/BerryTree'
+import { BerryTree } from '../base/tree/berry-tree/BerryTree'
 import { ItemDock } from '../base/ItemDock'
 import { Field } from '../base/Field/Field'
 import { Crop } from '../base/plant/Crop'
@@ -90,23 +90,6 @@ export const useGlobal = async () => {
 			player
 		}),
 		chicken: new Chicken({ chickens, boundary }),
-		// chickens: [
-		// 	...chickens.map(
-		// 		chicken =>
-		// 			new Chicken({
-		// 				...chicken
-		// 			})
-		// 	)
-		// ],
-		// cows: [
-		// 	...cows.map(
-		// 		cow =>
-		// 			new Cow({
-		// 				...cow,
-		// 				boundary
-		// 			})
-		// 	)
-		// ],
 		cow: new Cow({ cows, boundary }),
 		berryTree: new BerryTree({
 			trees: berryTrees,

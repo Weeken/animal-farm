@@ -8,17 +8,16 @@ import { generateCtx } from './utils/canvas'
 
 import { Controller } from './base/control/Controller'
 
-import { BerryTreeItem } from './base/tree/BerryTreeItem'
 import { BoundaryItem } from './base/fixed-things/BoundaryItem'
 import { PlantField } from './base/Field/PlantField'
 import { Bridge } from './base/fixed-things/Bridge'
-import { Wheat } from './base/plant/Wheat'
-import { Tomato } from './base/plant/Tomato'
+import { Plant } from './base/plant/Plant'
 import { Material } from './base/material/Material'
 import { DropItem } from './base/drop/DropItem'
 import { FullCow } from './base/animal/cow/Cow'
 import { FullFruitTree } from './base/tree/fruit-tree/FruitTree'
 import { BaseChicken } from './base/animal/chicken/BaseChicken'
+import { BaseBerryTree } from './base/tree/berry-tree/BaseBerryTree'
 
 const setGlobalData = async (data: any) => {
 	window.myGameGlobalData = data
@@ -67,7 +66,7 @@ const start = async () => {
 			})
 
 			// 浆果树
-			gameObjects.berryTree.list.forEach((tree: BerryTreeItem) => {
+			gameObjects.berryTree.list.forEach((tree: BaseBerryTree) => {
 				tree.draw()
 			})
 
@@ -85,12 +84,9 @@ const start = async () => {
 				field.draw()
 			})
 
-			// 作物--小麦
-			gameObjects.crop.wheats.forEach((wheat: Wheat) => {
-				wheat.draw()
-			})
-			gameObjects.crop.tomatoes.forEach((tomato: Tomato) => {
-				tomato.draw()
+			// 作物
+			gameObjects.crop.plants.forEach((plant: Plant) => {
+				plant.draw()
 			})
 
 			gameObjects.drop.list.forEach((drop: DropItem) => {
@@ -139,7 +135,7 @@ const start = async () => {
 		...gameObjects.berryTree.list,
 		...gameObjects.field.plantFields,
 		...gameObjects.bridges,
-		...gameObjects.crop.wheats,
+		...gameObjects.crop.plants,
 		...gameObjects.drop.list,
 		...gameObjects.fruitTree.treeTop,
 		...gameObjects.fruitTree.treeStump

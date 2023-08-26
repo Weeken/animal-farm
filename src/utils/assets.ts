@@ -3,10 +3,7 @@ import PlayerImg from '../assets/premium-player.png'
 import materialImg from '../assets/material.png'
 import ItemDockImg from '../assets/item-dock.png'
 import berryTreeImg from '../assets/berry-tree.png'
-import appleTreeTopImg from '../assets/apple-tree-top.png'
-import appleTreeStumpImg from '../assets/apple-tree-stump.png'
-import cropTomatoImg from '../assets/tomato.png'
-import cropWheatImg from '../assets/wheat.png'
+import farmingPlantImg from '../assets/farming-plant.png'
 import houseRootImg from '../assets/house/house-root.png'
 import houseDoorImg from '../assets/house/door.png'
 import fieldImg from '../assets/vegetable-field-1.png'
@@ -52,13 +49,7 @@ export const assets: Assets = {
 	// 掉落物
 	materials: materialImg,
 	// 树
-	trees: {
-		berryTree: berryTreeImg,
-		appleTree: {
-			top: appleTreeTopImg,
-			stump: appleTreeStumpImg
-		}
-	},
+	berryTree: berryTreeImg,
 	fruitTree: {
 		common: Tree_common,
 		apple: Tree_apple,
@@ -67,10 +58,7 @@ export const assets: Assets = {
 		orange: Tree_orange
 	},
 	// 作物
-	crops: {
-		tomato: cropTomatoImg,
-		wheat: cropWheatImg
-	},
+	farmingPlant: farmingPlantImg,
 	// 动物
 	animal: {
 		chicken: {

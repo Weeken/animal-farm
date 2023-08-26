@@ -1,7 +1,7 @@
 import type { TreeInfo } from '../base/tree/fruit-tree/FruitTree'
 
 export const fruitTrees: TreeInfo[] = [
-	{ x: 20, y: 17, type: 'common' },
+	// { x: 20, y: 17, type: 'common' },
 	// 左上角房子旁边的树
 	{ x: 14, y: 10, type: 'common' },
 	{ x: 13, y: 11, type: 'common' },

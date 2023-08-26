@@ -1,45 +1,30 @@
 import { Field } from '../Field/Field'
 import { PlantField } from '../Field/PlantField'
-import { Tomato } from './Tomato'
-import { Wheat } from './Wheat'
+import { Plant } from './Plant'
+import { PlantType } from './position'
 
 interface CropConfig {
 	field: Field
 }
 
 export class Crop {
-	wheats: Wheat[] = []
-	tomatoes: Tomato[] = []
+	plants: Plant[] = []
 	field: Field
 	constructor(config: CropConfig) {
 		this.field = config.field
 	}
 
-	addWheat(field: PlantField) {
-		const newWheat = new Wheat({
-			x: field.x,
-			y: field.y,
-			field
+	addPlant(type: PlantType, field: PlantField) {
+		const newPlant = new Plant({
+			// x: field.x,
+			// y: field.y,
+			field,
+			type
 		})
 		if (field.isEmpty) {
-			this.wheats.push(newWheat)
+			this.plants.push(newPlant)
 			field.isEmpty = false
-			return newWheat
-		} else {
-			return null
-		}
-	}
-
-	addTomato(field: PlantField) {
-		const newTomato = new Tomato({
-			x: field.x,
-			y: field.y,
-			field
-		})
-		if (field.isEmpty) {
-			this.tomatoes.push(newTomato)
-			field.isEmpty = false
-			return newTomato
+			return newPlant
 		} else {
 			return null
 		}

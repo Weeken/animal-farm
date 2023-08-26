@@ -6,14 +6,15 @@ import { getPositionFormIdStr, findTarget, withGrid, checkHittingBoundary } from
 import { Field } from '../Field/Field'
 import { PlantField } from '../Field/PlantField'
 import { Crop } from '../plant/Crop'
-import { Wheat } from '../plant/Wheat'
+import { Plant } from '../plant/Plant'
 import { ItemDock } from '../ItemDock'
-import { BerryTree } from '../tree/BerryTree'
-import { BerryTreeItem } from '../tree/BerryTreeItem'
+import { BerryTree } from '../tree/berry-tree/BerryTree'
 import { Drop } from '../drop/Drop'
 import { DropItem } from '../drop/DropItem'
 import { FruitTree, FullFruitTree } from '../tree/fruit-tree/FruitTree'
 import { TREE_ACTION } from '../tree/fruit-tree/BaseTree'
+import { BaseBerryTree } from '../tree/berry-tree/BaseBerryTree'
+import { PlantType } from '../plant/position'
 
 interface ControllerConfig {
 	movableObjects: any[]
@@ -148,7 +149,7 @@ export class Controller {
 			return true
 		} else {
 			// 砍浆果树
-			const targetBerryTree: BerryTreeItem | undefined = this.berryTree.list.find(tree => {
+			const targetBerryTree: BaseBerryTree | undefined = this.berryTree.list.find(tree => {
 				if (targetTreeBoundary && tree.boundaryBlock.id === targetTreeBoundary.id) {
 					return tree
 				}
@@ -157,7 +158,7 @@ export class Controller {
 				const position = getPositionFormIdStr(targetBerryTree.id)
 				targetBerryTree.isBeingCut = true
 				// 树被砍3次就移除
-				if (targetBerryTree.cuttingCount === 3) {
+				if (targetBerryTree.shake.cuttingCount === 3) {
 					const tree = this.berryTree.removeTree({ gridX: position.x, gridY: position.y })
 					targetTreeBoundary && this.boundary.removeItem(targetTreeBoundary.id)
 					if (tree) {
@@ -194,15 +195,10 @@ export class Controller {
 		}
 	}
 
-	handleCreateACrop(cropType: 'wheat' | 'tomato') {
+	handleCreateACrop(plantType: PlantType) {
 		const targetField = this.findAllDirectionBlock(this.field.plantFields)
 		if (targetField !== null && targetField instanceof PlantField) {
-			let newCrop: Wheat | null = null
-			if (cropType === 'wheat') {
-				newCrop = this.crop.addWheat(targetField)
-			} else if (cropType === 'tomato') {
-				newCrop = this.crop.addTomato(targetField)
-			}
+			const newCrop: Plant | null = this.crop.addPlant(plantType, targetField)
 			newCrop && (this.movableObjects = [...this.movableObjects, newCrop])
 		}
 	}
