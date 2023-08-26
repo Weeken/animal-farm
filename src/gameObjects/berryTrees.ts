@@ -2,7 +2,7 @@ import type { BerryTreeInfo } from '../base/tree/berry-tree/BaseBerryTree'
 
 export const berryTrees: BerryTreeInfo[] = [
 	// 左下角山丘上
-	{ x: 20, y: 18, state: 'small', type: 'blueberry' },
+	{ x: 20, y: 18, state: 'bearFruit', type: 'blueberry' },
 	{ x: 44, y: 15, state: 'bearFruit', type: 'blueberry' },
 	{ x: 46, y: 15, state: 'noFruit', type: 'grace' },
 	{ x: 47, y: 14, state: 'bearFruit', type: 'grace' },

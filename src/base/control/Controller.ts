@@ -209,6 +209,19 @@ export class Controller {
 			this.drop.removeDrop(targetDrop.id)
 			this.movableObjects = this.movableObjects.filter(item => item.id !== targetDrop.id)
 			this.itemDock.addItem(targetDrop.type, targetDrop.count)
+		} else {
+			// 摘浆果
+			const targetTreeBoundary: BoundaryItem | null = this.findAllDirectionBlock(this.boundary.list)
+			const targetBerryTree: BaseBerryTree | undefined = this.berryTree.list.find(tree => {
+				if (targetTreeBoundary && tree.boundaryBlock.id === targetTreeBoundary.id) {
+					return tree
+				}
+			})
+			if (targetBerryTree && targetBerryTree.state === 'bearFruit') {
+				const newDrop = this.berryTree.createPickDrop(targetBerryTree)
+				newDrop.forEach(drop => this.drop.addDrops(drop))
+				this.movableObjects = [...this.movableObjects, ...newDrop]
+			}
 		}
 	}
 
