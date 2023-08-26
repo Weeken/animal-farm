@@ -1,4 +1,4 @@
-import { BaseRect, VIEW_OFFSET, withGrid } from '../../../utils'
+import { BaseRect, VIEW_OFFSET, hours, withGrid } from '../../../utils'
 import { Movable } from '../../Movable'
 import { Boundary } from '../../fixed-things/Boundary'
 import { Shake } from './Shake'
@@ -21,7 +21,6 @@ export interface BerryTreeInfo {
 	y: number
 	state: TreeState
 	type: BerryTreeType
-	// matureTime?: number
 }
 
 interface BoundaryBlock extends BaseRect {
@@ -44,6 +43,8 @@ export class BaseBerryTree extends Movable {
 	shake: Shake
 	isBeingCut = false
 
+	createTime = 0
+
 	constructor(config: BaseBerryConfig) {
 		super({ x: config.x, y: config.y })
 		this.x = config.x + VIEW_OFFSET.x
@@ -56,6 +57,7 @@ export class BaseBerryTree extends Movable {
 
 		this.state = config.state || 'small'
 		this.type = config.type || 'strawberry'
+		this.createTime = +new Date()
 		this.id = `berryTree-${config.x}-${config.y}`
 
 		this.boundary = config.boundary
@@ -71,6 +73,18 @@ export class BaseBerryTree extends Movable {
 		})
 
 		this.shake = this.createShake()
+	}
+
+	growUp() {
+		if (this.state === 'bearFruit') return
+		if (Date.now() - this.createTime >= hours(0.5)) {
+			if (this.state === 'small') {
+				this.state = 'noFruit'
+				this.createTime = Date.now()
+			} else if (this.state === 'noFruit') {
+				this.state = 'bearFruit'
+			}
+		}
 	}
 
 	configImgX() {
@@ -106,6 +120,8 @@ export class BaseBerryTree extends Movable {
 	}
 
 	draw() {
+		this.growUp()
+		this.shake.imgX = this.configImgX()
 		this.shake.x = this.x
 		this.shake.y = this.y
 		if (this.isBeingCut) {

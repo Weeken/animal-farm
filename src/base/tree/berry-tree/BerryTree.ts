@@ -36,7 +36,8 @@ export class BerryTree {
 			return tree
 		}
 	}
-	createDrop(tree: BaseBerryTree) {
+	// 被砍掉时的掉落
+	createCutDrop(tree: BaseBerryTree) {
 		const woods = new DropItem({
 			x: tree.x - VIEW_OFFSET.x,
 			y: tree.y - VIEW_OFFSET.y,
@@ -54,6 +55,24 @@ export class BerryTree {
 				})
 			)
 		}
+		return drops
+	}
+
+	// 被摘时的掉落
+	createPickDrop(tree: BaseBerryTree) {
+		if (tree.state !== 'bearFruit') return []
+		const drops: DropItem[] = []
+		if (tree.state === 'bearFruit') {
+			drops.push(
+				new DropItem({
+					x: tree.x + withGrid(0.5) - VIEW_OFFSET.x,
+					y: tree.y + withGrid(0.4) - VIEW_OFFSET.y,
+					type: tree.type,
+					count: 3
+				})
+			)
+		}
+		tree.state = 'noFruit'
 		return drops
 	}
 }

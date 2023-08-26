@@ -162,7 +162,7 @@ export class Controller {
 					const tree = this.berryTree.removeTree({ gridX: position.x, gridY: position.y })
 					targetTreeBoundary && this.boundary.removeItem(targetTreeBoundary.id)
 					if (tree) {
-						const newDrop = this.berryTree.createDrop(tree)
+						const newDrop = this.berryTree.createCutDrop(tree)
 						newDrop.forEach(drop => this.drop.addDrops(drop))
 						this.movableObjects = [...this.movableObjects, ...newDrop]
 					}
