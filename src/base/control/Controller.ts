@@ -203,25 +203,49 @@ export class Controller {
 		}
 	}
 
+	pickTheBerry() {
+		// 摘浆果
+		const targetTreeBoundary: BoundaryItem | null = this.findAllDirectionBlock(this.boundary.list)
+		const targetBerryTree: BaseBerryTree | undefined = this.berryTree.list.find(tree => {
+			if (targetTreeBoundary && tree.boundaryBlock.id === targetTreeBoundary.id) {
+				return tree
+			}
+		})
+		if (targetBerryTree && targetBerryTree.state === 'bearFruit') {
+			const newDrop = this.berryTree.createPickDrop(targetBerryTree)
+			newDrop.forEach(drop => this.drop.addDrops(drop))
+			this.movableObjects = [...this.movableObjects, ...newDrop]
+			return true
+		} else {
+			return false
+		}
+	}
+
+	pickThePlant() {
+		const targetField = this.findAllDirectionBlock(this.field.plantFields)
+		if (targetField !== null && targetField instanceof PlantField && !targetField.isEmpty) {
+			const targetPlant = this.crop.plants.find(plant => plant.field.id === targetField.id)
+			if (targetPlant && targetPlant.state === 'mature') {
+				this.crop.removePlant(targetPlant.id)
+				const newDrop = this.crop.createPickDrop(targetPlant)
+				newDrop.forEach(drop => this.drop.addDrops(drop))
+				this.movableObjects = [...this.movableObjects, ...newDrop]
+				return true
+			} else {
+				return false
+			}
+		}
+	}
+
 	pickUpDrops() {
 		const targetDrop = this.findAllDirectionBlock(this.drop.list)
 		if (targetDrop !== null && targetDrop instanceof DropItem) {
 			this.drop.removeDrop(targetDrop.id)
 			this.movableObjects = this.movableObjects.filter(item => item.id !== targetDrop.id)
 			this.itemDock.addItem(targetDrop.type, targetDrop.count)
+			return true
 		} else {
-			// 摘浆果
-			const targetTreeBoundary: BoundaryItem | null = this.findAllDirectionBlock(this.boundary.list)
-			const targetBerryTree: BaseBerryTree | undefined = this.berryTree.list.find(tree => {
-				if (targetTreeBoundary && tree.boundaryBlock.id === targetTreeBoundary.id) {
-					return tree
-				}
-			})
-			if (targetBerryTree && targetBerryTree.state === 'bearFruit') {
-				const newDrop = this.berryTree.createPickDrop(targetBerryTree)
-				newDrop.forEach(drop => this.drop.addDrops(drop))
-				this.movableObjects = [...this.movableObjects, ...newDrop]
-			}
+			return false
 		}
 	}
 
@@ -272,7 +296,9 @@ export class Controller {
 			} else if (e.key === 'e') {
 				this.itemDock.switch()
 			} else if (e.key === 'r') {
-				this.pickUpDrops()
+				if (this.pickUpDrops()) return
+				if (this.pickTheBerry()) return
+				if (this.pickThePlant()) return
 			}
 		})
 		document.addEventListener('keyup', (e: KeyboardEvent) => {
